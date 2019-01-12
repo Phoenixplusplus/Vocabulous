@@ -20,7 +20,7 @@ public class TrieTest : MonoBehaviour
         }
 
         /* define the available letters that can be indexed */
-        public const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public const string letters = "abcdefghijklmnopqrstuvwxyz";
         /* the index of the key */
         public int index;
         
@@ -35,12 +35,13 @@ public class TrieTest : MonoBehaviour
         /* within an Trie, we have nodes */
         public class Node
         {
-            /* a dictionary to pair a Letter to a Node, our 'group' */
+            /* a dictionary to pair a Letter to a Node, our 'group' 
+             * Letter (Key), Node (Value) */
             public Dictionary<Letter, Node> group = new Dictionary<Letter, Node>();
             /* the letter at this node */
             public string letter;
             /* are we a leaf node? end of searching */
-            public bool isLeaf { get { return group.Count == 0 && letter != null; } }
+            public bool isLeaf { get { return letter != null; } }
         }
 
         /* declare a root */
@@ -57,7 +58,7 @@ public class TrieTest : MonoBehaviour
                 string letter = arrayOfWords[i];
                 Node node = root;
 
-                /* as a saftey measure(?) make sure we only get 1 character */
+                /* loop through each element in array */
                 for (int a = 1; a <= letter.Length; a++)
                 {
                     char character = letter[a - 1];
@@ -72,7 +73,7 @@ public class TrieTest : MonoBehaviour
                         node.group.Add(character, next);
                     }
 
-                    /* when finishing up, set this nodes 'letter' to the one we have */
+                    /* at the last letter of array, set it's letter, thereby making it a leaf node 'isLeaf == true' */
                     if (a == letter.Length)
                     {
                         next.letter = letter;
@@ -84,5 +85,134 @@ public class TrieTest : MonoBehaviour
             }
             /* END looping through array of words */
         }
+    }
+
+    /* recursive function for searching words in nodes, takes:
+     * a Trie.Node, ie. the root
+     * a HashSet of Letter arrays, basically a half of a dictionary where all we care about it 'does this set contain element x', it is not linked to any other value 
+     * an index to iterate through 'setsOfLetters'
+     * a list of strings to hold 'wordsFound' */
+    public void SearchWords(Trie.Node node, HashSet<Letter>[] setsOfLetters, int currentArrayIndex, List<string> wordsFound)
+    {
+        if (currentArrayIndex < setsOfLetters.Length)
+        {
+            /* for each node branching off from this current node */
+            foreach (KeyValuePair<Letter, Trie.Node> group in node.group)
+            {
+                /* if the letter (Key) present in any of the branching nodes.. */
+                if (setsOfLetters[currentArrayIndex].Contains(group.Key))
+                {
+                    /* check if it is a leaf node, if so, we've found a word - add it to the list */
+                    if (group.Value.isLeaf)
+                    {
+                        wordsFound.Add(group.Value.letter);
+                    }
+                    /* if we've found a word or not AND we've detected a node with our letter,
+                     * search again with our found node (Value), and increment our index for the next letter */
+                    SearchWords(group.Value, setsOfLetters, currentArrayIndex + 1, wordsFound);
+                }
+            }
+        }
+        // return wordsFound;
+    }
+
+    /* used by Text_Transfer1 to add lines to the list */
+    public List<string> allWordsList;
+    /* 'allWordsList' converted into an array to be fed into the Trie */
+    string[] wordsArray;
+    /* the words found from 'SearchWords' function */
+    List<string> wordsFound = new List<string>();
+    /* letters to search the Trie, with a maximum number of letters (will need to precalculate the longest word in the dictionary soon) */
+    char[] lettersToSearch = new char[26];
+    /* number of cubes clicked, used to know which char goes into which element of 'lettersToSearch' */
+    public int cubesClicked = 0;
+    /* the Trie */
+    Trie trie;
+
+    /* called by Text_Transfer1 once it has read the dictionary being used */
+    public void Initialise()
+    {
+        Debug.Log("Left click on cubes to add word to search");
+        Debug.Log("Right click to finish search");
+
+        /* the Trie takes in an array of strings, convert the list and chops the null reference off at the end */
+        wordsArray = new string[allWordsList.Count];
+        allWordsList.RemoveAt(allWordsList.Count - 1);
+        wordsArray = allWordsList.ToArray();
+
+        /* populate Trie */
+        trie = new Trie(wordsArray);
+
+        ///* using an array of HashSet Letters to search for in order */
+        //HashSet<Letter>[] sets = new HashSet<Letter>[] {
+        //  new HashSet<Letter>(new Letter[] { 'a', 'h', 'r', 'a' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'e', 'c' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'l', 'v' }),
+        //  new HashSet<Letter>(new Letter[] { 'l', 'n', 'o' }) };
+
+        //SearchWords(trie.root, sets, 0, wordsFound);
+
+        //foreach (string word in wordsFound)
+        //{
+        //    Debug.Log(word + " could also carry on to be ");
+        //    //for (int i = 0; i < wordsArray.Length; i++)
+        //    //{
+        //    //    if (wordsArray[i].StartsWith(word))
+        //    //    {
+        //    //        Debug.Log(wordsArray[i]);
+        //    //    }
+        //    //}
+        //}
+    }
+
+    public void TrieAddToSearch(char c)
+    {
+        lettersToSearch[cubesClicked] = c;
+        cubesClicked++;
+    }
+    public void TrieSearch()
+    {
+        /* some interpreted/altered magic */
+        HashSet<Letter>[] sets = new HashSet<Letter>[lettersToSearch.Length];
+        for (int i = 0; i < sets.Length; i++)
+        {
+            sets[i] = new HashSet<Letter>(new Letter[] { lettersToSearch[i] });
+        }
+
+        /* search trie */
+        SearchWords(trie.root, sets, 0, wordsFound);
+
+        /* words found? */
+        foreach (string word in wordsFound)
+        {
+            Debug.Log("'" + word + "' was found");
+            /* starting to determine (with other surrounding cubes) which words can be made */
+            //for (int i = 0; i < wordsArray.Length; i++)
+            //{
+            //    if (wordsArray[i].StartsWith(word))
+            //    {
+            //        Debug.Log(wordsArray[i]);
+            //    }
+            //}
+        }
+        /* no words found */
+        if (wordsFound.Count == 0) Debug.Log("No words found");
+
+        /* clear letters array after search */
+        for (int i = 0; i < lettersToSearch.Length; i++)
+        {
+            lettersToSearch[i] = (char) 0;
+        }
+        /* clear cubesClicked after search */
+        cubesClicked = 0;
+        /* clear wordsFound after search */
+        wordsFound.Clear();
+    }
+
+    /* inputs */
+    void Update()
+    {
+        /* right click */
+        if (Input.GetMouseButtonDown(1)) TrieSearch();
     }
 }
