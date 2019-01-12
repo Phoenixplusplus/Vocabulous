@@ -31,7 +31,7 @@ public class File_Reader : MonoBehaviour
         }
         if (reader == null)
         {
-            Debug.Log(filepath + " not valid");
+            Debug.Log("File_Reader:open() - filepath("+ filepath + ") not valid");
         }
         else
         {
