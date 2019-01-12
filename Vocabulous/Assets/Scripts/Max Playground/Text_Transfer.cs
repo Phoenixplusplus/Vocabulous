@@ -7,12 +7,13 @@ public class Text_Transfer : MonoBehaviour
     public File_Reader reader;
     public File_Writer writer;
     private bool _running = false;
+    private int count = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        reader.open("/Dictionaries/testText.txt");
-        writer.open("/Dictionaries/testOutput.txt");
+        reader.open("/Dictionaries/UK English 65K words.txt");
+        writer.open("/Dictionaries/L2-6 from 65K.txt");
         _running = true;
         while (_running)
         {
@@ -30,7 +31,11 @@ public class Text_Transfer : MonoBehaviour
         }
         else
         {
-            writer.writeLine(word);
+            if (word.Length >= 2 && word.Length <=6)
+            {
+                writer.writeLine(word);
+                count++;
+            }
         }
     }
 
@@ -38,7 +43,7 @@ public class Text_Transfer : MonoBehaviour
     {
         reader.close();
         writer.close();
-        Debug.Log("How's them apples?");
+        Debug.Log("L2-6 from 65K.txt - Word Count: " + count.ToString());
     }
 
     // Update is called once per frame
