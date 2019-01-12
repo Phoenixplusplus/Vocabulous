@@ -132,7 +132,8 @@ public class TrieTest : MonoBehaviour
     /* called by Text_Transfer1 once it has read the dictionary being used */
     public void Initialise()
     {
-        Debug.Log("Left click on cubes to add word to search");
+        Debug.Log("Using: L3-4 from 65K");
+        Debug.Log("Left click on cubes to add letter to search");
         Debug.Log("Right click to finish search");
 
         /* the Trie takes in an array of strings, convert the list and chops the null reference off at the end */
