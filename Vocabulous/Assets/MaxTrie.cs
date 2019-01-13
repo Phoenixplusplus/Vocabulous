@@ -10,6 +10,8 @@ public class MaxTrie : MonoBehaviour
     public string WordToCheck = "";
     public bool Loaded = false;
     [SerializeField]
+    private int Trie_Word_Count = 0;
+    [SerializeField]
     private Node _root;
 
     public class Node
@@ -61,6 +63,7 @@ public class MaxTrie : MonoBehaviour
             else
             {
                 AddWord(str);
+                Trie_Word_Count++;
             }
         }
         Loaded = true;
