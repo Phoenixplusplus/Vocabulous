@@ -18,7 +18,6 @@ public class Text_Transfer1 : MonoBehaviour
         while (_running)
         {
             check(reader.nextLine());
-            Trie.allWordsList.Add(reader.nextLine());
         }
 
     }
@@ -29,6 +28,10 @@ public class Text_Transfer1 : MonoBehaviour
         {
             _running = false;
             closeAll();
+        }
+        else
+        {
+            Trie.allWordsList.Add(word);
         }
         //else
         //{
@@ -42,11 +45,5 @@ public class Text_Transfer1 : MonoBehaviour
         //writer.close();
         Debug.Log("Read finished");
         Trie.Initialise();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

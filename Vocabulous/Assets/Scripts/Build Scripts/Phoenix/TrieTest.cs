@@ -132,7 +132,7 @@ public class TrieTest : MonoBehaviour
     /* called by Text_Transfer1 once it has read the dictionary being used */
     public void Initialise()
     {
-        Debug.Log("Using: L3-4 from 65K");
+        Debug.Log("-- Using: L3-4 from 65K --");
         Debug.Log("Left click on cubes to add letter to search");
         Debug.Log("Right click to finish search");
 
@@ -142,7 +142,9 @@ public class TrieTest : MonoBehaviour
         wordsArray = allWordsList.ToArray();
 
         /* populate Trie */
+        Debug.Log("Constructing Trie -- " + System.DateTime.Now);
         trie = new Trie(wordsArray);
+        Debug.Log("Finished constructing Trie -- " + System.DateTime.Now);
 
         ///* using an array of HashSet Letters to search for in order */
         //HashSet<Letter>[] sets = new HashSet<Letter>[] {
@@ -164,16 +166,22 @@ public class TrieTest : MonoBehaviour
         //    //    }
         //    //}
         //}
+        Debug.Log("Trie consists of " + wordsArray.Length + " leaf nodes");
     }
 
+    /* called when left clicking a cube */
     public void TrieAddToSearch(char c)
     {
         lettersToSearch[cubesClicked] = c;
         cubesClicked++;
     }
-    public void TrieSearch()
+
+    /* called on right click */
+    public bool TrieSearch()
     {
-        /* some interpreted/altered magic */
+        /* create a new HashSet Letter array to the length of lettersToSearch
+         * each element of the HashSet Letter array must be a new Letter array,
+         * populate it with the char in lettersToSearch */
         HashSet<Letter>[] sets = new HashSet<Letter>[lettersToSearch.Length];
         for (int i = 0; i < sets.Length; i++)
         {
@@ -186,7 +194,7 @@ public class TrieTest : MonoBehaviour
         /* words found? */
         foreach (string word in wordsFound)
         {
-            Debug.Log("'" + word + "' was found");
+            Debug.Log("'" + word + "' was found -- " + System.DateTime.Now);
             /* starting to determine (with other surrounding cubes) which words can be made */
             //for (int i = 0; i < wordsArray.Length; i++)
             //{
@@ -197,7 +205,7 @@ public class TrieTest : MonoBehaviour
             //}
         }
         /* no words found */
-        if (wordsFound.Count == 0) Debug.Log("No words found");
+        if (wordsFound.Count == 0) { Debug.Log("No words found -- " + System.DateTime.Now); }
 
         /* clear letters array after search */
         for (int i = 0; i < lettersToSearch.Length; i++)
@@ -206,14 +214,11 @@ public class TrieTest : MonoBehaviour
         }
         /* clear cubesClicked after search */
         cubesClicked = 0;
+        /* how many words were found? */
+        int numWords = wordsFound.Count;
         /* clear wordsFound after search */
         wordsFound.Clear();
-    }
-
-    /* inputs */
-    void Update()
-    {
-        /* right click */
-        if (Input.GetMouseButtonDown(1)) TrieSearch();
+        /* return true or false */
+        return numWords > 0;
     }
 }
