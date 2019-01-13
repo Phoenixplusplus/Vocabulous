@@ -13,7 +13,7 @@ public class Text_Transfer : MonoBehaviour
     void Start()
     {
         reader.open("/Dictionaries/UK English 65K words.txt");
-        writer.open("/Dictionaries/L2-6 from 65K.txt");
+        writer.open("/Dictionaries/GameDictUK.txt");
         _running = true;
         while (_running)
         {
@@ -31,7 +31,7 @@ public class Text_Transfer : MonoBehaviour
         }
         else
         {
-            if (word.Length >= 2 && word.Length <=6)
+            if ((word.Length >= 2 && word.Length <=16) || (word.Length == 17 && word.Contains("qu")) )
             {
                 writer.writeLine(word);
                 count++;
@@ -43,12 +43,7 @@ public class Text_Transfer : MonoBehaviour
     {
         reader.close();
         writer.close();
-        Debug.Log("L2-6 from 65K.txt - Word Count: " + count.ToString());
+        Debug.Log("GameDictUK.txt (aka L2-17(with Qu)) - Word Count: " + count.ToString());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

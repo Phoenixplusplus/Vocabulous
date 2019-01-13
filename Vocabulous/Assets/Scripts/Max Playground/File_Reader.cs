@@ -10,6 +10,9 @@ public class File_Reader : MonoBehaviour
     private FileInfo _myFile = null;
     private StreamReader reader = null;
     private string _txt = "";
+    private string _currLine = "";
+    private int _currIndex = 0;
+    private string _currWord = "";
 
     public bool isOpen()
     {
@@ -50,8 +53,48 @@ public class File_Reader : MonoBehaviour
         if (!_fileOpen) return null;
 
         string ret = reader.ReadLine();
+        _currLine = ret;
         if (ret == null) close();
         return ret;
+    }
+
+    // BUGGED TO FUCK AND BACK - do not use
+    public string nextWord()
+    {
+        string next = "";
+
+        if (_currIndex == _currLine.Length -1 || _currLine == "")
+        {
+            nextLine();
+            _currIndex = 0;
+        }
+        if (!_fileOpen) return null;
+        bool found = false;
+        while (found == false)
+        {
+            if ((int)_currLine[_currIndex] >= 79 && (int)_currLine[_currIndex] <= 122)
+            {
+                next = next + _currLine[_currIndex];
+            }
+            else
+            {
+                if (next.Length < 2)
+                {
+                    next = "";
+                }
+                else
+                {
+                    found = true;
+                }
+            }
+            _currIndex++;
+            if (_currIndex == _currLine.Length - 1)
+            {
+                nextLine();
+                _currIndex = 0;
+            }
+        }
+        return next;
     }
 
     void OnDestroy()
