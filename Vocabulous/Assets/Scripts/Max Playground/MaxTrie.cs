@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MaxTrie : MonoBehaviour
 {
-    private string DictPath = "/Dictionaries/GameDictUK.txt";
+    private string DictPath = "/Dictionaries/XLGameDictUK.txt";
     private File_Reader reader;
     public string WordToCheck = "";
     public bool Loaded = false;
@@ -13,6 +13,8 @@ public class MaxTrie : MonoBehaviour
     private int Trie_Word_Count = 0;
     [SerializeField]
     private Node _root;
+    [SerializeField]
+    private int Trie_Node_Count = 0;
 
     public class Node
     {
@@ -36,6 +38,7 @@ public class MaxTrie : MonoBehaviour
             {
                 tmp = new Node() { Letter = c, Length = curr.Length + 1 };
                 curr.Kids.Add(c, tmp);
+                Trie_Node_Count++;
             }
             curr = curr.Kids[c];
         }

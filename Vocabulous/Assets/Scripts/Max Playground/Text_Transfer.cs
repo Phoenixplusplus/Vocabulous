@@ -12,8 +12,8 @@ public class Text_Transfer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        reader.open("/Dictionaries/UK English 65K words.txt");
-        writer.open("/Dictionaries/GameDictUK.txt");
+        reader.open("/Dictionaries/UK English 194K words.txt");
+        writer.open("/Dictionaries/XLGameDictUK.txt");
         _running = true;
         while (_running)
         {
