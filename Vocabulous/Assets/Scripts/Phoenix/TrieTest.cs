@@ -131,7 +131,7 @@ public class TrieTest : MonoBehaviour
     /* called by Text_Transfer1 once it has read the dictionary being used */
     public void Initialise()
     {
-        Debug.Log("-- Using: L3-4 from 65K --");
+        Debug.Log("-- Using: XLGameDictUK --");
         Debug.Log("Left click on cubes to add letter to search");
         Debug.Log("Right click to finish search");
 
