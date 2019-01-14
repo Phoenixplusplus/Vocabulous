@@ -123,6 +123,8 @@ GameObject:
   - component: {fileID: 298494163}
   - component: {fileID: 298494162}
   - component: {fileID: 298494164}
+  - component: {fileID: 298494166}
+  - component: {fileID: 298494165}
   m_Layer: 0
   m_Name: Trie-Holder
   m_TagString: Untagged
@@ -168,6 +170,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d7bbc64994764a418669223f3c97b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &298494165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 298494161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1e00561d05d70f4e99805dfbc8e30d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &298494166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 298494161}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cc9f27d648f4c34587d4be0679872dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reader: {fileID: 298494164}
+  writer: {fileID: 298494165}
 --- !u!1 &352798456
 GameObject:
   m_ObjectHideFlags: 0
