@@ -58,7 +58,7 @@ public class TrieTest : MonoBehaviour
                 string letter = arrayOfWords[i];
                 Node node = root;
 
-                /* loop through each element in array */
+                /* loop through word element in array */
                 for (int a = 1; a <= letter.Length; a++)
                 {
                     char character = letter[a - 1];
@@ -67,8 +67,7 @@ public class TrieTest : MonoBehaviour
                     /* searching for the node that corresponds to the character we have, if it doesn't exist.. */
                     if (!node.group.TryGetValue(character, out next))
                     {
-                        /* assign the character to a new node in the 'group' dictionary 
-                         * notice that the 'Letter' to 'char' conversion comes in handy here */
+                        /* assign the character to a new node in the 'group' dictionary */
                         next = new Node();
                         node.group.Add(character, next);
                     }
@@ -196,15 +195,30 @@ public class TrieTest : MonoBehaviour
     }
 
     /* called on right click */
-    public bool TrieSearch()
+    public bool TrieSearch(bool anagram)
     {
         /* create a new HashSet Letter array to the length of lettersToSearch
          * each element of the HashSet Letter array must be a new Letter array,
          * populate it with the char in lettersToSearch */
         HashSet<Letter>[] sets = new HashSet<Letter>[lettersToSearch.Length];
-        for (int i = 0; i < sets.Length; i++)
+        if (anagram)
         {
-            sets[i] = new HashSet<Letter>(new Letter[] { lettersToSearch[i] });
+            HashSet<Letter> selectedLetters = new HashSet<Letter>();
+            for (int i = 0; i < sets.Length; i++)
+            {
+                for (int j = 0; j < sets.Length; j++)
+                {
+                    selectedLetters.Add(lettersToSearch[j]);
+                }
+                sets[i] = selectedLetters;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < sets.Length; i++)
+            {
+                sets[i] = new HashSet<Letter>(new Letter[] { lettersToSearch[i] });
+            }
         }
 
         /* search trie */
@@ -233,7 +247,7 @@ public class TrieTest : MonoBehaviour
         /* clear letters array after search */
         for (int i = 0; i < lettersToSearch.Length; i++)
         {
-            lettersToSearch[i] = (char) 0;
+            lettersToSearch[i] = '\0';
         }
         /* clear cubesClicked after search */
         cubesClicked = 0;
@@ -243,5 +257,16 @@ public class TrieTest : MonoBehaviour
         wordsFound.Clear();
         /* return true or false */
         return numWords > 0;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            for (int i = 0; i < lettersToSearch.Length; i++)
+            {
+                Debug.Log(lettersToSearch[i] + " - ");
+            }
+        }
     }
 }
