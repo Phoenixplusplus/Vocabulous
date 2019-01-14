@@ -142,18 +142,38 @@ public class TrieTest : MonoBehaviour
         wordsArray = allWordsList.ToArray();
 
         /* populate Trie */
-        Debug.Log("Constructing Trie -- " + System.DateTime.Now);
+        double t = 0;
+        t += Time.deltaTime;
         trie = new Trie(wordsArray);
-        Debug.Log("Finished constructing Trie -- " + System.DateTime.Now);
+        Debug.Log("Constructed Trie in " + t + " seconds -- " + System.DateTime.Now);
+        t = 0;
+        Debug.Log("Trie consists of " + wordsArray.Length + " leaf nodes");
 
         ///* using an array of HashSet Letters to search for in order */
         //HashSet<Letter>[] sets = new HashSet<Letter>[] {
-        //  new HashSet<Letter>(new Letter[] { 'a', 'h', 'r', 'a' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'e', 'c' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'l', 'v' }),
-        //  new HashSet<Letter>(new Letter[] { 'l', 'n', 'o' }) };
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
+        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }), };
 
+        //t += Time.deltaTime;
         //SearchWords(trie.root, sets, 0, wordsFound);
+        //Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds");
+        //t = 0;
 
         //foreach (string word in wordsFound)
         //{
@@ -166,7 +186,6 @@ public class TrieTest : MonoBehaviour
         //    //    }
         //    //}
         //}
-        Debug.Log("Trie consists of " + wordsArray.Length + " leaf nodes");
     }
 
     /* called when left clicking a cube */
@@ -189,6 +208,8 @@ public class TrieTest : MonoBehaviour
         }
 
         /* search trie */
+        double t = 0;
+        t += Time.deltaTime;
         SearchWords(trie.root, sets, 0, wordsFound);
 
         /* words found? */
@@ -206,6 +227,8 @@ public class TrieTest : MonoBehaviour
         }
         /* no words found */
         if (wordsFound.Count == 0) { Debug.Log("No words found -- " + System.DateTime.Now); }
+        else { Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds"); }
+        t = 0;
 
         /* clear letters array after search */
         for (int i = 0; i < lettersToSearch.Length; i++)

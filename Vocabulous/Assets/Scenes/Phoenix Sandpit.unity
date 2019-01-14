@@ -153,7 +153,7 @@ MonoBehaviour:
   - {fileID: 1969569929}
   - {fileID: 1322922944}
   - {fileID: 1044402825}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &14515382
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -365,7 +365,7 @@ MonoBehaviour:
   - {fileID: 1354415325}
   - {fileID: 394195225}
   - {fileID: 507313273}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &40278242
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -484,7 +484,7 @@ MonoBehaviour:
   - {fileID: 1296213303}
   - {fileID: 2065237701}
   - {fileID: 2076494786}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &85442366
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -603,7 +603,7 @@ MonoBehaviour:
   - {fileID: 1296213303}
   - {fileID: 85442364}
   - {fileID: 2144649036}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &162459701
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1063,7 +1063,7 @@ MonoBehaviour:
   - {fileID: 1629553995}
   - {fileID: 1296213303}
   - {fileID: 162459699}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &288328324
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1292,7 +1292,7 @@ MonoBehaviour:
   - {fileID: 928818096}
   - {fileID: 40278240}
   - {fileID: 1354415325}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &394195227
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1506,7 +1506,7 @@ MonoBehaviour:
   - {fileID: 394195225}
   - {fileID: 1354415325}
   - {fileID: 40278240}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &507313275
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2535,7 +2535,7 @@ MonoBehaviour:
   - {fileID: 1091994932}
   - {fileID: 394195225}
   - {fileID: 1354415325}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &928818098
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2753,7 +2753,7 @@ MonoBehaviour:
   - {fileID: 14515380}
   - {fileID: 1969569929}
   - {fileID: 1322922944}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1044402827
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2875,7 +2875,7 @@ MonoBehaviour:
   - {fileID: 1322922944}
   - {fileID: 928818096}
   - {fileID: 1354415325}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1091994934
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3098,7 +3098,7 @@ MonoBehaviour:
   - {fileID: 1629553995}
   - {fileID: 2065237701}
   - {fileID: 1380126564}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1296213305
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3407,7 +3407,7 @@ MonoBehaviour:
   - {fileID: 1969569929}
   - {fileID: 1091994932}
   - {fileID: 928818096}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1322922946
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3526,7 +3526,7 @@ MonoBehaviour:
   - {fileID: 394195225}
   - {fileID: 40278240}
   - {fileID: 507313273}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1354415327
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3648,7 +3648,7 @@ MonoBehaviour:
   - {fileID: 2009293130}
   - {fileID: 1969569929}
   - {fileID: 1091994932}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1380126566
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4024,7 +4024,7 @@ MonoBehaviour:
   - {fileID: 2009293130}
   - {fileID: 1745132194}
   - {fileID: 1541222249}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1525275402
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4238,7 +4238,7 @@ MonoBehaviour:
   - {fileID: 1525275400}
   - {fileID: 2009293130}
   - {fileID: 1745132194}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1541222251
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4360,7 +4360,7 @@ MonoBehaviour:
   - {fileID: 1525275400}
   - {fileID: 2009293130}
   - {fileID: 1380126564}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1629553997
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4619,7 +4619,7 @@ MonoBehaviour:
   - {fileID: 2009293130}
   - {fileID: 1969569929}
   - {fileID: 14515380}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1745132196
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4821,14 +4821,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6803562f306f449429371cad23815ef7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximumTurns: 4
+  maximumTurns: 17
   currentTurn: 0
   Trie: {fileID: 1736841179}
   cubesList: []
   SelectedCubes: []
   NeighbourCubes: []
   cubeDefaultColour: {r: 0.824, g: 0.412, b: 0.118, a: 1}
-  neighbourColour: {r: 0, g: 0, b: 1, a: 1}
+  cubeNeighbourColour: {r: 0, g: 0, b: 1, a: 1}
+  cubeSelectedColour: {r: 1, g: 0, b: 0, a: 1}
 --- !u!4 &1851468815
 Transform:
   m_ObjectHideFlags: 0
@@ -4887,7 +4888,7 @@ MonoBehaviour:
   - {fileID: 1322922944}
   - {fileID: 1044402825}
   - {fileID: 928818096}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &1969569931
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5009,7 +5010,7 @@ MonoBehaviour:
   - {fileID: 1969569929}
   - {fileID: 14515380}
   - {fileID: 1745132194}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &2009293132
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5131,7 +5132,7 @@ MonoBehaviour:
   - {fileID: 1091994932}
   - {fileID: 507313273}
   - {fileID: 1380126564}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &2065237703
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5399,7 +5400,7 @@ MonoBehaviour:
   - {fileID: 2065237701}
   - {fileID: 394195225}
   - {fileID: 507313273}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &2076494788
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5516,7 +5517,7 @@ MonoBehaviour:
   - {fileID: 162459699}
   - {fileID: 1296213303}
   - {fileID: 85442364}
-  wasHighlighted: 0
+  wasSelected: 0
 --- !u!65 &2144649038
 BoxCollider:
   m_ObjectHideFlags: 0
