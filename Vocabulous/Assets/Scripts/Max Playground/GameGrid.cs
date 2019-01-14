@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid  {
+public class GameGrid  {
 
     public int dx = 5;
     public int dy = 5;
@@ -54,50 +54,57 @@ public class Grid  {
         if (y > 0)
         {
             r = a - dx;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 0) )
+                legals.Add(r); 
         }
         /* move 1 (up, right) */
         if (y > 0 && x < dx - 2 && diagonals)
         {
             r = a - dx + 1;
-            if (!path.Contains(r) && bins[r] != "")
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
                 legals.Add(r);
         }
         /* move 2 (right) */
         if (x < dx - 2)
         {
             r = a + 1;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
+                legals.Add(r);
         }
         /* move 3 (down, right) */
         if (y < dy - 2 && x < dx - 2 && diagonals)
         {
             r = a + dx + 1;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
+                legals.Add(r);
         }
         /* move 4 (down) */
         if (y < dy - 2)
         {
             r = a + dx;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
+                legals.Add(r);
         }
         /* move 5 (down, left) */
         if (y < dy - 2 && x > 0 && diagonals)
         {
             r = a + dx - 1;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
+                legals.Add(r);
         }
         /* move 6 (left) */
         if (x > 0)
         {
             r = a - 1;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(r);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 6))
+                legals.Add(r);
         }
         /* move 7 (up, left) */
         if (x > 0 && y > 0 && diagonals)
         {
             r = a - dx - 1;
-            if (!path.Contains(r) && bins[r] != "") legals.Add(a - dx - 1);
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 7))
+                legals.Add(r);
         }
     }
     
