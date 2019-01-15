@@ -11,31 +11,29 @@ public class GameGrid  {
     public int currDir = -1;
     public Dictionary<int, string> bins = new Dictionary<int, string>();
     public List<int> legals = new List<int>();
-    public List<int> path;
-    private string str = "abcdefghijklmnopqrstuvwxyz";
-    private bool DEBUG = false;
+    public List<int> path = new List<int>();
+    private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public bool DEBUG = false;
 
     // Use this for initialization
     void Start ()
     {
-
+        
     }
 
     public void init()
     {
-        if (DEBUG) { 
-            for (int i = 0; i < dx * dy; i++)
-            {
-                bins.Add(i, "" + str[Random.Range(0, 27)]);
-            }
-        }
-        else
+        currDir = -1;
+        bins.Clear();
+        legals.Clear();
+        path.Clear();
+        for (int i = 0; i < dy * dx; i++)
         {
-            currDir = -1;
-            bins.Clear();
-            legals.Clear();
-            path.Clear();
-            for (int i = 0; i < dy * dx; i++)
+            if (DEBUG)
+            {
+                bins.Add(i, "" + str[Random.Range(0, 26)]);
+            }
+            else
             {
                 bins.Add(i, "");
             }
@@ -110,6 +108,12 @@ public class GameGrid  {
     
     public void AddToPath(int a)
     {
+        if (a < 0 || a > dx * dy)
+        {
+            Debug.Log("GameGrid:AddToPath() - illegal for: " + a);
+            return;
+        }
+        Debug.Log("GameGrid:AddToPath() - attempt for: " + a);
         int c = path.Count;
         if (c == 0)
         {
@@ -184,16 +188,19 @@ public class GameGrid  {
     {
         string ret = "";
         int len = path.Count;
-        foreach (KeyValuePair<int, string> item in bins)
+        foreach (int item in path)
         {
-            ret = ret + item.Value;
+            ret = ret + bins[item];
         }
         return ret;
     }
 
-    // Update is called once per frame
-    void Update ()
+    public void ClearPath()
     {
-		
-	}
+        path.Clear();
+    }
+
+    // Update is called once per frame
+    //void Update ()
+    //{ }
 }

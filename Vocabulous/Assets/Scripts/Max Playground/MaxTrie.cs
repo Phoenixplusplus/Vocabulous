@@ -53,12 +53,12 @@ public class MaxTrie : MonoBehaviour
             Debug.Log("MaxTrie:Load() - Dictionary Path not Specified - returning now");
             return;
         }
+        double Start = Time.realtimeSinceStartup;
         reader.open(DictPath);
         bool _streaming = true;
         while (_streaming)
         {
             string str = reader.nextLine();
-            //string str = reader.nextWord();
             if (str == null)
             {
                 _streaming = false;
@@ -71,7 +71,7 @@ public class MaxTrie : MonoBehaviour
             }
         }
         Loaded = true;
-        Debug.Log("MaxTrie - Loaded");
+        Debug.Log("MaxTrie - Loaded: "+(Time.realtimeSinceStartup - Start).ToString() + " seconds");
     }
 
     // PUBLIC function, feed in a word, returns true if it's in the Trie
