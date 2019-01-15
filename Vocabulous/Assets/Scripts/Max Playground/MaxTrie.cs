@@ -71,6 +71,7 @@ public class MaxTrie : MonoBehaviour
             }
         }
         Loaded = true;
+        Debug.Log("MaxTrie - Loaded");
     }
 
     // PUBLIC function, feed in a word, returns true if it's in the Trie
@@ -180,18 +181,18 @@ public class MaxTrie : MonoBehaviour
         // Trie Loading
         _root = new Node() { Length = 1 };
         reader = GetComponent<File_Reader>();
-        double Start = Time.realtimeSinceStartup;
+        //double Start = Time.realtimeSinceStartup;
         LoadDictionary();
-        Debug.Log("Time to load Dictionary (" + DictPath + ") : " + (Time.realtimeSinceStartup - Start).ToString()+ " seconds");
+        //Debug.Log("Time to load Dictionary (" + DictPath + ") : " + (Time.realtimeSinceStartup - Start).ToString()+ " seconds");
         // End Trie Loading
 
         // Test Scripts
 
-        Start = Time.realtimeSinceStartup;
-        string tester = "gutsaloadsa";
-        List<string> results = testMyOptions(tester,false,5);
-        Debug.Log("Time to recusively check string (" + tester + ") : " + (Time.realtimeSinceStartup - Start).ToString() + " seconds - "+ results.Count.ToString()+" words found");
-        testMySequence("additions", 2);
+        //Start = Time.realtimeSinceStartup;
+        //string tester = "gutsaloadsa";
+        //List<string> results = testMyOptions(tester,false,5);
+        //Debug.Log("Time to recusively check string (" + tester + ") : " + (Time.realtimeSinceStartup - Start).ToString() + " seconds - "+ results.Count.ToString()+" words found");
+        //testMySequence("additions", 2);
     }
 
     // test script
