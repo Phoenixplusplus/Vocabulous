@@ -1072,6 +1072,111 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OverlayPrefab: {fileID: 6638645963978897925, guid: e51d32e4a8ed9e74b8958ee537ca8677,
     type: 3}
+  tiles: {fileID: 1939929877}
+  HoverOver: -1
+  Selecting: 0
+  CurrentWord: 
+  FoundWords: []
+  GridLegals: 
+  currDirection: 0
+  dicelist: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000
+  faces:
+  - S
+  - T
+  - O
+  - S
+  - I
+  - E
+  - D
+  - R
+  - E
+  - X
+  - I
+  - L
+  - U
+  - I
+  - E
+  - N
+  - S
+  - E
+  - N
+  - A
+  - E
+  - E
+  - A
+  - G
+  - B
+  - O
+  - O
+  - B
+  - A
+  - J
+  - W
+  - H
+  - E
+  - G
+  - E
+  - N
+  - A
+  - O
+  - O
+  - T
+  - T
+  - W
+  - L
+  - E
+  - R
+  - T
+  - T
+  - Y
+  - L
+  - N
+  - Z
+  - R
+  - H
+  - N
+  - M
+  - U
+  - N
+  - H
+  - I
+  - Qu
+  - W
+  - T
+  - V
+  - H
+  - E
+  - R
+  - C
+  - A
+  - H
+  - P
+  - O
+  - S
+  - C
+  - O
+  - T
+  - M
+  - U
+  - I
+  - L
+  - R
+  - Y
+  - V
+  - E
+  - D
+  - S
+  - T
+  - Y
+  - D
+  - I
+  - T
+  - P
+  - S
+  - K
+  - F
+  - F
+  - A
 --- !u!4 &896567597
 Transform:
   m_ObjectHideFlags: 0
@@ -1082,7 +1187,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.0514274, y: 0.33274436, z: -0.09664869}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1939929878}
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1344,6 +1450,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1939929877
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1939929878}
+  m_Layer: 0
+  m_Name: Tiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1939929878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1939929877}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.76538795, y: 0.946247, z: -0.054083347}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 896567597}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6638645963573437705
 PrefabInstance:

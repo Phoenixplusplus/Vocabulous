@@ -11,31 +11,29 @@ public class GameGrid  {
     public int currDir = -1;
     public Dictionary<int, string> bins = new Dictionary<int, string>();
     public List<int> legals = new List<int>();
-    public List<int> path;
-    private string str = "abcdefghijklmnopqrstuvwxyz";
-    private bool DEBUG = false;
+    public List<int> path = new List<int>();
+    private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    public bool DEBUG = false;
 
     // Use this for initialization
     void Start ()
     {
-
+        
     }
 
     public void init()
     {
-        if (DEBUG) { 
-            for (int i = 0; i < dx * dy; i++)
-            {
-                bins.Add(i, "" + str[Random.Range(0, 27)]);
-            }
-        }
-        else
+        currDir = -1;
+        bins.Clear();
+        legals.Clear();
+        path.Clear();
+        for (int i = 0; i < dy * dx; i++)
         {
-            currDir = -1;
-            bins.Clear();
-            legals.Clear();
-            path.Clear();
-            for (int i = 0; i < dy * dx; i++)
+            if (DEBUG)
+            {
+                bins.Add(i, "" + str[Random.Range(0, 26)]);
+            }
+            else
             {
                 bins.Add(i, "");
             }
@@ -44,11 +42,11 @@ public class GameGrid  {
 
     public void CheckLegals(int a)
     {
-
+        legals.Clear();
         int r = 0;
 
         int x = a % dx;
-        int y = a % dy;
+        int y = (a - x)/dy;
 
         /* move 0 (up) */
         if (y > 0)
@@ -58,35 +56,35 @@ public class GameGrid  {
                 legals.Add(r); 
         }
         /* move 1 (up, right) */
-        if (y > 0 && x < dx - 2 && diagonals)
+        if (y > 0 && x < dx - 1 && diagonals)
         {
             r = a - dx + 1;
             if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
                 legals.Add(r);
         }
         /* move 2 (right) */
-        if (x < dx - 2)
+        if (x < dx - 1)
         {
             r = a + 1;
             if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
                 legals.Add(r);
         }
         /* move 3 (down, right) */
-        if (y < dy - 2 && x < dx - 2 && diagonals)
+        if (y < dy - 1 && x < dx - 1 && diagonals)
         {
             r = a + dx + 1;
             if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
                 legals.Add(r);
         }
         /* move 4 (down) */
-        if (y < dy - 2)
+        if (y < dy - 1)
         {
             r = a + dx;
             if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
                 legals.Add(r);
         }
         /* move 5 (down, left) */
-        if (y < dy - 2 && x > 0 && diagonals)
+        if (y < dy - 1 && x > 0 && diagonals)
         {
             r = a + dx - 1;
             if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
@@ -110,16 +108,22 @@ public class GameGrid  {
     
     public void AddToPath(int a)
     {
+        if (a < 0 || a > dx * dy)
+        {
+            Debug.Log("GameGrid:AddToPath() - illegal for: " + a);
+            return;
+        }
+        // Debug.Log("GameGrid:AddToPath() - attempt for: " + a);
         int c = path.Count;
         if (c == 0)
         {
             path.Add(a);
             CheckLegals(a);
         }
-        else if (path[c - 1] == a)
+        else if (c > 1 && GetPathSecondFromEnd() == a)
         {
             path.RemoveAt(c - 1);
-            CheckLegals(path[c - 1]);
+            CheckLegals(GetPathEnd());
             if (path.Count < 2)
             {
                 currDir = -1;
@@ -148,10 +152,9 @@ public class GameGrid  {
     public string FinishPath()
     {
         string ret = "";
-        int len = path.Count;
-        foreach (KeyValuePair<int, string> item in bins)
+        foreach (int item in path)
         {
-            ret = ret + item.Value;
+            ret = ret + bins[item];
         }
         path.Clear();
         legals.Clear();
@@ -176,24 +179,48 @@ public class GameGrid  {
     {
         if (bin >= 0 && bin <= dx * dy)
         {
-            bins.Add(bin, value);
+            bins[bin] = value;
+            //bins.Add(bin, value);
         }
     }
 
     public string GetCurrentPath()
     {
         string ret = "";
-        int len = path.Count;
-        foreach (KeyValuePair<int, string> item in bins)
+        foreach (int item in path)
         {
-            ret = ret + item.Value;
+            ret = ret + bins[item];
         }
         return ret;
     }
 
-    // Update is called once per frame
-    void Update ()
+    public void ClearPath()
     {
-		
-	}
+        path.Clear();
+        legals.Clear();
+    }
+
+    public int GetPathEnd()
+    {
+        int len = path.Count;
+        if (len == 0) return -1;
+        else
+        {
+            return path[len - 1];
+        }
+    }
+
+    public int GetPathSecondFromEnd()
+    {
+        int len = path.Count;
+        if (len < 2 ) return -1;
+        else
+        {
+            return path[len - 2];
+        }
+    }
+
+    // Update is called once per frame
+    //void Update ()
+    //{ }
 }
