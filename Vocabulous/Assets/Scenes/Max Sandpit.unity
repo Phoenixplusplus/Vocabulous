@@ -1075,7 +1075,108 @@ MonoBehaviour:
   tiles: {fileID: 1939929877}
   HoverOver: -1
   Selecting: 0
+  CurrentWord: 
   FoundWords: []
+  GridLegals: 
+  currDirection: 0
+  dicelist: 000000000100000002000000030000000400000005000000060000000700000008000000090000000a0000000b0000000c0000000d0000000e0000000f000000
+  faces:
+  - S
+  - T
+  - O
+  - S
+  - I
+  - E
+  - D
+  - R
+  - E
+  - X
+  - I
+  - L
+  - U
+  - I
+  - E
+  - N
+  - S
+  - E
+  - N
+  - A
+  - E
+  - E
+  - A
+  - G
+  - B
+  - O
+  - O
+  - B
+  - A
+  - J
+  - W
+  - H
+  - E
+  - G
+  - E
+  - N
+  - A
+  - O
+  - O
+  - T
+  - T
+  - W
+  - L
+  - E
+  - R
+  - T
+  - T
+  - Y
+  - L
+  - N
+  - Z
+  - R
+  - H
+  - N
+  - M
+  - U
+  - N
+  - H
+  - I
+  - Qu
+  - W
+  - T
+  - V
+  - H
+  - E
+  - R
+  - C
+  - A
+  - H
+  - P
+  - O
+  - S
+  - C
+  - O
+  - T
+  - M
+  - U
+  - I
+  - L
+  - R
+  - Y
+  - V
+  - E
+  - D
+  - S
+  - T
+  - Y
+  - D
+  - I
+  - T
+  - P
+  - S
+  - K
+  - F
+  - F
+  - A
 --- !u!4 &896567597
 Transform:
   m_ObjectHideFlags: 0
@@ -1446,36 +1547,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: LegalColor.r
-      value: 0.022694906
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: LegalColor.g
-      value: 0.9622642
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: LegalColor.b
-      value: 0.08172533
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: SelectedColor.r
-      value: 0.9433962
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: SelectedColor.g
-      value: 0.7966088
-      objectReference: {fileID: 0}
-    - target: {fileID: 6638645963978897924, guid: e51d32e4a8ed9e74b8958ee537ca8677,
-        type: 3}
-      propertyPath: SelectedColor.b
-      value: 0.28924885
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e51d32e4a8ed9e74b8958ee537ca8677, type: 3}

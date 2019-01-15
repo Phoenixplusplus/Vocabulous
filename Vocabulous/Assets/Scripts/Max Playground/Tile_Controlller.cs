@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile_Controlller : MonoBehaviour, IisOverlayTile
+public class Tile_Controlller : MonoBehaviour
 {
-    public GameObject quad;
+    public Quad_report InnerQuad;
+    public Quad_report OuterQuad;
     public GameObject letter;
     public Color BaseColor;
     public Color LegalColor;
     public Color SelectedColor;
     private TextMesh txt;
     public int ID = -1;
-    private string rand = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public GameGrid myGrid = null;
 
     public void SetLetter (string value)
@@ -19,17 +19,22 @@ public class Tile_Controlller : MonoBehaviour, IisOverlayTile
         txt.text = value;
     }
 
-    // Interface requirement
-    public int getID()
+    public void setID (int value)
     {
-        return ID;
+        ID = value;
+        InnerQuad.ID = value;
+    }
+
+    public void SetVisible(bool value)
+    {
+        InnerQuad.setVisible(value);
+        OuterQuad.setVisible(value);
     }
 
     // Start is called before the first frame update
     void Start()
     {
         txt = letter.GetComponent<TextMesh>();
-        //SetLetter(""+rand[Random.Range(0, 26)]);
     }
 
     // Update is called once per frame
@@ -37,15 +42,19 @@ public class Tile_Controlller : MonoBehaviour, IisOverlayTile
     {
         if (myGrid != null)
         {
-            SetLetter(myGrid.bins[this.ID]);
-            //if (myGrid.legals.Contains(this.ID))
-            //{
-            //    txt.color = LegalColor;
-            //}
-           // else if (myGrid.path.Contains(this.ID))
-           // {
-            //    txt.color = SelectedColor;
-           // }
+            SetLetter(myGrid.bins[ID]);
+            if (myGrid.legals.Contains(ID))
+            {
+                txt.color = LegalColor;
+            }
+            else if (myGrid.path.Contains(ID))
+            {
+                txt.color = SelectedColor;
+            }
+            else
+            {
+                txt.color = BaseColor;
+            }
         }
     }
 }

@@ -83,6 +83,7 @@ public class MaxTrie : MonoBehaviour
             Debug.Log("MaxTrie:CheckWord() - no string submitted - false returned");
             return false;
         }
+        // Debug.Log("MaxTrie:CheckWord() - "+word+ " submitted");
         word = word.ToLower();
         bool result = true;
         Node curr = _root;
@@ -99,6 +100,7 @@ public class MaxTrie : MonoBehaviour
             }
         }
         if (!curr.Word) result = false;
+        // Debug.Log("MaxTrie:CheckWord() - " + result + " returned");
         return result;
     }
 
