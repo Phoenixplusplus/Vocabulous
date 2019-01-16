@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Test_Game_Controller : MonoBehaviour
 {
+    private GC gc;
     public GameObject OverlayPrefab;
     private GameGrid grid;
     private MaxTrie trie;
@@ -36,6 +37,9 @@ public class Test_Game_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gc = GC.Instance;
+        if (gc != null) Debug.Log("GAME:Start() - connected to Game Controller");
+
         trie = GetComponent<MaxTrie>();
         grid = new GameGrid() { dx = 4, dy = 4 };
         grid.init();
