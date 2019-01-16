@@ -3,6 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameGrid  {
+    // GAMEGRID CLASS
+    // Created and initialised by an "game"
+    // is populated with the game "letters" (held in Dictionary bins by number and String Value)
+    // Grids numbered from 0 - whatever, starting top left to right and down, e.g.
+    // -----------------
+    // | 0 | 1 | 2 | 3 |
+    // |---|---|---|---|
+    // | 4 | 5 | 6 | 7 |
+    // |---|---|---|---|
+    // | 8 | 9 |10 |11 |
+    // |---|---|---|---|
+    // Tracks player "path" through the grid
+    // Establishes "legal" moves from end of path to next cell (based upon rules set at Initialisation)
+    // Returns data to the "game" upon request
 
     public int dx = 5;
     public int dy = 5;
@@ -15,21 +29,19 @@ public class GameGrid  {
     private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public bool DEBUG = false;
 
-    // Use this for initialization
-    void Start ()
-    {
-        
-    }
+    // Use this for initialization ... not used, retained "just in case"
+    // void Start() { }
 
     public void init()
     {
+        // Call this to initialise (and subsequently reset) the GameGrid
         currDir = -1;
         bins.Clear();
         legals.Clear();
         path.Clear();
-        for (int i = 0; i < dy * dx; i++)
+        for (int i = 0; i < dy * dx; i++) // needs to be "full" even if with empty strings, else get reference errors
         {
-            if (DEBUG)
+            if (DEBUG) // for test purposes, populates the bins (all of them) with a random letter
             {
                 bins.Add(i, "" + str[Random.Range(0, 26)]);
             }
@@ -42,9 +54,17 @@ public class GameGrid  {
 
     public void CheckLegals(int a)
     {
+        // populates the legals<int> list with legal moves from the passed (a) cell
+        // based upon cells already on the path and the game rules 
+        // Uses a "move" system defined as
+        //  7  0  1
+        //   \ | /
+        //  6- a -2
+        //   / | \
+        //  5  4  3
+
         legals.Clear();
         int r = 0;
-
         int x = a % dx;
         int y = (a - x)/dy;
 
@@ -108,18 +128,24 @@ public class GameGrid  {
     
     public void AddToPath(int a)
     {
-        if (a < 0 || a > dx * dy)
+        // Called by any "game" to add a cell to the path
+
+        // of "out-of bounds" ... not getting in
+        if (a < 0 || a > dx * dy) 
         {
             Debug.Log("GameGrid:AddToPath() - illegal for: " + a);
             return;
         }
-        // Debug.Log("GameGrid:AddToPath() - attempt for: " + a);
+
         int c = path.Count;
+        // First node on path ... add and populate legals
         if (c == 0)
         {
             path.Add(a);
             CheckLegals(a);
         }
+        // "rollback" functionality, if a == second from end, delete path and AND a from it
+        // "game" needs to check if it wants to do this
         else if (c > 1 && GetPathSecondFromEnd() == a)
         {
             path.RemoveAt(c - 1);
@@ -129,10 +155,12 @@ public class GameGrid  {
                 currDir = -1;
             }
         }
+        // Only adds a path node if it's on the legals list
         else if (legals.Contains(a))
         {
             path.Add(a);
             CheckLegals(a);
+            // establish the current direction .. BUGGED ... NEEDS A FIX
             if (path.Count == 2 && directional)
             {
                 int d = path[0] - path[1];
@@ -151,6 +179,10 @@ public class GameGrid  {
 
     public string FinishPath()
     {
+        // To be called by "game"
+        // returns a string of the selected characters
+        // game needs to "length check" it
+        // current path (and direction) is then cleared
         string ret = "";
         foreach (int item in path)
         {
@@ -164,6 +196,8 @@ public class GameGrid  {
 
     public void PopulateGrid(string values)
     {
+        // FULLY populates a grid with a string sequence of character
+        // length of which MUST match the size of the grid
         int len = dx * dy;
         if (values.Length != len) Debug.Log("Grid:Populate() -> Wrong length of values string");
         else
@@ -177,15 +211,17 @@ public class GameGrid  {
 
     public void PopulateBin(int bin, string value)
     {
+        // Populates a particular "bin" witha string (i.e. letter or "")
         if (bin >= 0 && bin <= dx * dy)
         {
             bins[bin] = value;
-            //bins.Add(bin, value);
         }
     }
 
     public string GetCurrentPath()
     {
+        // returns a String reflecting the letters (words) on the current path
+        // path itself is not modified
         string ret = "";
         foreach (int item in path)
         {
@@ -196,12 +232,15 @@ public class GameGrid  {
 
     public void ClearPath()
     {
+        // Clears the current path (and resets legals and direction)
         path.Clear();
         legals.Clear();
+        currDir = -1;
     }
 
     public int GetPathEnd()
     {
+        // returns the LAST cell ID of the path
         int len = path.Count;
         if (len == 0) return -1;
         else
@@ -212,6 +251,7 @@ public class GameGrid  {
 
     public int GetPathSecondFromEnd()
     {
+        // returns the SECOND LAST cell ID of the path
         int len = path.Count;
         if (len < 2 ) return -1;
         else
@@ -220,7 +260,4 @@ public class GameGrid  {
         }
     }
 
-    // Update is called once per frame
-    //void Update ()
-    //{ }
 }
