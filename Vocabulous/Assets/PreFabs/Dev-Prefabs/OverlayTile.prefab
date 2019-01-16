@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 119617549}
   - component: {fileID: 119617548}
   - component: {fileID: 119617547}
-  - component: {fileID: 119617546}
+  - component: {fileID: 3261959198252848428}
   m_Layer: 0
   m_Name: QuadOuter
   m_TagString: Untagged
@@ -93,7 +93,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 0
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &119617546
+--- !u!114 &3261959198252848428
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -102,11 +102,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 119617544}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d420173d9e51b448b49e06069275d1c, type: 3}
+  m_Script: {fileID: 11500000, guid: fb5c320090ba73a4fa34609d38eebabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColor: {r: 0.7420372, g: 0.05098039, b: 0.94509804, a: 0.49019608}
-  invisibleColor: {r: 0, g: 0, b: 0, a: 0}
+  myColor: {r: 0, g: 0, b: 0, a: 0}
   ID: 9999
   visible: 1
 --- !u!1 &6638645963978897925
@@ -193,8 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b6455c493e194d4f96e01621ffa522b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InnerQuad: {fileID: 5637495319693159886}
-  OuterQuad: {fileID: 119617546}
+  InnerQuad: {fileID: 146854485695181269}
+  OuterQuad: {fileID: 3261959198252848428}
   letter: {fileID: 6638645964814077137}
   BaseColor: {r: 0, g: 0, b: 0, a: 1}
   LegalColor: {r: 0.43271625, g: 0.6415094, b: 0.44582045, a: 1}
@@ -212,7 +211,7 @@ GameObject:
   - component: {fileID: 6638645964136589452}
   - component: {fileID: 6638645964136589453}
   - component: {fileID: 6638645964136589450}
-  - component: {fileID: 5637495319693159886}
+  - component: {fileID: 146854485695181269}
   m_Layer: 0
   m_Name: QuadInner
   m_TagString: Untagged
@@ -293,7 +292,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 0
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &5637495319693159886
+--- !u!114 &146854485695181269
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -302,11 +301,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6638645964136589448}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d420173d9e51b448b49e06069275d1c, type: 3}
+  m_Script: {fileID: 11500000, guid: fb5c320090ba73a4fa34609d38eebabf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColor: {r: 0, g: 0.9604411, b: 1, a: 0.43137255}
-  invisibleColor: {r: 0, g: 0, b: 0, a: 0}
+  myColor: {r: 0, g: 0, b: 0, a: 0}
   ID: 9999
   visible: 1
 --- !u!1 &6638645964814077137

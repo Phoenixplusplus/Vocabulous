@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Tile_Controlller : MonoBehaviour
 {
-    public Quad_report InnerQuad;
-    public Quad_report OuterQuad;
+    public Object_Report InnerQuad;
+    public Object_Report OuterQuad;
     public GameObject letter;
     public Color BaseColor;
     public Color LegalColor;

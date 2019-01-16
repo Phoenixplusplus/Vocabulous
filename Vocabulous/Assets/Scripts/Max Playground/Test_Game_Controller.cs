@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Test_Game_Controller : MonoBehaviour
 {
+    private GC gc;
     public GameObject OverlayPrefab;
     private GameGrid grid;
     private MaxTrie trie;
@@ -36,7 +37,11 @@ public class Test_Game_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        trie = GetComponent<MaxTrie>();
+        gc = GC.Instance;
+        if (gc != null) Debug.Log("GAME:Start() - connected to Game Controller");
+        trie = gc.maxTrie;
+        if (trie == null) Debug.Log("oops");
+
         grid = new GameGrid() { dx = 4, dy = 4 };
         grid.init();
         GridLegals = grid.legals;
@@ -50,9 +55,11 @@ public class Test_Game_Controller : MonoBehaviour
             {
                 GameObject tile = Instantiate(OverlayPrefab, new Vector3(x, y, 0),Quaternion.identity);
                 tile.transform.parent = tiles.transform;
-                tile.GetComponent<Tile_Controlller>().setID(count);
+                Tile_Controlller tilecon = tile.GetComponent<Tile_Controlller>();
+                tilecon.setID(count);
                 count++;
-                tile.GetComponent<Tile_Controlller>().myGrid = grid;
+                tilecon.myGrid = grid;
+                tilecon.SetVisible(false);
             }
         }
     }

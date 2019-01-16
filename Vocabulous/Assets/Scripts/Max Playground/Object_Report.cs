@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quad_report : MonoBehaviour, IisOverlayTile
+public class Object_Report : MonoBehaviour, IisOverlayTile
 {
     public Color myColor;
-    public Color invisibleColor;
-
     public int ID = 9999;
     public bool visible = true;
 
@@ -15,17 +13,17 @@ public class Quad_report : MonoBehaviour, IisOverlayTile
         return ID;
     }
 
-    public void setVisible (bool value)
+    public void setVisible(bool value)
     {
         if (value)
         {
             visible = true;
-            GetComponent<Renderer>().material.color = myColor;
+            GetComponent<Renderer>().enabled = false;
         }
         else
         {
             visible = false;
-            GetComponent<Renderer>().material.color = invisibleColor;
+            GetComponent<Renderer>().enabled = false;
         }
     }
 
