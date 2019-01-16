@@ -6,14 +6,12 @@ public class Text_Transfer1 : MonoBehaviour
 {
     public File_Reader1 reader;
     public TrieTest Trie;
-    //public File_Writer writer;
     private bool _running = false;
 
     // Start is called before the first frame update
     void Start()
     {
         reader.open("/Dictionaries/XLGameDictUK.txt");
-        //writer.open("/Dictionaries/testOutput.txt");
         _running = true;
         while (_running)
         {
@@ -33,17 +31,11 @@ public class Text_Transfer1 : MonoBehaviour
         {
             Trie.allWordsList.Add(word);
         }
-        //else
-        //{
-        //    writer.writeLine(word);
-        //}
     }
 
     void closeAll()
     {
         reader.close();
-        //writer.close();
-        Debug.Log("Read finished");
         Trie.Initialise();
     }
 }

@@ -39,9 +39,9 @@ public class TrieTest : MonoBehaviour
              * Letter (Key), Node (Value) */
             public Dictionary<Letter, Node> group = new Dictionary<Letter, Node>();
             /* the letter at this node */
-            public string letter;
+            public string word;
             /* are we a leaf node? end of searching */
-            public bool isLeaf { get { return letter != null; } }
+            public bool isLeaf { get { return word != null; } }
         }
 
         /* declare a root */
@@ -75,7 +75,7 @@ public class TrieTest : MonoBehaviour
                     /* at the last letter of array, set it's letter, thereby making it a leaf node 'isLeaf == true' */
                     if (a == letter.Length)
                     {
-                        next.letter = letter;
+                        next.word = letter;
                     }
 
                     /* go to next node */
@@ -104,7 +104,7 @@ public class TrieTest : MonoBehaviour
                     /* check if it is a leaf node, if so, we've found a word - add it to the list */
                     if (group.Value.isLeaf)
                     {
-                        wordsFound.Add(group.Value.letter);
+                        wordsFound.Add(group.Value.word);
                     }
                     /* if we've found a word or not AND we've detected a node with our letter,
                      * search again with our found node (Value), and increment our index for the next letter */
@@ -122,9 +122,8 @@ public class TrieTest : MonoBehaviour
     /* the words found from 'SearchWords' function */
     List<string> wordsFound = new List<string>();
     /* letters to search the Trie, with a maximum number of letters (will need to precalculate the longest word in the dictionary soon) */
-    char[] lettersToSearch = new char[26];
-    /* number of cubes clicked, used to know which char goes into which element of 'lettersToSearch' */
-    public int cubesClicked = 0;
+    //char[] lettersToSearch = new char[26];
+    List<char> lettersToSearch = new List<char>();
     /* the Trie */
     Trie trie;
 
@@ -132,8 +131,6 @@ public class TrieTest : MonoBehaviour
     public void Initialise()
     {
         Debug.Log("-- Using: XLGameDictUK --");
-        Debug.Log("Left click on cubes to add letter to search");
-        Debug.Log("Right click to finish search");
 
         /* the Trie takes in an array of strings, convert the list and chops the null reference off at the end */
         wordsArray = new string[allWordsList.Count];
@@ -151,23 +148,6 @@ public class TrieTest : MonoBehaviour
         ///* using an array of HashSet Letters to search for in order */
         //HashSet<Letter>[] sets = new HashSet<Letter>[] {
         //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }),
-        //  new HashSet<Letter>(new Letter[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' }), };
 
         //t += Time.deltaTime;
         //SearchWords(trie.root, sets, 0, wordsFound);
@@ -187,20 +167,13 @@ public class TrieTest : MonoBehaviour
         //}
     }
 
-    /* called when left clicking a cube */
-    public void TrieAddToSearch(char c)
-    {
-        lettersToSearch[cubesClicked] = c;
-        cubesClicked++;
-    }
-
-    /* called on right click */
-    public bool TrieSearch(bool anagram)
+    /* main search function */
+    public bool TrieSearch(bool anagram, bool exactCompare, bool debug)
     {
         /* create a new HashSet Letter array to the length of lettersToSearch
          * each element of the HashSet Letter array must be a new Letter array,
          * populate it with the char in lettersToSearch */
-        HashSet<Letter>[] sets = new HashSet<Letter>[lettersToSearch.Length];
+        HashSet<Letter>[] sets = new HashSet<Letter>[lettersToSearch.Count];
         if (anagram)
         {
             HashSet<Letter> selectedLetters = new HashSet<Letter>();
@@ -226,44 +199,62 @@ public class TrieTest : MonoBehaviour
         t += Time.deltaTime;
         SearchWords(trie.root, sets, 0, wordsFound);
 
-        /* words found? */
-        foreach (string word in wordsFound)
+        /* debug other words found within the search string */
+        if (debug)
         {
-            Debug.Log("'" + word + "' was found -- " + System.DateTime.Now);
-            /* starting to determine (with other surrounding cubes) which words can be made */
-            //for (int i = 0; i < wordsArray.Length; i++)
-            //{
-            //    if (wordsArray[i].StartsWith(word))
-            //    {
-            //        Debug.Log(wordsArray[i]);
-            //    }
-            //}
+            foreach (string word in wordsFound)
+            {
+                Debug.Log("'" + word + "' was found -- " + System.DateTime.Now);
+            }
+            /* no words found */
+            if (wordsFound.Count == 0) { Debug.Log("No words found -- " + System.DateTime.Now); }
+            else { Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds"); }
         }
-        /* no words found */
-        if (wordsFound.Count == 0) { Debug.Log("No words found -- " + System.DateTime.Now); }
-        else { Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds"); }
         t = 0;
 
-        /* clear letters array after search */
-        for (int i = 0; i < lettersToSearch.Length; i++)
+        /* how many words were found if exactCompare false
+         * else check each word in the returned words, if the length of any word in the list == lettersToSearch length, then we have an exact match */
+        int numWords = 0;
+        if (!exactCompare) numWords = wordsFound.Count;
+        else
         {
-            lettersToSearch[i] = '\0';
+            foreach (string word in wordsFound)
+            {
+                if (word.Length == lettersToSearch.Count)
+                {
+                    if (debug) Debug.Log("Exact match found");
+                    numWords++;
+                }
+            }
         }
-        /* clear cubesClicked after search */
-        cubesClicked = 0;
-        /* how many words were found? */
-        int numWords = wordsFound.Count;
-        /* clear wordsFound after search */
+
+        /* clear lettersToSearch and wordsFound after search */
+        lettersToSearch.Clear();
         wordsFound.Clear();
-        /* return true or false */
+        /* return true or false based on how many words found */
         return numWords > 0;
     }
 
+    /* convert the string to chars, add them in order to the 'lettersToSearch' array then do the search without anagram */
+    public bool SearchString(string str, bool anagram, bool exactCompare, bool debug)
+    {
+        for (int i = 0; i < str.Length; i++)
+        {
+            lettersToSearch.Add(str[i]);
+        }
+        return TrieSearch(anagram, exactCompare, debug);
+    }
+
+
+
+
+
+    /* DEBUG */
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.C))
         {
-            for (int i = 0; i < lettersToSearch.Length; i++)
+            for (int i = 0; i < lettersToSearch.Count; i++)
             {
                 Debug.Log(lettersToSearch[i] + " - ");
             }

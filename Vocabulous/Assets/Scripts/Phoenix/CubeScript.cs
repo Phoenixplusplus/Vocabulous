@@ -34,7 +34,7 @@ public class CubeScript : MonoBehaviour
             Debug.Log(letter + " clicked, adding to search -- " + System.DateTime.Now);
 
             /* add letter to the Trie search array */
-            sceneController.Trie.TrieAddToSearch(letter);
+            //sceneController.Trie.TrieAddToSearch(letter);
             /* add myself to list in sceneController so it can change the colour back to default when search is over */
             sceneController.SelectedCubes.Add(this.gameObject);
             /* tell controller to delete any memory of previous neighbour cubes and send this cubes neighbours */
