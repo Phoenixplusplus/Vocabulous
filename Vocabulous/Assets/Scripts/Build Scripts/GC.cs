@@ -9,15 +9,16 @@ public class GC : MonoBehaviour
     public bool HoverChange = false; // quick "has hover changed bool" for frame to frame checking
 
 
-
+    // a lot of messing about ... but ... https://answers.unity.com/questions/915032/make-a-public-variable-with-a-private-setter-appea.html
     // changed in Update() to reflect code of what mouse is over
     public int NewHoverOver { get { return _NewHoverOver; } private set { _NewHoverOver = value; } }
     [SerializeField]
-    private int _NewHoverOver = 0;
+    private int _NewHoverOver = -1;
     // reflects the HoverOvervalue from the PREVIOUS frame (for frame by frame comparison)
     public int OldHoverOver { get { return _OldHoverOver; } private set { _OldHoverOver = value; } }
     [SerializeField]
-    private int _OldHoverOver = 0;
+    private int _OldHoverOver = -1;
+    public MaxTrie maxTrie;
 
 
     // --------------------//
