@@ -122,8 +122,9 @@ public class TrieTest : MonoBehaviour
     /* the words found from 'SearchWords' function */
     List<string> wordsFound = new List<string>();
     /* letters to search the Trie, with a maximum number of letters (will need to precalculate the longest word in the dictionary soon) */
-    //char[] lettersToSearch = new char[26];
     List<char> lettersToSearch = new List<char>();
+    /* store last words found from search */
+    public List<string> lastStoredWords = new List<string>();
     /* the Trie */
     Trie trie;
 
@@ -154,22 +155,20 @@ public class TrieTest : MonoBehaviour
         //Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds");
         //t = 0;
 
-        //foreach (string word in wordsFound)
+        //int c = 0;
+        //foreach (string word in allWordsList)
         //{
-        //    Debug.Log(word + " could also carry on to be ");
-        //    //for (int i = 0; i < wordsArray.Length; i++)
-        //    //{
-        //    //    if (wordsArray[i].StartsWith(word))
-        //    //    {
-        //    //        Debug.Log(wordsArray[i]);
-        //    //    }
-        //    //}
+        //    if (word.Length > 16) c++;
         //}
+        //Debug.Log(c++);
     }
 
     /* main search function */
-    public bool TrieSearch(bool anagram, bool exactCompare, bool debug)
+    public bool TrieSearch(bool anagram, bool exactCompare, bool storeWords, int lengthOfStoredWords, bool debug)
     {
+        /* clear last stored words firstly */
+        lastStoredWords.Clear();
+
         /* create a new HashSet Letter array to the length of lettersToSearch
          * each element of the HashSet Letter array must be a new Letter array,
          * populate it with the char in lettersToSearch */
@@ -196,21 +195,38 @@ public class TrieTest : MonoBehaviour
 
         /* search trie */
         double t = 0;
-        t += Time.deltaTime;
-        SearchWords(trie.root, sets, 0, wordsFound);
-
-        /* debug other words found within the search string */
         if (debug)
         {
-            foreach (string word in wordsFound)
-            {
-                Debug.Log("'" + word + "' was found -- " + System.DateTime.Now);
-            }
-            /* no words found */
-            if (wordsFound.Count == 0) { Debug.Log("No words found -- " + System.DateTime.Now); }
-            else { Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds"); }
+            t += Time.deltaTime;
         }
-        t = 0;
+        SearchWords(trie.root, sets, 0, wordsFound);
+
+        /* debug other words found within the search string -- also store last searched words for convenience */
+        foreach (string word in wordsFound)
+        {
+            if (debug) Debug.Log("'" + word + "' was found -- " + System.DateTime.Now);
+            if (storeWords)
+            {
+                if (word.Length == lengthOfStoredWords)
+                {
+                    lastStoredWords.Add(word);
+                }
+            }
+        }
+        /* no words found */
+        if (debug)
+        {
+            if (wordsFound.Count == 0)
+            {
+                Debug.Log("No words found -- " + System.DateTime.Now);
+            }
+            else
+            {
+                Debug.Log("Found " + wordsFound.Count + " words and took " + t + " seconds");
+            }
+        }
+
+        if (debug) t = 0;
 
         /* how many words were found if exactCompare false
          * else check each word in the returned words, if the length of any word in the list == lettersToSearch length, then we have an exact match */
@@ -236,13 +252,13 @@ public class TrieTest : MonoBehaviour
     }
 
     /* convert the string to chars, add them in order to the 'lettersToSearch' array then do the search without anagram */
-    public bool SearchString(string str, bool anagram, bool exactCompare, bool debug)
+    public bool SearchString(string str, bool anagram, bool exactCompare, bool storeWords, int lengthOfStoredWords, bool debug)
     {
         for (int i = 0; i < str.Length; i++)
         {
             lettersToSearch.Add(str[i]);
         }
-        return TrieSearch(anagram, exactCompare, debug);
+        return TrieSearch(anagram, exactCompare, storeWords, lengthOfStoredWords, debug);
     }
 
 

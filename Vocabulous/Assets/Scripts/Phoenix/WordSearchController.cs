@@ -14,8 +14,19 @@ public class WordSearchController : MonoBehaviour
     public TrieTest trie;
     public int gridXLength = 20;
     public int gridYLength = 20;
-    public int minimumLengthWord = 3;
-    public int maximumLengthWord = 17;
+    [SerializeField]
+    private int minimumLengthWord = 3;
+    [SerializeField]
+    private int maximumLengthWord = 8;
+    public int numberOfWords = 15;
+    //                                  will longer length/default these off some research when less tierd
+    public int threeLetterWordsCount = 2;
+    public int fourLetterWordsCount = 3;
+    public int fiveLetterWordsCount = 4;
+    public int sixLetterWordsCount = 2;
+    public int sevenLetterWordsCount = 2;
+    public int eightLetterWordsCount = 2;
+    //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
     public Dictionary<string, float> weights = new Dictionary<string, float>
@@ -26,17 +37,28 @@ public class WordSearchController : MonoBehaviour
         { "s", 6.82f }, { "t", 9.10f }, { "u", 2.88f }, { "v", 1.11f }, { "w", 2.09f },{ "x", 0.17f },
         { "y", 2.11f }, { "z", 0.07f }
     };
+    private float totalWeight = 0f;
     [SerializeField]
     private bool selecting = false;
-    private float totalWeight;
 
     void Start()
     {
+
         /* gc */
         gameController = GC.Instance;
 
+        /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
+        if (maximumLengthWord > 17) maximumLengthWord = 17;
+        if (gridXLength < maximumLengthWord)
+        {
+            maximumLengthWord = gridXLength;
+            if (gridYLength < maximumLengthWord)
+            {
+                maximumLengthWord = gridYLength;
+            }
+        }
+
         /* sum weights.Value for 'totalWeight' from start as this wont change */
-        float totalWeight = 0f;
         foreach (KeyValuePair<string, float> weight in weights)
         {
             totalWeight = totalWeight + weight.Value;
@@ -45,11 +67,6 @@ public class WordSearchController : MonoBehaviour
         /* setup grid and tiles */
         grid = new GameGrid() { dx = gridXLength, dy = gridYLength };
         grid.init();
-
-        for (int i = 0; i < gridXLength * gridYLength; i++)
-        {
-            grid.PopulateBin(i, GetRandomLetter(totalWeight));
-        }
 
         int count = 0;
         for (int y = gridYLength; y > 0; y--)
@@ -65,6 +82,26 @@ public class WordSearchController : MonoBehaviour
                 tilecon.SetVisible(true);
             }
         }
+
+        /* populate with dummy data so the grid can check 'legals' for placing words in */
+        for (int i = 0; i < gridXLength * gridYLength; i++)
+        {
+            grid.PopulateBin(i, "a");
+        }
+
+        /* populate with initial words to be placed 'unfoundWords' List */ // NTS: shorten this up, maybe convert to array and add a loop
+        PopulateInitialWords(3, threeLetterWordsCount);
+        PopulateInitialWords(4, fourLetterWordsCount);
+        PopulateInitialWords(5, fiveLetterWordsCount);
+        PopulateInitialWords(6, sixLetterWordsCount);
+        PopulateInitialWords(7, sevenLetterWordsCount);
+        PopulateInitialWords(8, eightLetterWordsCount);
+
+        /* bosh in some random weighted letters */
+        //for (int i = 0; i < gridXLength * gridYLength; i++)
+        //{
+        //    grid.PopulateBin(i, GetRandomLetter(totalWeight));
+        //}
     }
 
     void Update()
@@ -75,7 +112,50 @@ public class WordSearchController : MonoBehaviour
         InputAndSearch();
     }
 
-    /* return key in 'weights' dictionary based on accumulated weight > random number */
+    /* recursive populate 'unfoundWords' list */
+    void PopulateInitialWords(int len, int numberOfWordsCount)
+    {
+        Debug.Log("Populating initial words..");
+        /* create a random string to the lenth 'len' we want */
+        string s = "";
+        for (int i = 0; i < len; i++)
+        {
+            s = s + GetRandomLetter(totalWeight);
+        }
+        /* search trie with string 's' and store result with..
+         * s = string, anagram = true, exactCompare = false, storeWords = true, lengthOfStoredWords = len, debug = false */
+        bool success = trie.SearchString(s, true, false, true, len, false);
+        /* recursion */
+        if (!success)
+        {
+            Debug.Log("Failed to populate words..");
+            PopulateInitialWords(len, numberOfWordsCount);
+        }
+        if (trie.lastStoredWords.Count < len)
+        {
+            Debug.Log("Failed to populate words..");
+            PopulateInitialWords(len, numberOfWordsCount);
+        }
+        /* grab the amount 'numberOfWordsCount' we need at random if it's not already in the List 'unfoundWords' */
+        else
+        {
+            for (int i = 0; i < numberOfWordsCount; i++)
+            {
+                int randIndex = Random.Range(0, trie.lastStoredWords.Count - 1);
+                if (!unfoundWords.Contains(trie.lastStoredWords[randIndex])) unfoundWords.Add(trie.lastStoredWords[randIndex]);
+                /* if the random number made the controller add the same word twice or more, go mental */
+                else
+                {
+                    for (int a = 0; a < numberOfWordsCount - i; a++)
+                    {
+                        if (!unfoundWords.Contains(trie.lastStoredWords[a])) unfoundWords.Add(trie.lastStoredWords[a]);
+                    }
+                }
+            }
+        }
+    }
+
+    /* based on accumulated weight > random number, return string 'Key' in Dictionary 'weights' */
     string GetRandomLetter(float tw)
     {
         float rand = Random.Range(0f, tw);
@@ -90,11 +170,12 @@ public class WordSearchController : MonoBehaviour
         return weights.ElementAt(count).Key;
     }
 
+    /* input and trie search */
     void InputAndSearch()
     {
+        /* hit a tile, mouse down */
         if (!selecting)
         {
-            /* hit a tile, mouse down */
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver != -1)
             {
                 selecting = true;
@@ -110,7 +191,7 @@ public class WordSearchController : MonoBehaviour
                 string res = grid.FinishPath();
                 if (res.Length >= minimumLengthWord)
                 {
-                    if (trie.SearchString(res, false, true, false))
+                    if (trie.SearchString(res, false, true, false, 0, false))
                     {
                         if (foundWords.Contains(res))
                         {
@@ -120,6 +201,7 @@ public class WordSearchController : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             foundWords.Add(res);
+                            unfoundWords.Remove(res);
                         }
                     }
                     else
@@ -131,6 +213,7 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
+    /* middle man between GC and this class' grid */
     void CheckGCHoverValue()
     {
         if (gameController.NewHoverOver != gameController.OldHoverOver && selecting)

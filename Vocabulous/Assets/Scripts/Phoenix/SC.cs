@@ -29,7 +29,7 @@ public class SC : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             /* search Trie and store in bool */
-            bool success = Trie.TrieSearch(false, false, true);
+            bool success = Trie.TrieSearch(false, false, false, 0, true);
 
             /* reset cubes back to default settings
              * if found a word, start coroutine on those cubes */
