@@ -8,7 +8,7 @@ public class MaxTrie : MonoBehaviour
     private string DictPath = "/Dictionaries/XLGameDictUK.txt";
     private File_Reader reader;
     public string WordToCheck = "";
-    public bool Loaded = false;
+    public bool Loaded = true;
     public bool Reporting = false;
     [SerializeField]
     private int Trie_Word_Count = 0;
@@ -19,6 +19,39 @@ public class MaxTrie : MonoBehaviour
 
     public Dictionary<char, int> Letter_Dist = new Dictionary<char, int>(); 
     public Dictionary<char, int> Word_Starts = new Dictionary<char, int>();
+    public Dictionary<int, int> Word_Lengths = new Dictionary<int, int>();
+
+    private Dictionary<float, char> RandomLetter = new Dictionary<float, char>() {
+        {187095.0f/1700190.0f,'e'},{341116.0f/1700190.0f,'i'},{492408.0f/1700190.0f,'s'},
+        { 629275.0f/1700190.0f,'a'},{749571.0f/1700190.0f,'r'},{867292.0f/1700190.0f,'n'},
+        { 980758.0f/1700190.0f,'t'},{1090113.0f/1700190.0f,'o'},{1179858.0f/1700190.0f,'l'},
+        { 1249386.0f/1700190.0f,'c'},{1309461.0f/1700190.0f,'u'},{1368152.0f/1700190.0f,'d'},
+        { 1418768.0f/1700190.0f,'p'},{1468342.0f/1700190.0f,'m'},{1516149.0f/1700190.0f,'g'},
+        { 1558124.0f/1700190.0f,'h'},{1589258.0f/1700190.0f,'b'},{1617793.0f/1700190.0f,'y'},
+        { 1637837.0f/1700190.0f,'f'},{1654167.0f/1700190.0f,'v'},{1668262.0f/1700190.0f,'k'},
+        { 1680616.0f/1700190.0f,'w'},{1689227.0f/1700190.0f,'z'},{1693958.0f/1700190.0f,'x'},
+        { 1697117.0f/1700190.0f,'q'},{1700190.0f/1700190.0f,'j'}
+    };
+    private Dictionary<float, char> RandomWordStart = new Dictionary<float, char>() {
+        {22310.0f/193655.0f,'s'},{39810.0f/193655.0f,'c'},{56252.0f/193655.0f,'p'},
+        { 67846.0f/193655.0f,'d'},{79152.0f/193655.0f,'a'},{90015.0f/193655.0f,'m'},
+        { 100558.0f/193655.0f,'t'},{110551.0f/193655.0f,'r'},{120315.0f/193655.0f,'b'},
+        { 128382.0f/193655.0f,'u'},{136398.0f/193655.0f,'e'},{143800.0f/193655.0f,'i'},
+        { 150847.0f/193655.0f,'f'},{157890.0f/193655.0f,'h'},{164415.0f/193655.0f,'g'},
+        { 170143.0f/193655.0f,'l'},{175633.0f/193655.0f,'o'},{179638.0f/193655.0f,'w'},
+        { 183446.0f/193655.0f,'n'},{186869.0f/193655.0f,'v'},{188989.0f/193655.0f,'k'},
+        { 190748.0f/193655.0f,'j'},{191834.0f/193655.0f,'q'},{192689.0f/193655.0f,'z'},
+        { 193418.0f/193655.0f,'y'},{193655.0f/193655.0f,'x'}
+    };
+    private Dictionary<float, int> RandomWordLength = new Dictionary<float, int>() {
+        {29452.0f/193653.0f,8},{58060.0f/193653.0f,9},{84111.0f/193653.0f,7},
+        { 108992.0f/193653.0f,10},{127745.0f/193653.0f,6},{146308.0f/193653.0f,11},
+        { 159065.0f/193653.0f,12},{170500.0f/193653.0f,5},{178576.0f/193653.0f,13},
+        { 183944.0f/193653.0f,4},{188578.0f/193653.0f,14},{191034.0f/193653.0f,15},
+        { 192441.0f/193653.0f,3},{193445.0f/193653.0f,16},{193646.0f/193653.0f,2},
+        { 193653.0f/193653.0f,17}
+    };
+
 
 
     public class Node
@@ -34,6 +67,12 @@ public class MaxTrie : MonoBehaviour
     {
         Node curr = _root;
         Node tmp = null;
+        if (Reporting)
+        {
+            int len = str.Length;
+            if (!Word_Lengths.ContainsKey(len)) Word_Lengths.Add(len, 0);
+            Word_Lengths[len]++;
+        }
         foreach (char c in str)
         {
             if (curr.Kids == null)
@@ -98,6 +137,11 @@ public class MaxTrie : MonoBehaviour
         }
         Debug.Log("WORD LETTER STARTS");
         foreach (KeyValuePair<char, int> pair in Word_Starts)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
+        Debug.Log("WORD LENGTHS");
+        foreach (KeyValuePair<int, int> pair in Word_Lengths)
         {
             Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
         }
@@ -204,6 +248,38 @@ public class MaxTrie : MonoBehaviour
         return results;
     }
 
+    public int GetRandWordLength()
+    {
+        float test = Random.Range(0.0f, 1.0f);
+        int ret = 0;
+        foreach (KeyValuePair<float, int> odds in RandomWordLength)
+        {
+            if (test <= odds.Key && ret == 0) ret = odds.Value;
+        }
+        return ret;
+    }
+
+    public string GetRandomWordStart()
+    {
+        float test = Random.Range(0.0f, 1.0f);
+        string ret = "";
+        foreach (KeyValuePair<float, char> odds in RandomWordStart)
+        {
+            if (test <= odds.Key && ret == "") ret = ret + odds.Value;
+        }
+        return ret;
+    }
+
+    public string GetRandomLetter()
+    {
+        float test = Random.Range(0.0f, 1.0f);
+        string ret = "";
+        foreach (KeyValuePair<float, char> odds in RandomLetter)
+        {
+            if (test <= odds.Key && ret == "") ret = ret + odds.Value;
+        }
+        return ret;
+    }
 
     // Start is called before the first frame update
     // Currently Loads Trie ... and runs some test scripts
@@ -212,45 +288,33 @@ public class MaxTrie : MonoBehaviour
         // Trie Loading
         _root = new Node() { Length = 1 };
         reader = GetComponent<File_Reader>();
-        //double Start = Time.realtimeSinceStartup;
         LoadDictionary();
-        //Debug.Log("Time to load Dictionary (" + DictPath + ") : " + (Time.realtimeSinceStartup - Start).ToString()+ " seconds");
         // End Trie Loading
-
-        // Test Scripts
-
-        //Start = Time.realtimeSinceStartup;
-        //string tester = "gutsaloadsa";
-        //List<string> results = testMyOptions(tester,false,5);
-        //Debug.Log("Time to recusively check string (" + tester + ") : " + (Time.realtimeSinceStartup - Start).ToString() + " seconds - "+ results.Count.ToString()+" words found");
-        //testMySequence("additions", 2);
+        // TEST SCRIPTS BELOW (if any)
+        TestScripts();
     }
 
-    // test script
-    private List<string> testMyOptions(string tester,bool complete, int minimum)
+    void TestScripts ()
     {
-        List<string> results = getOptions(tester, complete, minimum);
-        foreach (string s in results)
+        var txt1 = "TEST LENGTHS";
+        for (int i = 0; i < 50; i++)
         {
-            Debug.Log(s);
+            txt1 = txt1 + ", " + GetRandWordLength().ToString();
         }
-        return results;
+        Debug.Log(txt1);
+        txt1 = "Word Starts";
+        for (int i = 0; i < 50; i++)
+        {
+            txt1 = txt1 + ", " + GetRandomWordStart().ToString();
+        }
+        Debug.Log(txt1);
+        txt1 = "Random Letters";
+        for (int i = 0; i < 50; i++)
+        {
+            txt1 = txt1 + ", " + GetRandomLetter().ToString();
+        }
+        Debug.Log(txt1);
     }
 
-    // test script
-    private List<string> testMySequence(string sequence, int minimum)
-    {
-        List<string> results = CheckSequence(sequence, minimum);
-        if (results.Count == 0) Debug.Log("Nothing found with checkSequence()");
-        else
-        {
-            for (int i = 0; i < results.Count; i++)
-            {
-                Debug.Log(sequence + " has: " + results[i]);
-            }
-        }
-        return results;
-        
-    }
 
 }
