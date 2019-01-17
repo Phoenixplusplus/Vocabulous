@@ -9,12 +9,17 @@ public class MaxTrie : MonoBehaviour
     private File_Reader reader;
     public string WordToCheck = "";
     public bool Loaded = false;
+    public bool Reporting = false;
     [SerializeField]
     private int Trie_Word_Count = 0;
     [SerializeField]
     private Node _root;
     [SerializeField]
     private int Trie_Node_Count = 0;
+
+    public Dictionary<char, int> Letter_Dist = new Dictionary<char, int>(); 
+    public Dictionary<char, int> Word_Starts = new Dictionary<char, int>();
+
 
     public class Node
     {
@@ -33,7 +38,16 @@ public class MaxTrie : MonoBehaviour
         {
             if (curr.Kids == null)
                 curr.Kids = new Dictionary<char, Node>();
-
+            if (Reporting)
+            {
+                if (curr == _root)
+                {
+                    if (!Word_Starts.ContainsKey(c)) Word_Starts.Add(c, 0);
+                    Word_Starts[c]++;
+                }
+                if (!Letter_Dist.ContainsKey(c)) Letter_Dist.Add(c, 0);
+                Letter_Dist[c]++;
+            }
             if (!curr.Kids.ContainsKey(c))
             {
                 tmp = new Node() { Letter = c, Length = curr.Length + 1 };
@@ -71,7 +85,22 @@ public class MaxTrie : MonoBehaviour
             }
         }
         Loaded = true;
+        if (Reporting) LogLetters();
         Debug.Log("MaxTrie - Loaded: "+(Time.realtimeSinceStartup - Start).ToString() + " seconds");
+    }
+
+    private void LogLetters()
+    {
+        Debug.Log("LETTER DISTRIBUTION");
+        foreach (KeyValuePair<char,int> pair in Letter_Dist)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
+        Debug.Log("WORD LETTER STARTS");
+        foreach (KeyValuePair<char, int> pair in Word_Starts)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
     }
 
     // PUBLIC function, feed in a word, returns true if it's in the Trie
