@@ -9,12 +9,11 @@ public class Test_Game_Controller : MonoBehaviour
     private GameGrid grid;
     private MaxTrie trie;
     public GameObject tiles;
-    public int HoverOver = -1;
     public bool Selecting = false;
     public string CurrentWord = "";
     public List<string> FoundWords = new List<string>();
-    public List<int> GridLegals;
-    public int currDirection;
+    public List<int> GridLegals;    // for debug
+    public int currDirection;       // for debug
     private int[] dicelist = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
     private string[] faces = {
         "S","T","O","S","I","E",
@@ -37,17 +36,21 @@ public class Test_Game_Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Connect to Game Controller and establish links
         gc = GC.Instance;
         if (gc != null) Debug.Log("GAME:Start() - connected to Game Controller");
         trie = gc.maxTrie;
         if (trie == null) Debug.Log("oops");
 
+        // Set up GameGrid
         grid = new GameGrid() { dx = 4, dy = 4 };
         grid.init();
-        GridLegals = grid.legals;
-        currDirection = grid.currDir;
+        GridLegals = grid.legals; // purely for debug purposes
+        currDirection = grid.currDir; // ditto
         PopulateGrid();
         Debug.Log("New Grid x: " + grid.dx.ToString() + " y: " + grid.dy.ToString());
+
+        // Set up Overlay Tiles in a grid, link each tile to the new GameGrid
         int count = 0;
         for (int y = 4; y > 0; y--)
         {
@@ -66,6 +69,10 @@ public class Test_Game_Controller : MonoBehaviour
 
     void PopulateGrid()
     {
+        // Using boggle dice.  
+        // Shuffle "dicelist" an array of 0-15 representing the dice
+        // Loop and establish letter from dice, face (rand 0-5) and faces[] Array
+        // Feed the loop counter and letter into the GameGrid
         // Shuffle as per https://forum.unity.com/threads/randomize-array-in-c.86871/
         for (int i = 0; i < 16; i++)
         {
@@ -86,27 +93,30 @@ public class Test_Game_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Just for Inspector debug purposes
         if (Selecting)
         {
-            CurrentWord = grid.GetCurrentPath();
+            CurrentWord = grid.GetCurrentPath(); // purely for debug
         }
         else
         {
             CurrentWord = "";
         }
-        CheckHoverOver();
-        CheckMouseClicks();
+
+        // Where the game logic really lies
+        CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
+        CheckMouseClicks(); // Defines what happens if the user clicks the mouse
     }
 
     void CheckMouseClicks()
     {
-        if (!Selecting)
+        if (!Selecting) // not currently selecting anything
         {
-            if (Input.GetMouseButtonDown(0) && HoverOver != -1)
+            // Mouse goes down over a non -1 or 9999 IisOverlayTile object (i.e. a valid letter)
+            if (Input.GetMouseButtonDown(0) && gc.NewHoverOver != -1 && gc.NewHoverOver != 9999)
             {
                 Selecting = true;
-                // Debug.Log("Test_Game_Controller:CheckMouseClicks() : Attempting to add " + HoverOver.ToString() + " to path");
-                grid.AddToPath(HoverOver);
+                grid.AddToPath(gc.NewHoverOver);
             }
         }
         else
@@ -140,30 +150,15 @@ public class Test_Game_Controller : MonoBehaviour
 
     void CheckHoverOver()
     {
-        int OldHover = HoverOver;
-        HoverOver = -1;
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 100.0f))
+
+        if (gc.HoverChange && Selecting) // We have a change (whilst selecting)
         {
-            if (hit.collider != null)
-            {
-                IisOverlayTile tile = hit.collider.GetComponent<IisOverlayTile>();              
-                if (tile != null)
-                {
-                    HoverOver = tile.getID();
-                }
-            }
-        }
-        if (HoverOver != OldHover && Selecting) // We have a change (whilst selecting
-        {
-            if (HoverOver == -1)
+            if (gc.NewHoverOver == -1) // moves off grid .... reset path
             {
                 grid.ClearPath();
                 Selecting = false;
             }
-            if (grid.legals.Contains(HoverOver) || grid.GetPathSecondFromEnd() == HoverOver) grid.AddToPath(HoverOver);
+            if (grid.legals.Contains(gc.NewHoverOver) || grid.GetPathSecondFromEnd() == gc.NewHoverOver) grid.AddToPath(gc.NewHoverOver);
         }
     }
-
 }
