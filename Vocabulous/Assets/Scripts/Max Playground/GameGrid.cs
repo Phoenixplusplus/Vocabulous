@@ -14,6 +14,13 @@ public struct MiniGrid
     public GameGrid parent;
     public List<int> ReportTo;
 
+    public void init()
+    {
+        legals = new List<int>();
+        path = new List<int>();
+        parent = new GameGrid();
+    }
+
     public void CheckLegals()
     {
         // populates the legals<int> list with legal moves from the PATH END
@@ -162,11 +169,21 @@ public class GameGrid  {
         dy = mg.dy;
         directional = mg.directional;
         diagonals = mg.diagonals;
-
+        currDir = mg.currDir;
+        path.Clear();
+        foreach (int p in mg.path) path.Add(p);
+        legals.Clear();
+        foreach (int l in mg.legals) path.Add(l);
     }
 
     public void CheckLegals(int a)
     {
+
+        //MiniGrid sample = ExportToMiniGrid();
+        //sample.init();
+        //sample.CheckLegals();
+        //ImportFromMiniGrid(sample);
+
         // populates the legals<int> list with legal moves from the passed (a) cell
         // based upon cells already on the path and the game rules 
         // Uses a "move" system defined as
@@ -179,14 +196,14 @@ public class GameGrid  {
         legals.Clear();
         int r = 0;
         int x = a % dx;
-        int y = (a - x)/dy;
+        int y = (a - x) / dy;
 
         /* move 0 (up) */
         if (y > 0)
         {
             r = a - dx;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 0) )
-                legals.Add(r); 
+            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 0))
+                legals.Add(r);
         }
         /* move 1 (up, right) */
         if (y > 0 && x < dx - 1 && diagonals)
