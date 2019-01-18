@@ -10,6 +10,7 @@ public class Tile_Controlller : MonoBehaviour
     public Color BaseColor;
     public Color LegalColor;
     public Color SelectedColor;
+    public Color HighlightedColor;
     private TextMesh txt;
     public int ID = -1;
     public GameGrid myGrid = null;
@@ -51,9 +52,13 @@ public class Tile_Controlller : MonoBehaviour
             {
                 txt.color = SelectedColor;
             }
-            else
+            else if (!myGrid.highlights.Contains(ID))
             {
                 txt.color = BaseColor;
+            }
+            else
+            {
+                txt.color = HighlightedColor;
             }
         }
     }

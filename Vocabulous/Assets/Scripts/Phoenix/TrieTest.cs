@@ -254,6 +254,7 @@ public class TrieTest : MonoBehaviour
     /* convert the string to chars, add them in order to the 'lettersToSearch' array then do the search without anagram */
     public bool SearchString(string str, bool anagram, bool exactCompare, bool storeWords, int lengthOfStoredWords, bool debug)
     {
+        str.ToLower();
         for (int i = 0; i < str.Length; i++)
         {
             lettersToSearch.Add(str[i]);

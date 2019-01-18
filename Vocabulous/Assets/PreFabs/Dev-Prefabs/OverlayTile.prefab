@@ -198,6 +198,7 @@ MonoBehaviour:
   BaseColor: {r: 0, g: 0, b: 0, a: 1}
   LegalColor: {r: 0.43271625, g: 0.6415094, b: 0.44582045, a: 1}
   SelectedColor: {r: 0.9433962, g: 0.7966088, b: 0.28924885, a: 1}
+  HighlightedColor: {r: 0.745283, g: 0.745283, b: 0.745283, a: 0}
   ID: -1
 --- !u!1 &6638645964136589448
 GameObject:

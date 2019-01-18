@@ -29,7 +29,6 @@ public class WordSearchController : MonoBehaviour
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
-    private List<int> placingPositions = new List<int>();
     public Dictionary<string, uint> weights = new Dictionary<string, uint>
     {
         { "a", 11306 }, { "b", 9764 }, { "c", 17500 }, { "d", 11594 }, { "e", 8016 },{ "f", 7074 },
@@ -197,74 +196,15 @@ public class WordSearchController : MonoBehaviour
         /* clean up in case of recursion 
          * stringPos is for where we will need to compare which letter is at the current path so we can cross through or not */
         bool success = true;
-        int direction = -1;
 
         /* add first position anywhere */
         grid.AddToPath(Random.Range(0, gridXLength * gridYLength));
-        //Debug.Log("Number of legal moves here are: " + grid.legals.Count + " " + System.DateTime.Now);
 
         /* add another path at any legal spot and record the direction */
         grid.AddToPath(grid.legals[Random.Range(0, grid.legals.Count)]);
-        direction = grid.currDir;
-
-        /* need to calculate manually where the next position in the grid should go, because there is still > 1 legal move but at this point, we want it to move in the same direction 
-         * grid.path[1] = the current position on grid, from the direction we know where we should be going */
-        int a = grid.path[1];
-        switch (direction)
-        {
-
-            case 0:
-                {
-                    int res = a - gridXLength;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 1:
-                {
-                    int res = a - gridXLength + 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 2:
-                {
-                    int res = a + 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 3:
-                {
-                    int res = a + gridXLength + 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 4:
-                {
-                    int res = a + gridXLength;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 5:
-                {
-                    int res = a + gridXLength - 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 6:
-                {
-                    int res = a - 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-            case 7:
-                {
-                    int res = a - gridXLength - 1;
-                    grid.AddToPath(res);
-                    break;
-                }
-        }
 
         /* for the rest of the positions, now the 'diagonal' bool will kick in and now there can only be 1 possible legal move */
-        for (int i = 0; i < word.Length - 2; i++)
+        for (int i = 0; i < word.Length - 1; i++)
         {
             /* before we do the rest of the loop, are we at an edge with no legal moves? set success to false, make sure to call FINISHPATH() not CLEARPATH() or there will be errors (direction will not be reset) */
             if (grid.legals.Count == 0)
@@ -343,7 +283,7 @@ public class WordSearchController : MonoBehaviour
             {
                 selecting = false;
                 bool isFound = false;
-                string res = grid.FinishPath();
+                string res = grid.GetCurrentPath();
                 if (res.Length >= minimumLengthWord)
                 {
                     if (trie.SearchString(res, false, true, false, 0, false))
@@ -360,10 +300,12 @@ public class WordSearchController : MonoBehaviour
                             }
                         }
                         if (!isFound) Debug.Log("Sorry, " + res + " is not on the list!");
+                        grid.FinishPath();
                     }
                     else
                     {
                         Debug.Log("Sorry, " + res + " is not on the list!");
+                        grid.FinishPath();
                     }
                 }
             }
