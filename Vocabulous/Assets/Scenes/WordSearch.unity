@@ -296,10 +296,17 @@ MonoBehaviour:
   OverlayPrefab: {fileID: 6638645963978897925, guid: e51d32e4a8ed9e74b8958ee537ca8677,
     type: 3}
   trie: {fileID: 839519899}
-  gridXLength: 20
-  gridYLength: 20
+  gridXLength: 15
+  gridYLength: 15
   minimumLengthWord: 3
   maximumLengthWord: 17
+  numberOfWords: 15
+  threeLetterWordsCount: 2
+  fourLetterWordsCount: 3
+  fiveLetterWordsCount: 4
+  sixLetterWordsCount: 2
+  sevenLetterWordsCount: 2
+  eightLetterWordsCount: 2
   foundWords: []
   unfoundWords: []
   selecting: 0

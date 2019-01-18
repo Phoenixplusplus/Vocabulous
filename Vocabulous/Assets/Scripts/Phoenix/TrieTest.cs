@@ -260,20 +260,4 @@ public class TrieTest : MonoBehaviour
         }
         return TrieSearch(anagram, exactCompare, storeWords, lengthOfStoredWords, debug);
     }
-
-
-
-
-
-    /* DEBUG */
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            for (int i = 0; i < lettersToSearch.Count; i++)
-            {
-                Debug.Log(lettersToSearch[i] + " - ");
-            }
-        }
-    }
 }

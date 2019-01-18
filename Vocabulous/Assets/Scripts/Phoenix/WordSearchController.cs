@@ -15,7 +15,7 @@ public class WordSearchController : MonoBehaviour
     public int gridXLength = 20;
     public int gridYLength = 20;
     [SerializeField]
-    private int minimumLengthWord = 3;
+    private int minimumLengthWord = 4;
     [SerializeField]
     private int maximumLengthWord = 8;
     public int numberOfWords = 15;
@@ -29,17 +29,21 @@ public class WordSearchController : MonoBehaviour
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
-    public Dictionary<string, float> weights = new Dictionary<string, float>
+    private List<int> placingPositions = new List<int>();
+    public Dictionary<string, uint> weights = new Dictionary<string, uint>
     {
-        { "a", 8.12f }, { "b", 1.49f }, { "c", 2.71f }, { "d", 4.32f }, { "e", 12.02f },{ "f", 2.30f },
-        { "g", 2.03f }, { "h", 5.92f }, { "i", 7.31f }, { "j", 0.10f }, { "k", 0.69f },{ "l", 3.98f },
-        { "m", 2.61f }, { "n", 6.95f }, { "o", 7.68f }, { "p", 1.82f }, { "q", 0.11f },{ "r", 6.02f },
-        { "s", 6.82f }, { "t", 9.10f }, { "u", 2.88f }, { "v", 1.11f }, { "w", 2.09f },{ "x", 0.17f },
-        { "y", 2.11f }, { "z", 0.07f }
+        { "a", 11306 }, { "b", 9764 }, { "c", 17500 }, { "d", 11594 }, { "e", 8016 },{ "f", 7074 },
+        { "g", 6525 }, { "h", 7043 }, { "i", 7402 }, { "j", 1759 }, { "k", 2120 },{ "l", 5728 },
+        { "m", 10863 }, { "n", 3808 }, { "o", 5490 }, { "p", 16442 }, { "q", 1086 },{ "r", 9993 },
+        { "s", 22310 }, { "t", 10543 }, { "u", 8067 }, { "v", 3423 }, { "w", 4005 },{ "x", 237 },
+        { "y", 729 }, { "z", 855 }
     };
-    private float totalWeight = 0f;
+    private uint totalWeight = 0;
     [SerializeField]
     private bool selecting = false;
+    private int initialWordsCounter = 0;
+    private string defaultString = "0";
+    private int debugPlacedWords = 0;
 
     void Start()
     {
@@ -59,7 +63,7 @@ public class WordSearchController : MonoBehaviour
         }
 
         /* sum weights.Value for 'totalWeight' from start as this wont change */
-        foreach (KeyValuePair<string, float> weight in weights)
+        foreach (KeyValuePair<string, uint> weight in weights)
         {
             totalWeight = totalWeight + weight.Value;
         }
@@ -67,6 +71,7 @@ public class WordSearchController : MonoBehaviour
         /* setup grid and tiles */
         grid = new GameGrid() { dx = gridXLength, dy = gridYLength };
         grid.init();
+        grid.directional = true;
 
         int count = 0;
         for (int y = gridYLength; y > 0; y--)
@@ -86,22 +91,29 @@ public class WordSearchController : MonoBehaviour
         /* populate with dummy data so the grid can check 'legals' for placing words in */
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
-            grid.PopulateBin(i, "a");
+            grid.PopulateBin(i, defaultString);
         }
 
-        /* populate with initial words to be placed 'unfoundWords' List */ // NTS: shorten this up, maybe convert to array and add a loop
-        PopulateInitialWords(3, threeLetterWordsCount);
-        PopulateInitialWords(4, fourLetterWordsCount);
-        PopulateInitialWords(5, fiveLetterWordsCount);
-        PopulateInitialWords(6, sixLetterWordsCount);
-        PopulateInitialWords(7, sevenLetterWordsCount);
-        PopulateInitialWords(8, eightLetterWordsCount);
+        /* populate with initial words to be placed 'unfoundWords' List */
+        for (int i = 0; i < threeLetterWordsCount; i++) { PopulateInitialWords(3, threeLetterWordsCount, false); }
+        for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
+        for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
+        for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
+        for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
+        for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
 
-        /* bosh in some random weighted letters */
-        //for (int i = 0; i < gridXLength * gridYLength; i++)
-        //{
-        //    grid.PopulateBin(i, GetRandomLetter(totalWeight));
-        //}
+        /* start placing words in the grid and check their legality (possible recursion for each word) */
+        foreach (string word in unfoundWords)
+        {
+            InsertWordToGrid(word);
+        }
+        Debug.Log("Finished populating words, successfully placed " + debugPlacedWords + " words out of " + unfoundWords.Count + " on the unfoundWords list");
+
+        /* bosh in some random weighted letters where there are only 'defaultLetters' left */
+        for (int i = 0; i < gridXLength * gridYLength; i++)
+        {
+            if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight));
+        }
     }
 
     void Update()
@@ -113,7 +125,7 @@ public class WordSearchController : MonoBehaviour
     }
 
     /* recursive populate 'unfoundWords' list */
-    void PopulateInitialWords(int len, int numberOfWordsCount)
+    void PopulateInitialWords(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
         Debug.Log("Populating initial words..");
         /* create a random string to the lenth 'len' we want */
@@ -125,40 +137,48 @@ public class WordSearchController : MonoBehaviour
         /* search trie with string 's' and store result with..
          * s = string, anagram = true, exactCompare = false, storeWords = true, lengthOfStoredWords = len, debug = false */
         bool success = trie.SearchString(s, true, false, true, len, false);
-        /* recursion */
-        if (!success)
+
+        if (trie.lastStoredWords.Count < len) success = false;
+
+        if (success)
         {
-            Debug.Log("Failed to populate words..");
-            PopulateInitialWords(len, numberOfWordsCount);
-        }
-        if (trie.lastStoredWords.Count < len)
-        {
-            Debug.Log("Failed to populate words..");
-            PopulateInitialWords(len, numberOfWordsCount);
-        }
-        /* grab the amount 'numberOfWordsCount' we need at random if it's not already in the List 'unfoundWords' */
-        else
-        {
-            for (int i = 0; i < numberOfWordsCount; i++)
+            /* grab the amount 'numberOfWordsCount' we need at random if it's not already in the List 'unfoundWords' */
+            if (basedOnSameAnagram)
             {
-                int randIndex = Random.Range(0, trie.lastStoredWords.Count - 1);
-                if (!unfoundWords.Contains(trie.lastStoredWords[randIndex])) unfoundWords.Add(trie.lastStoredWords[randIndex]);
-                /* if the random number made the controller add the same word twice or more, go mental */
-                else
+                for (int i = 0; i < numberOfWordsCount; i++)
                 {
-                    for (int a = 0; a < numberOfWordsCount - i; a++)
+                    int randIndex = Random.Range(0, trie.lastStoredWords.Count - 1);
+                    if (!unfoundWords.Contains(trie.lastStoredWords[randIndex])) unfoundWords.Add(trie.lastStoredWords[randIndex]);
+                    /* if the random number made the controller add the same word twice or more, go mental */
+                    else
                     {
-                        if (!unfoundWords.Contains(trie.lastStoredWords[a])) unfoundWords.Add(trie.lastStoredWords[a]);
+                        for (int a = 0; a < numberOfWordsCount - i; a++)
+                        {
+                            if (!unfoundWords.Contains(trie.lastStoredWords[a])) unfoundWords.Add(trie.lastStoredWords[a]);
+                        }
                     }
                 }
             }
+            /* do the same but pick at random for 1 word, not the same anagram for all words */
+            else
+            {
+                int randIndex = Random.Range(0, trie.lastStoredWords.Count);
+                if (unfoundWords.Contains(trie.lastStoredWords[randIndex])) success = false;
+                else unfoundWords.Add(trie.lastStoredWords[randIndex]);
+            }
+        }
+        /* recursion */
+        else
+        {
+            Debug.Log("Failed to populate words, repopulating");
+            PopulateInitialWords(len, numberOfWordsCount, false);
         }
     }
 
     /* based on accumulated weight > random number, return string 'Key' in Dictionary 'weights' */
-    string GetRandomLetter(float tw)
+    string GetRandomLetter(uint tw)
     {
-        float rand = Random.Range(0f, tw);
+        float rand = Random.Range(0, tw + 1);
         float accumWeight = 0;
         int count;
 
@@ -168,6 +188,140 @@ public class WordSearchController : MonoBehaviour
             if (accumWeight > rand) break;
         }
         return weights.ElementAt(count).Key;
+    }
+
+    /* place words in 'unfoundWords' into the grid at random start position while checking if it would be legal */
+    void InsertWordToGrid(string word)
+    {
+        Debug.Log("-- Function Start with: " + word + " --");
+        /* clean up in case of recursion 
+         * stringPos is for where we will need to compare which letter is at the current path so we can cross through or not */
+        bool success = true;
+        int direction = -1;
+
+        /* add first position anywhere */
+        grid.AddToPath(Random.Range(0, gridXLength * gridYLength));
+        //Debug.Log("Number of legal moves here are: " + grid.legals.Count + " " + System.DateTime.Now);
+
+        /* add another path at any legal spot and record the direction */
+        grid.AddToPath(grid.legals[Random.Range(0, grid.legals.Count)]);
+        direction = grid.currDir;
+
+        /* need to calculate manually where the next position in the grid should go, because there is still > 1 legal move but at this point, we want it to move in the same direction 
+         * grid.path[1] = the current position on grid, from the direction we know where we should be going */
+        int a = grid.path[1];
+        switch (direction)
+        {
+
+            case 0:
+                {
+                    int res = a - gridXLength;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 1:
+                {
+                    int res = a - gridXLength + 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 2:
+                {
+                    int res = a + 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 3:
+                {
+                    int res = a + gridXLength + 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 4:
+                {
+                    int res = a + gridXLength;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 5:
+                {
+                    int res = a + gridXLength - 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 6:
+                {
+                    int res = a - 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+            case 7:
+                {
+                    int res = a - gridXLength - 1;
+                    grid.AddToPath(res);
+                    break;
+                }
+        }
+
+        /* for the rest of the positions, now the 'diagonal' bool will kick in and now there can only be 1 possible legal move */
+        for (int i = 0; i < word.Length - 2; i++)
+        {
+            /* before we do the rest of the loop, are we at an edge with no legal moves? set success to false, make sure to call FINISHPATH() not CLEARPATH() or there will be errors (direction will not be reset) */
+            if (grid.legals.Count == 0)
+            {
+                success = false;
+                Debug.Log("Failed to find space for " + word);
+                grid.FinishPath();
+                break;
+            }
+            /* now just keep going to the only legal move */
+            grid.AddToPath(grid.legals[0]);
+            /* check again if we are at edge */
+            if (grid.legals.Count == 0)
+            {
+                success = false;
+                Debug.Log("Failed to find space for " + word);
+                grid.FinishPath();
+                break;
+            }
+        }
+
+
+        /* one last check to see if our path consists of any words that have been taken and that do not cross over with the string at the right character */
+        if (success)
+        {
+            for (int i = 0; i < grid.path.Count - 1; i++)
+            {
+                if (grid.bins[grid.path[i]] != defaultString)
+                {
+                    if (grid.bins[grid.path[i]] != word[i].ToString())
+                    {
+                        Debug.Log("Detected trying to put " + word[i] + " onto " + grid.bins[grid.path[i]]);
+                        success = false;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (success)
+        {
+            /* succeeded: populate each part of the string for each position in the grid we took */
+            for (int i = 0; i < grid.path.Count - 1; i++)
+            {
+                grid.PopulateBin(grid.path[i], word[i].ToString());
+            }
+            Debug.Log("Placed word: " + word);
+            debugPlacedWords++;
+            grid.FinishPath();
+        }
+        /* reached unsuccessful somewhere, recurse */
+        else
+        {
+            grid.FinishPath();
+            Debug.Log("Going recursive");
+            InsertWordToGrid(word);
+        }
     }
 
     /* input and trie search */
@@ -188,25 +342,28 @@ public class WordSearchController : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
             {
                 selecting = false;
+                bool isFound = false;
                 string res = grid.FinishPath();
                 if (res.Length >= minimumLengthWord)
                 {
                     if (trie.SearchString(res, false, true, false, 0, false))
                     {
-                        if (foundWords.Contains(res))
+                        /* do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching */
+                        for (int i = 0; i < unfoundWords.Count - 1; i++)
                         {
-                            Debug.Log("You already got that one!");
+                            if (unfoundWords[i] == res)
+                            {
+                                Debug.Log("You got " + res);
+                                isFound = true;
+                                foundWords.Add(res);
+                                unfoundWords.Remove(res);
+                            }
                         }
-                        else
-                        {
-                            Debug.Log("You got " + res);
-                            foundWords.Add(res);
-                            unfoundWords.Remove(res);
-                        }
+                        if (!isFound) Debug.Log("Sorry, " + res + " is not on the list!");
                     }
                     else
                     {
-                        Debug.Log("Sorry, " + res + " is not in our Dictionary");
+                        Debug.Log("Sorry, " + res + " is not on the list!");
                     }
                 }
             }
