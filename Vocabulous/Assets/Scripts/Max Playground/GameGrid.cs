@@ -2,6 +2,95 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct MiniGrid
+{
+    public int dx;
+    public int dy;
+    public bool directional;
+    public bool diagonals;
+    public int currDir;
+    public List<int> legals;
+    public List<int> path;
+    public GameGrid parent;
+    public List<int> ReportTo;
+
+    public void CheckLegals()
+    {
+        // populates the legals<int> list with legal moves from the PATH END
+        // based upon cells already on the path and the game rules 
+        // Uses a "move" system defined as
+        //  7  0  1
+        //   \ | /
+        //  6- a -2
+        //   / | \
+        //  5  4  3
+
+        int a = path[path.Count-1];
+        legals.Clear();
+        int r = 0;
+        int x = a % dx;
+        int y = (a - x) / dy;
+
+        /* move 0 (up) */
+        if (y > 0)
+        {
+            r = a - dx;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 0))
+                legals.Add(r);
+        }
+        /* move 1 (up, right) */
+        if (y > 0 && x < dx - 1 && diagonals)
+        {
+            r = a - dx + 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
+                legals.Add(r);
+        }
+        /* move 2 (right) */
+        if (x < dx - 1)
+        {
+            r = a + 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
+                legals.Add(r);
+        }
+        /* move 3 (down, right) */
+        if (y < dy - 1 && x < dx - 1 && diagonals)
+        {
+            r = a + dx + 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
+                legals.Add(r);
+        }
+        /* move 4 (down) */
+        if (y < dy - 1)
+        {
+            r = a + dx;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
+                legals.Add(r);
+        }
+        /* move 5 (down, left) */
+        if (y < dy - 1 && x > 0 && diagonals)
+        {
+            r = a + dx - 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
+                legals.Add(r);
+        }
+        /* move 6 (left) */
+        if (x > 0)
+        {
+            r = a - 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 6))
+                legals.Add(r);
+        }
+        /* move 7 (up, left) */
+        if (x > 0 && y > 0 && diagonals)
+        {
+            r = a - dx - 1;
+            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 7))
+                legals.Add(r);
+        }
+    }
+}
+
+
 public class GameGrid  {
     // GAMEGRID CLASS
     // Created and initialised by an "game"
@@ -26,6 +115,7 @@ public class GameGrid  {
     public Dictionary<int, string> bins = new Dictionary<int, string>();
     public List<int> legals = new List<int>();
     public List<int> path = new List<int>();
+    public List<int> highlights = new List<int>();
     private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public bool DEBUG = false;
 
@@ -39,6 +129,7 @@ public class GameGrid  {
         bins.Clear();
         legals.Clear();
         path.Clear();
+        highlights.Clear();
         for (int i = 0; i < dy * dx; i++) // needs to be "full" even if with empty strings, else get reference errors
         {
             if (DEBUG) // for test purposes, populates the bins (all of them) with a random letter
@@ -50,6 +141,28 @@ public class GameGrid  {
                 bins.Add(i, "");
             }
         }
+    }
+
+    public MiniGrid ExportToMiniGrid()
+    {
+        MiniGrid ret = new MiniGrid();
+        ret.dx = dx;
+        ret.dy = dy;
+        ret.directional = directional;
+        ret.diagonals = diagonals;
+        ret.currDir = currDir;
+        foreach (int p in path) ret.path.Add(p);
+        ret.parent = this;
+        return ret;
+    }
+
+    public void ImportFromMiniGrid(MiniGrid mg)
+    {
+        dx = mg.dx;
+        dy = mg.dy;
+        directional = mg.directional;
+        diagonals = mg.diagonals;
+
     }
 
     public void CheckLegals(int a)
@@ -214,6 +327,14 @@ public class GameGrid  {
         if (bin >= 0 && bin <= dx * dy)
         {
             bins[bin] = value;
+        }
+    }
+    // adds contents of the current path to the highlights List<int>
+    public void HighlightCurrentPath()
+    {
+        foreach (int i in path)
+        {
+            if (!highlights.Contains(i)) highlights.Add(i);
         }
     }
 

@@ -10,6 +10,7 @@ public class MaxTrie : MonoBehaviour
     public string WordToCheck = "";
     public bool Loaded = true;
     public bool Reporting = false;
+    public bool Testing = true;
     [SerializeField]
     private int Trie_Word_Count = 0;
     [SerializeField]
@@ -67,6 +68,7 @@ public class MaxTrie : MonoBehaviour
     {
         Node curr = _root;
         Node tmp = null;
+        str = str.ToLower();
         if (Reporting)
         {
             int len = str.Length;
@@ -179,13 +181,14 @@ public class MaxTrie : MonoBehaviour
         return result;
     }
 
-    // PUBLIC function, feed in string, returns a Distinct List<string> or anagram solutions (based on paramaters)
+    // PUBLIC function, feed in string, returns a Distinct List<string> of anagram solutions (based on paramaters)
     // letters {string} - anagram letters
     // complete {bool} - if true, returns only complete solutions using ALL letters
     // minimum {int} - the minimum length of word to be returned in the list
-    public List<string> getOptions(string letters,bool complete, int minimum)
+    public List<string> getAnagram(string letters,bool complete, int minimum)
     {
         List<string> results = new List<string>();
+        letters = letters.ToLower();
         optionsMagic(letters, complete, results, _root,"",minimum);
         return results;
     }
@@ -296,7 +299,7 @@ public class MaxTrie : MonoBehaviour
         LoadDictionary();
         // End Trie Loading
         // TEST SCRIPTS BELOW (if any)
-        //TestScripts();
+        if (Testing) TestScripts();
     }
 
     void TestScripts ()
@@ -317,6 +320,13 @@ public class MaxTrie : MonoBehaviour
         for (int i = 0; i < 50; i++)
         {
             txt1 = txt1 + ", " + GetRandomLetter().ToString();
+        }
+        Debug.Log(txt1);
+        txt1 = "ANAGRAM of (dfgtkjauys):";
+        List<string> anagram = getAnagram("dfgtkjauys", false, 3);
+        foreach (string s in anagram)
+        {
+            txt1 = txt1 + ", " + s;
         }
         Debug.Log(txt1);
     }
