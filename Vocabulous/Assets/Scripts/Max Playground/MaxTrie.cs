@@ -128,6 +128,8 @@ public class MaxTrie : MonoBehaviour
         Debug.Log("MaxTrie - Loaded: "+(Time.realtimeSinceStartup - Start).ToString() + " seconds");
     }
 
+    // Internal function.  Debug logs Dictionary letter distributions, word start letters and length
+    // Only called if "Reporting == true"
     private void LogLetters()
     {
         Debug.Log("LETTER DISTRIBUTION");
@@ -248,6 +250,7 @@ public class MaxTrie : MonoBehaviour
         return results;
     }
 
+    // Returns a WEIGHTED random word length
     public int GetRandWordLength()
     {
         float test = Random.Range(0.0f, 1.0f);
@@ -259,6 +262,7 @@ public class MaxTrie : MonoBehaviour
         return ret;
     }
 
+    // Returns a WEIGHTED random letter for a word starter
     public string GetRandomWordStart()
     {
         float test = Random.Range(0.0f, 1.0f);
@@ -270,6 +274,7 @@ public class MaxTrie : MonoBehaviour
         return ret;
     }
 
+    // Returns a WEIGHTED randome letter (based upon universal letter distribution in the dictionary)
     public string GetRandomLetter()
     {
         float test = Random.Range(0.0f, 1.0f);
@@ -291,7 +296,7 @@ public class MaxTrie : MonoBehaviour
         LoadDictionary();
         // End Trie Loading
         // TEST SCRIPTS BELOW (if any)
-        TestScripts();
+        //TestScripts();
     }
 
     void TestScripts ()

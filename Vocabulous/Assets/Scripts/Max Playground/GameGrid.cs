@@ -144,23 +144,22 @@ public class GameGrid  {
             path.Add(a);
             CheckLegals(a);
         }
-        // "rollback" functionality, if a == second from end, delete path and AND a from it
+        // "rollback" functionality, if a == second from end, delete path AND a from it
         // "game" needs to check if it wants to do this
         else if (c > 1 && GetPathSecondFromEnd() == a)
         {
             path.RemoveAt(c - 1);
-            CheckLegals(GetPathEnd());
             if (path.Count < 2)
             {
                 currDir = -1;
             }
+            CheckLegals(GetPathEnd());
         }
         // Only adds a path node if it's on the legals list
         else if (legals.Contains(a))
         {
             path.Add(a);
-            CheckLegals(a);
-            // establish the current direction .. BUGGED ... NEEDS A FIX
+            // establish the current direction 
             if (path.Count == 2 && directional)
             {
                 int d = path[0] - path[1];
@@ -173,8 +172,8 @@ public class GameGrid  {
                 else if (d ==  1) currDir = 6;
                 else if (d == dx + 1) currDir = 7;
             }
+            CheckLegals(a);
         }
-
     }
 
     public string FinishPath()
