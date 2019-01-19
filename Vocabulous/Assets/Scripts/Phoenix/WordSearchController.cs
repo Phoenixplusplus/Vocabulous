@@ -289,7 +289,7 @@ public class WordSearchController : MonoBehaviour
                     if (trie.SearchString(res, false, true, false, 0, false))
                     {
                         /* do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching */
-                        for (int i = 0; i < unfoundWords.Count - 1; i++)
+                        for (int i = 0; i < unfoundWords.Count; i++)
                         {
                             if (unfoundWords[i] == res)
                             {
