@@ -159,6 +159,7 @@ MonoBehaviour:
   WordToCheck: 
   Loaded: 0
   Reporting: 0
+  Testing: 1
   Trie_Word_Count: 0
   Trie_Node_Count: 0
 --- !u!114 &37235892
@@ -959,6 +960,7 @@ MonoBehaviour:
   FoundWords: []
   GridLegals: 
   currDirection: 0
+  BoggleWords: []
 --- !u!4 &896567597
 Transform:
   m_ObjectHideFlags: 0

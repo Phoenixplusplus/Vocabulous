@@ -184,6 +184,50 @@ public class MaxTrie : MonoBehaviour
         return result;
     }
 
+    // PUBLIC function, provides a list of possible solutions to a partial string (with unknowns marked with "_")
+    // Empty List is returned if no solutions found
+    public List<string> SolveCrossword(string letters)
+    {
+        List<string> results = new List<string>();
+        letters.ToLower();
+        crossMagic(letters, ref results, "", _root);
+        return results;
+    }
+
+    // PRIVATE function, does the recursive bit for SolveCrossword
+    private void crossMagic (string letters, ref List<string> results, string soFar, Node root)
+    {
+        int len = letters.Length;
+        if (len == 0)
+        {
+            if (root.Word && !results.Contains(soFar)) results.Add(soFar);
+        }
+        else
+        {
+            char c = letters[0];
+            if (c !='_') // have a character ... see if we have a new path to recurse through
+            {
+                if (root.Kids != null && root.Kids.Count > 0 && root.Kids.ContainsKey(c))
+                {
+                    string newSoFar = soFar + letters[0];
+                    string newLetters = letters.Remove(0, 1);
+                    crossMagic(newLetters, ref results, newSoFar, root.Kids[c]);
+                }
+            }
+            else
+            {
+                if (root.Kids != null && root.Kids.Count > 0)
+                {
+                    foreach (KeyValuePair<char,Node> item in root.Kids)
+                    {
+                        string newSoFar = soFar + item.Key;
+                        string newLetters = letters.Remove(0, 1);
+                        crossMagic(newLetters, ref results, newSoFar, item.Value);
+                    }
+                }
+            }
+        }
+    }
 
     // PUBLIC function, feed in string, returns a Distinct List<string> of anagram solutions (based on paramaters)
     // letters {string} - anagram letters
@@ -234,7 +278,7 @@ public class MaxTrie : MonoBehaviour
         return results;
     }
 
-    // PUBLIC function, returns a list of words made using the sequence (N.B. from the start of the sequence ONLY)
+    // PUBLIC function, returns a list of words made using the sequence (N.B. from the START of the sequence ONLY)
     // sequence {string} - the sequence to check
     // minimum {int} the smallest word to include
     public List<string> CheckSequence(string sequence, int minimum)
@@ -333,10 +377,19 @@ public class MaxTrie : MonoBehaviour
             txt1 = txt1 + ", " + s;
         }
         Debug.Log(txt1);
-        txt1 = "";
+
         Debug.Log("Start: ad=" + CheckWordStart("ad").ToString() + ", add=" + CheckWordStart("add").ToString() + ", addx=" + CheckWordStart("addx").ToString());
         Debug.Log("Start: fi=" + CheckWordStart("fi").ToString() + ", fix=" + CheckWordStart("fix").ToString() + ", fixz=" + CheckWordStart("fixz").ToString());
         Debug.Log("Start: CO=" + CheckWordStart("CO").ToString() + ", To=" + CheckWordStart("To").ToString() + ", ruddE=" + CheckWordStart("ruddE").ToString());
+        List<string> results = SolveCrossword("_ra_");
+        txt1 = "Solving X-Word for (_ra_) "+results.Count.ToString()+" found";
+        foreach (string s in results) txt1 = txt1 + ", " + s;
+        Debug.Log(txt1);
+        results = SolveCrossword("_ac__nat_on_");
+        txt1 = "Solving X-Word for (_ac__nat_on_) " + results.Count.ToString() + " found";
+        foreach (string s in results) txt1 = txt1 + ", " + s;
+        Debug.Log(txt1);
+
     }
 
     // Internal function.  Debug logs Dictionary letter distributions, word start letters and length
