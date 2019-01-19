@@ -130,26 +130,7 @@ public class MaxTrie : MonoBehaviour
         Debug.Log("MaxTrie - Loaded: "+(Time.realtimeSinceStartup - Start).ToString() + " seconds");
     }
 
-    // Internal function.  Debug logs Dictionary letter distributions, word start letters and length
-    // Only called if "Reporting == true"
-    private void LogLetters()
-    {
-        Debug.Log("LETTER DISTRIBUTION");
-        foreach (KeyValuePair<char,int> pair in Letter_Dist)
-        {
-            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
-        }
-        Debug.Log("WORD LETTER STARTS");
-        foreach (KeyValuePair<char, int> pair in Word_Starts)
-        {
-            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
-        }
-        Debug.Log("WORD LENGTHS");
-        foreach (KeyValuePair<int, int> pair in Word_Lengths)
-        {
-            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
-        }
-    }
+ 
 
     // PUBLIC function, feed in a word, returns true if it's in the Trie
     // word {string} - word to be checked 
@@ -160,13 +141,12 @@ public class MaxTrie : MonoBehaviour
             Debug.Log("MaxTrie:CheckWord() - no string submitted - false returned");
             return false;
         }
-        // Debug.Log("MaxTrie:CheckWord() - "+word+ " submitted");
         word = word.ToLower();
         bool result = true;
         Node curr = _root;
         foreach (char c in word)
         {
-            if (curr.Kids.ContainsKey(c))
+            if (curr.Kids != null && curr.Kids.Count >= 1 && curr.Kids.ContainsKey(c))
             {
                 curr = curr.Kids[c];
             }
@@ -177,9 +157,33 @@ public class MaxTrie : MonoBehaviour
             }
         }
         if (!curr.Word) result = false;
-        // Debug.Log("MaxTrie:CheckWord() - " + result + " returned");
+        //Debug.Log("CheckWord call for: " + word+" : "+result.ToString()+" returned");
         return result;
     }
+
+    // PUBLIC function, checks is the presented string is a POSSIBLE start of a word
+    // i.e. it is present in the Trie, AND there are routes to another(any) letter
+    public bool CheckWordStart(string letters)
+    {
+        letters = letters.ToLower();
+        bool result = true; // default
+        Node curr = _root;
+        foreach (char c in letters)
+        {
+            if (curr.Kids != null && curr.Kids.Count >= 1 && curr.Kids.ContainsKey(c))
+            {
+                curr = curr.Kids[c];
+            }
+            else
+            {
+                result = false;
+                break;
+            }
+        }
+        if (curr.Kids == null || curr.Kids.Count == 0) result = false;
+        return result;
+    }
+
 
     // PUBLIC function, feed in string, returns a Distinct List<string> of anagram solutions (based on paramaters)
     // letters {string} - anagram letters
@@ -189,12 +193,12 @@ public class MaxTrie : MonoBehaviour
     {
         List<string> results = new List<string>();
         letters = letters.ToLower();
-        optionsMagic(letters, complete, results, _root,"",minimum);
+        optionsMagic(letters, complete, ref results, _root,"",minimum);
         return results;
     }
 
     // internal Function, does the recursion for getOptions()
-    private List<string> optionsMagic(string letters, bool complete, List<string> results, Node root, string soFar, int minimum)
+    private List<string> optionsMagic(string letters, bool complete, ref List<string> results, Node root, string soFar, int minimum)
     {
         int len = letters.Length;
         if (len == 0)
@@ -223,7 +227,7 @@ public class MaxTrie : MonoBehaviour
                 {
                     string soFar2 = soFar + letters[i];
                     string letters2 = letters.Remove(i,1);
-                    optionsMagic(letters2, complete, results, root.Kids[letters[i]], soFar2, minimum);
+                    optionsMagic(letters2, complete, ref results, root.Kids[letters[i]], soFar2, minimum);
                 }
             }
         }
@@ -329,7 +333,31 @@ public class MaxTrie : MonoBehaviour
             txt1 = txt1 + ", " + s;
         }
         Debug.Log(txt1);
+        txt1 = "";
+        Debug.Log("Start: ad=" + CheckWordStart("ad").ToString() + ", add=" + CheckWordStart("add").ToString() + ", addx=" + CheckWordStart("addx").ToString());
+        Debug.Log("Start: fi=" + CheckWordStart("fi").ToString() + ", fix=" + CheckWordStart("fix").ToString() + ", fixz=" + CheckWordStart("fixz").ToString());
+        Debug.Log("Start: CO=" + CheckWordStart("CO").ToString() + ", To=" + CheckWordStart("To").ToString() + ", ruddE=" + CheckWordStart("ruddE").ToString());
     }
 
+    // Internal function.  Debug logs Dictionary letter distributions, word start letters and length
+    // Only called if "Reporting == true"
+    private void LogLetters()
+    {
+        Debug.Log("LETTER DISTRIBUTION");
+        foreach (KeyValuePair<char, int> pair in Letter_Dist)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
+        Debug.Log("WORD LETTER STARTS");
+        foreach (KeyValuePair<char, int> pair in Word_Starts)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
+        Debug.Log("WORD LENGTHS");
+        foreach (KeyValuePair<int, int> pair in Word_Lengths)
+        {
+            Debug.Log(pair.Key.ToString() + ": " + pair.Value.ToString());
+        }
+    }
 
 }

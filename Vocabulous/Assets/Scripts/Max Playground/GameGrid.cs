@@ -2,94 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct MiniGrid
-{
-    public int dx;
-    public int dy;
-    public bool directional;
-    public bool diagonals;
-    public int currDir;
-    public List<int> legals;
-    public List<int> path;
-    public GameGrid parent;
-    public List<int> ReportTo;
-
-    public void CheckLegals()
-    {
-        // populates the legals<int> list with legal moves from the PATH END
-        // based upon cells already on the path and the game rules 
-        // Uses a "move" system defined as
-        //  7  0  1
-        //   \ | /
-        //  6- a -2
-        //   / | \
-        //  5  4  3
-
-        int a = path[path.Count-1];
-        legals.Clear();
-        int r = 0;
-        int x = a % dx;
-        int y = (a - x) / dy;
-
-        /* move 0 (up) */
-        if (y > 0)
-        {
-            r = a - dx;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 0))
-                legals.Add(r);
-        }
-        /* move 1 (up, right) */
-        if (y > 0 && x < dx - 1 && diagonals)
-        {
-            r = a - dx + 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
-                legals.Add(r);
-        }
-        /* move 2 (right) */
-        if (x < dx - 1)
-        {
-            r = a + 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
-                legals.Add(r);
-        }
-        /* move 3 (down, right) */
-        if (y < dy - 1 && x < dx - 1 && diagonals)
-        {
-            r = a + dx + 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
-                legals.Add(r);
-        }
-        /* move 4 (down) */
-        if (y < dy - 1)
-        {
-            r = a + dx;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
-                legals.Add(r);
-        }
-        /* move 5 (down, left) */
-        if (y < dy - 1 && x > 0 && diagonals)
-        {
-            r = a + dx - 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
-                legals.Add(r);
-        }
-        /* move 6 (left) */
-        if (x > 0)
-        {
-            r = a - 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 6))
-                legals.Add(r);
-        }
-        /* move 7 (up, left) */
-        if (x > 0 && y > 0 && diagonals)
-        {
-            r = a - dx - 1;
-            if (!path.Contains(r) && parent.bins[r] != "" && (!directional || currDir == -1 || currDir == 7))
-                legals.Add(r);
-        }
-    }
-}
-
 
 public class GameGrid  {
     // GAMEGRID CLASS
@@ -118,6 +30,8 @@ public class GameGrid  {
     public List<int> highlights = new List<int>();
     private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public bool DEBUG = false;
+    public MaxTrie trie;
+    public List<string> AllWordStrings = new List<string>();
 
     // Use this for initialization ... not used, retained "just in case"
     // void Start() { }
@@ -130,6 +44,7 @@ public class GameGrid  {
         legals.Clear();
         path.Clear();
         highlights.Clear();
+        AllWordStrings.Clear();
         for (int i = 0; i < dy * dx; i++) // needs to be "full" even if with empty strings, else get reference errors
         {
             if (DEBUG) // for test purposes, populates the bins (all of them) with a random letter
@@ -143,32 +58,14 @@ public class GameGrid  {
         }
     }
 
-    public MiniGrid ExportToMiniGrid()
+    // NEW VERSION ... superceded "SetLegals", instead of populating a default list, returns a new one 
+    //(which allows for recursive fun)
+    // Legal moves are determined for the END of the path presented
+    private List<int> GetLegals(List<int> myPath)
     {
-        MiniGrid ret = new MiniGrid();
-        ret.dx = dx;
-        ret.dy = dy;
-        ret.directional = directional;
-        ret.diagonals = diagonals;
-        ret.currDir = currDir;
-        foreach (int p in path) ret.path.Add(p);
-        ret.parent = this;
-        return ret;
-    }
-
-    public void ImportFromMiniGrid(MiniGrid mg)
-    {
-        dx = mg.dx;
-        dy = mg.dy;
-        directional = mg.directional;
-        diagonals = mg.diagonals;
-
-    }
-
-    public void CheckLegals(int a)
-    {
-        // populates the legals<int> list with legal moves from the passed (a) cell
-        // based upon cells already on the path and the game rules 
+        // populates and returns a List<int> with legal moves from LAST point on the presented Path
+        // Direction is calculated (as required) "on-the-fly"
+        // Bins with "" are NOT added to the legals list
         // Uses a "move" system defined as
         //  7  0  1
         //   \ | /
@@ -176,68 +73,124 @@ public class GameGrid  {
         //   / | \
         //  5  4  3
 
-        legals.Clear();
+        List<int> result = new List<int>();
+        int dir = -1;
+        if (directional && myPath.Count >= 2) dir = GetDirection(myPath[0], myPath[1]);
+
+        int a = myPath[myPath.Count - 1];
         int r = 0;
         int x = a % dx;
-        int y = (a - x)/dy;
+        int y = (a - x) / dy;
 
         /* move 0 (up) */
         if (y > 0)
         {
             r = a - dx;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 0) )
-                legals.Add(r); 
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 0))
+                result.Add(r);
         }
         /* move 1 (up, right) */
         if (y > 0 && x < dx - 1 && diagonals)
         {
             r = a - dx + 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 1))
+                result.Add(r);
         }
         /* move 2 (right) */
         if (x < dx - 1)
         {
             r = a + 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 2))
+                result.Add(r);
         }
         /* move 3 (down, right) */
         if (y < dy - 1 && x < dx - 1 && diagonals)
         {
             r = a + dx + 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 3))
+                result.Add(r);
         }
         /* move 4 (down) */
         if (y < dy - 1)
         {
             r = a + dx;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 4))
+                result.Add(r);
         }
         /* move 5 (down, left) */
         if (y < dy - 1 && x > 0 && diagonals)
         {
             r = a + dx - 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 5))
+                result.Add(r);
         }
         /* move 6 (left) */
         if (x > 0)
         {
             r = a - 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 6))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 6))
+                result.Add(r);
         }
         /* move 7 (up, left) */
         if (x > 0 && y > 0 && diagonals)
         {
             r = a - dx - 1;
-            if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 7))
-                legals.Add(r);
+            if (!myPath.Contains(r) && bins[r] != "" && (!directional || dir == -1 || dir == 7))
+                result.Add(r);
+        }
+        return result;
+    }
+
+    public void PopulateBOGGLEStrings ()
+    {
+        for (int i = 0; i < dx * dy; i++)
+        {
+            List<int> myList = new List<int>();
+            if (bins[i] != "")
+            {
+                myList.Add(i);
+                RecurBOGGLEPath(myList, ref AllWordStrings);
+            }
         }
     }
+
+    private void RecurBOGGLEPath (List<int> path, ref List<string> results)
+    {
+        List<int> legals = GetLegals(path);
+        if (legals.Count == 0) // no more legals, time to report if a word
+        {
+            string result = GetStringFromList(path);
+            //Debug.Log("result = " + result);
+            if (result.Length >= 3 && trie.CheckWord(result) && !results.Contains(result))
+                results.Add(result);
+        }
+        else
+        {
+            foreach (int i in legals)
+            {
+                List<int> newPath = new List<int>();
+                foreach (int y in path)
+                {
+                    newPath.Add(y); 
+                }
+                newPath.Add(i);
+                string newString = GetStringFromList(newPath);
+                if (newString.Length >= 3 && trie.CheckWord(newString) && !results.Contains(newString))
+                    results.Add(newString);
+                //Debug.Log("Check Start:" + newString + " = " + trie.CheckWordStart(newString).ToString()+" True will recur");
+                if (trie.CheckWordStart(newString))
+                    RecurBOGGLEPath(newPath, ref results);
+            }
+        }
+    }
+
+    // I use it a LOT
+    public string GetStringFromList(List<int> path)
+    {
+        string ret = "";
+        foreach (int i in path) ret = ret + bins[i];
+        return ret;
+    } 
     
     public void AddToPath(int a)
     {
@@ -255,7 +208,8 @@ public class GameGrid  {
         if (c == 0)
         {
             path.Add(a);
-            CheckLegals(a);
+            //CheckLegals(a);
+            legals = GetLegals(path);
         }
         // "rollback" functionality, if a == second from end, delete path AND a from it
         // "game" needs to check if it wants to do this
@@ -266,7 +220,8 @@ public class GameGrid  {
             {
                 currDir = -1;
             }
-            CheckLegals(GetPathEnd());
+            //CheckLegals(GetPathEnd());
+            legals = GetLegals(path);
         }
         // Only adds a path node if it's on the legals list
         else if (legals.Contains(a))
@@ -275,18 +230,27 @@ public class GameGrid  {
             // establish the current direction 
             if (path.Count == 2 && directional)
             {
-                int d = path[0] - path[1];
-                if (d == dx) currDir = 0;
-                else if (d == dx -1) currDir = 1;
-                else if (d == - 1) currDir = 2;
-                else if (d == -dx - 1) currDir = 3;
-                else if (d == -dx ) currDir = 4;
-                else if (d == -dx + 1) currDir = 5;
-                else if (d ==  1) currDir = 6;
-                else if (d == dx + 1) currDir = 7;
+                currDir = GetDirection(path[0], path[1]);
             }
-            CheckLegals(a);
+            //CheckLegals(a);
+            legals = GetLegals(path);
         }
+    }
+
+    // internal helper function .. returns the direction from the two cells entered
+    private int GetDirection(int first, int second)
+    {
+        int result = -1; // default
+        int d = first - second;
+        if (d == dx) result = 0;
+        else if (d == dx - 1) result = 1;
+        else if (d == -1) result = 2;
+        else if (d == -dx - 1) result = 3;
+        else if (d == -dx) result = 4;
+        else if (d == -dx + 1) result = 5;
+        else if (d == 1) result = 6;
+        else if (d == dx + 1) result = 7;
+        return result;
     }
 
     public string FinishPath()
@@ -379,5 +343,82 @@ public class GameGrid  {
             return path[len - 2];
         }
     }
+
+    //// SUPERCEDED by private List<int> GetLegals(List<int> myPath) {{{ Above}}}
+    //// retained as a back-up
+    //public void CheckLegals(int a)
+    //{
+    //    // populates the legals<int> list with legal moves from the passed (a) cell
+    //    // based upon cells already on the path and the game rules 
+    //    // Uses a "move" system defined as
+    //    //  7  0  1
+    //    //   \ | /
+    //    //  6- a -2
+    //    //   / | \
+    //    //  5  4  3
+
+    //    legals.Clear();
+    //    int r = 0;
+    //    int x = a % dx;
+    //    int y = (a - x) / dy;
+
+    //    /* move 0 (up) */
+    //    if (y > 0)
+    //    {
+    //        r = a - dx;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 0))
+    //            legals.Add(r);
+    //    }
+    //    /* move 1 (up, right) */
+    //    if (y > 0 && x < dx - 1 && diagonals)
+    //    {
+    //        r = a - dx + 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 1))
+    //            legals.Add(r);
+    //    }
+    //    /* move 2 (right) */
+    //    if (x < dx - 1)
+    //    {
+    //        r = a + 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 2))
+    //            legals.Add(r);
+    //    }
+    //    /* move 3 (down, right) */
+    //    if (y < dy - 1 && x < dx - 1 && diagonals)
+    //    {
+    //        r = a + dx + 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 3))
+    //            legals.Add(r);
+    //    }
+    //    /* move 4 (down) */
+    //    if (y < dy - 1)
+    //    {
+    //        r = a + dx;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 4))
+    //            legals.Add(r);
+    //    }
+    //    /* move 5 (down, left) */
+    //    if (y < dy - 1 && x > 0 && diagonals)
+    //    {
+    //        r = a + dx - 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 5))
+    //            legals.Add(r);
+    //    }
+    //    /* move 6 (left) */
+    //    if (x > 0)
+    //    {
+    //        r = a - 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 6))
+    //            legals.Add(r);
+    //    }
+    //    /* move 7 (up, left) */
+    //    if (x > 0 && y > 0 && diagonals)
+    //    {
+    //        r = a - dx - 1;
+    //        if (!path.Contains(r) && bins[r] != "" && (!directional || currDir == -1 || currDir == 7))
+    //            legals.Add(r);
+    //    }
+    //}
+
 
 }

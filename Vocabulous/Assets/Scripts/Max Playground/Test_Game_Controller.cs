@@ -14,6 +14,8 @@ public class Test_Game_Controller : MonoBehaviour
     public List<string> FoundWords = new List<string>();
     public List<int> GridLegals;    // for debug
     public int currDirection;       // for debug
+    [SerializeField]
+    private List<string> BoggleWords;
     private int[] dicelist = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
     private string[] faces = {
         "S","T","O","S","I","E",
@@ -44,10 +46,13 @@ public class Test_Game_Controller : MonoBehaviour
 
         // Set up GameGrid
         grid = new GameGrid() { dx = 4, dy = 4 };
+        grid.trie = gc.maxTrie;
         grid.init();
+        if (grid.trie != null) Debug.Log("grid connected to Trie");
         GridLegals = grid.legals; // purely for debug purposes
         currDirection = grid.currDir; // ditto
         PopulateGrid();
+        BoggleWords = grid.AllWordStrings;
         Debug.Log("New Grid x: " + grid.dx.ToString() + " y: " + grid.dy.ToString());
 
         // Set up Overlay Tiles in a grid, link each tile to the new GameGrid
@@ -65,6 +70,10 @@ public class Test_Game_Controller : MonoBehaviour
                 tilecon.SetVisible(false);
             }
         }
+        double Start = Time.realtimeSinceStartup;
+        grid.PopulateBOGGLEStrings();
+        Debug.Log("Boggle Path Strings - Loaded: " + (Time.realtimeSinceStartup - Start).ToString() + " seconds");
+
     }
 
     void PopulateGrid()
