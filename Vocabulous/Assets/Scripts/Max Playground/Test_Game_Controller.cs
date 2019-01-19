@@ -72,7 +72,7 @@ public class Test_Game_Controller : MonoBehaviour
         }
         double Start = Time.realtimeSinceStartup;
         grid.PopulateBOGGLEStrings();
-        Debug.Log("Boggle Path Strings - Loaded: " + (Time.realtimeSinceStartup - Start).ToString() + " seconds");
+        Debug.Log("Boggle Path Strings - Loaded ("+BoggleWords.Count.ToString()+" found): " + (Time.realtimeSinceStartup - Start).ToString() + " seconds");
 
     }
 
