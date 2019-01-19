@@ -146,7 +146,7 @@ public class MaxTrie : MonoBehaviour
         Node curr = _root;
         foreach (char c in word)
         {
-            if (curr.Kids.ContainsKey(c))
+            if (curr.Kids != null && curr.Kids.Count >= 1 && curr.Kids.ContainsKey(c))
             {
                 curr = curr.Kids[c];
             }
@@ -157,6 +157,7 @@ public class MaxTrie : MonoBehaviour
             }
         }
         if (!curr.Word) result = false;
+        //Debug.Log("CheckWord call for: " + word+" : "+result.ToString()+" returned");
         return result;
     }
 
@@ -164,11 +165,12 @@ public class MaxTrie : MonoBehaviour
     // i.e. it is present in the Trie, AND there are routes to another(any) letter
     public bool CheckWordStart(string letters)
     {
+        letters = letters.ToLower();
         bool result = true; // default
         Node curr = _root;
         foreach (char c in letters)
         {
-            if (curr.Kids.ContainsKey(c))
+            if (curr.Kids != null && curr.Kids.Count >= 1 && curr.Kids.ContainsKey(c))
             {
                 curr = curr.Kids[c];
             }
@@ -178,7 +180,7 @@ public class MaxTrie : MonoBehaviour
                 break;
             }
         }
-        if (curr.Kids.Count == 0) result = false;
+        if (curr.Kids == null || curr.Kids.Count == 0) result = false;
         return result;
     }
 
@@ -331,6 +333,10 @@ public class MaxTrie : MonoBehaviour
             txt1 = txt1 + ", " + s;
         }
         Debug.Log(txt1);
+        txt1 = "";
+        Debug.Log("Start: ad=" + CheckWordStart("ad").ToString() + ", add=" + CheckWordStart("add").ToString() + ", addx=" + CheckWordStart("addx").ToString());
+        Debug.Log("Start: fi=" + CheckWordStart("fi").ToString() + ", fix=" + CheckWordStart("fix").ToString() + ", fixz=" + CheckWordStart("fixz").ToString());
+        Debug.Log("Start: CO=" + CheckWordStart("CO").ToString() + ", To=" + CheckWordStart("To").ToString() + ", ruddE=" + CheckWordStart("ruddE").ToString());
     }
 
     // Internal function.  Debug logs Dictionary letter distributions, word start letters and length

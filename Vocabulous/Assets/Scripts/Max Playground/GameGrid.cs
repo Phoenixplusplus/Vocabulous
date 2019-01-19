@@ -157,11 +157,12 @@ public class GameGrid  {
     private void RecurBOGGLEPath (List<int> path, ref List<string> results)
     {
         List<int> legals = GetLegals(path);
-        if (legals.Count == 0) // no more legals, time to report
+        if (legals.Count == 0) // no more legals, time to report if a word
         {
             string result = GetStringFromList(path);
-            if (trie.CheckWord(result))
-            results.Add(result);
+            //Debug.Log("result = " + result);
+            if (result.Length >= 3 && trie.CheckWord(result) && !results.Contains(result))
+                results.Add(result);
         }
         else
         {
@@ -174,11 +175,11 @@ public class GameGrid  {
                 }
                 newPath.Add(i);
                 string newString = GetStringFromList(newPath);
-                if (trie.CheckWord(newString))
+                if (newString.Length >= 3 && trie.CheckWord(newString) && !results.Contains(newString))
                     results.Add(newString);
-
-                if (newPath.Count <= 2 || trie.CheckWordStart(newString))
-                RecurBOGGLEPath(newPath, ref results);
+                //Debug.Log("Check Start:" + newString + " = " + trie.CheckWordStart(newString).ToString()+" True will recur");
+                if (trie.CheckWordStart(newString))
+                    RecurBOGGLEPath(newPath, ref results);
             }
         }
     }
