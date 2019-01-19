@@ -297,6 +297,7 @@ public class WordSearchController : MonoBehaviour
                                 isFound = true;
                                 foundWords.Add(res);
                                 unfoundWords.Remove(res);
+                                grid.HighlightCurrentPath();
                             }
                         }
                         if (!isFound) Debug.Log("Sorry, " + res + " is not on the list!");
