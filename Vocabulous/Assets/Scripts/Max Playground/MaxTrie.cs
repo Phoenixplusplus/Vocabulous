@@ -350,7 +350,7 @@ public class MaxTrie : MonoBehaviour
         if (Testing) TestScripts();
     }
 
-    void TestScripts ()
+    private void TestScripts ()
     {
         var txt1 = "TEST LENGTHS";
         for (int i = 0; i < 50; i++)
