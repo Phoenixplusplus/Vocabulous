@@ -19,6 +19,7 @@ public class GC : MonoBehaviour
     [SerializeField]
     private int _OldHoverOver = -1;
     public MaxTrie maxTrie;
+    public TrieTest phoenixTrie;
 
 
     // --------------------//
