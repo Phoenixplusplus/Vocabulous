@@ -8,8 +8,8 @@ public class CameraController : MonoBehaviour
     public Transform cameraParent;
     public Vector3 currentAngle;
     public Vector3 targetAngle;
-    public Button Bwoggle, WordSplerch, Game3, Game4, Stats, PlayThis, QuitThis;
-    public Animator ButtonAnimations;
+    public Button PlayThis, QuitThis;
+    //public Animator ButtonAnimations;
     float mouseX;
     public float mouseSensitivty = 4f;
     public float lerpSpeed = 1f;
@@ -25,7 +25,7 @@ public class CameraController : MonoBehaviour
         targetAngle = new Vector3(0f, 20f, 0f);
 
         PlayThis.gameObject.SetActive(false);
-        ToggleButtonsSlide();
+        //ToggleButtonsSlide();
     }
 
     void Update()
@@ -101,7 +101,7 @@ public class CameraController : MonoBehaviour
             {
                 quitting = false;
                 inPlay = false;
-                ToggleButtonsSlide();
+                //ToggleButtonsSlide();
             }
         }
     }
@@ -110,11 +110,11 @@ public class CameraController : MonoBehaviour
     public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
 
     // UI animations
-    public void ToggleButtonsSlide()
-    {
-        bool b = ButtonAnimations.GetBool("SlideState");
-        ButtonAnimations.SetBool("SlideState", !b);
-    }
+    //public void ToggleButtonsSlide()
+    //{
+    //    bool b = ButtonAnimations.GetBool("SlideState");
+    //    ButtonAnimations.SetBool("SlideState", !b);
+    //}
 
     // button click functions
     public void RotateToGameBwoggle() { targetAngle = new Vector3(0, 298, 0); }
@@ -132,7 +132,7 @@ public class CameraController : MonoBehaviour
         if (onGame4) playGame4 = true;
         if (onStats) playStats = true;
 
-        ToggleButtonsSlide();
+        //ToggleButtonsSlide();
     }
 
     public void QuitClicked()
@@ -178,7 +178,7 @@ public class CameraController : MonoBehaviour
         }
         inPlay = false;
 
-        ToggleButtonsSlide();
+        //ToggleButtonsSlide();
         yield break;
     }
 }
