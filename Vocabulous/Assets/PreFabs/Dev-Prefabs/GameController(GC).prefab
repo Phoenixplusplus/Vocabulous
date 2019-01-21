@@ -1,5 +1,199 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &357395249
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 357395250}
+  - component: {fileID: 357395251}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &357395250
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357395249}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6776935128822241971}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &357395251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357395249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd7b726586cf6c48a3a5ec994c7fc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicFiles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  SFXFiles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!1 &6132877551865925350
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6132877551865925349}
+  m_Layer: 0
+  m_Name: phoenixTrie
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6132877551865925349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6132877551865925350}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6776935128822241971}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6132877551983331155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6132877551983331154}
+  - component: {fileID: 6132877551983331152}
+  m_Layer: 0
+  m_Name: Assets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6132877551983331154
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6132877551983331155}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6776935128822241971}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6132877551983331152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6132877551983331155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8b85e002c4971f4c811f18719e36cb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OLayTile: {fileID: 6638645963978897925, guid: e51d32e4a8ed9e74b8958ee537ca8677,
+    type: 3}
+  Da: {fileID: 0}
+  Db: {fileID: 0}
+  Dc: {fileID: 0}
+  Dd: {fileID: 0}
+  De: {fileID: 0}
+  Df: {fileID: 0}
+  Dg: {fileID: 0}
+  Dh: {fileID: 0}
+  Di: {fileID: 0}
+  Dj: {fileID: 0}
+  Dk: {fileID: 0}
+  Dl: {fileID: 0}
+  Dm: {fileID: 0}
+  Dn: {fileID: 0}
+  Do: {fileID: 0}
+  Dp: {fileID: 0}
+  Dq: {fileID: 0}
+  Dqu: {fileID: 0}
+  Dr: {fileID: 0}
+  Ds: {fileID: 0}
+  Dt: {fileID: 0}
+  Du: {fileID: 0}
+  Dv: {fileID: 0}
+  Dw: {fileID: 0}
+  Dx: {fileID: 0}
+  Dy: {fileID: 0}
+  Dz: {fileID: 0}
+  Ta: {fileID: 0}
+  Tb: {fileID: 0}
+  Tc: {fileID: 0}
+  Td: {fileID: 0}
+  Te: {fileID: 0}
+  Tf: {fileID: 0}
+  Tg: {fileID: 0}
+  Th: {fileID: 0}
+  Ti: {fileID: 0}
+  Tj: {fileID: 0}
+  Tk: {fileID: 0}
+  Tl: {fileID: 0}
+  Tm: {fileID: 0}
+  Tn: {fileID: 0}
+  To: {fileID: 0}
+  Tp: {fileID: 0}
+  Tq: {fileID: 0}
+  Tqu: {fileID: 0}
+  Tr: {fileID: 0}
+  Ts: {fileID: 0}
+  Tt: {fileID: 0}
+  Tu: {fileID: 0}
+  Tv: {fileID: 0}
+  Tw: {fileID: 0}
+  Tx: {fileID: 0}
+  Ty: {fileID: 0}
+  Tz: {fileID: 0}
 --- !u!1 &6776935128822241969
 GameObject:
   m_ObjectHideFlags: 0
@@ -29,6 +223,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6776935130134317498}
+  - {fileID: 6132877551865925349}
+  - {fileID: 6132877551983331154}
+  - {fileID: 357395250}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -44,11 +241,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8475707f7f4c71445a4bf794f3090673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forKickOff: 0
   HoverChange: 0
   _NewHoverOver: 0
   _OldHoverOver: 0
   maxTrie: {fileID: 6776935130134317499}
+  phoenixTrie: {fileID: 0}
+  assets: {fileID: 6132877551983331152}
+  sm: {fileID: 357395251}
+  PosWordSearch: {x: 0, y: 0, z: 0}
+  PosTranWordDice: {x: 0, y: 0, z: 0}
+  PosTranAnagram: {x: 0, y: 0, z: 0}
+  PosTranWordrop: {x: 0, y: 0, z: 0}
+  RotWordSearch: {x: 0, y: 0, z: 0}
+  RotTranWordDice: {x: 0, y: 0, z: 0}
+  RotTranAnagram: {x: 0, y: 0, z: 0}
+  RotTranWordrop: {x: 0, y: 0, z: 0}
+  ScaleWordSearch: {x: 0, y: 0, z: 0}
+  ScaleTranWordDice: {x: 0, y: 0, z: 0}
+  ScaleTranAnagram: {x: 0, y: 0, z: 0}
+  ScaleTranWordrop: {x: 0, y: 0, z: 0}
 --- !u!1 &6776935130134317497
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,6 +306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WordToCheck: 
   Loaded: 0
+  Reporting: 0
+  Testing: 1
   Trie_Word_Count: 0
   Trie_Node_Count: 0
 --- !u!114 &6776935130134317500
