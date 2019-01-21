@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Test_Game_Controller : MonoBehaviour
+public class ConWordDice : MonoBehaviour
 {
     private GC gc;
     public GameObject OverlayPrefab;
@@ -35,22 +35,14 @@ public class Test_Game_Controller : MonoBehaviour
         "S","T","Y","D","I","T",
         "P","S","K","F","F","A" };
 
-
-
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
         // Connect to Game Controller and establish links
         gc = GC.Instance;
         if (gc != null) Debug.Log("GAME:Start() - connected to Game Controller");
         trie = gc.maxTrie;
         if (trie == null) Debug.Log("oops");
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
 
         // Set up GameGrid
         grid = new GameGrid() { dx = 4, dy = 4 };
