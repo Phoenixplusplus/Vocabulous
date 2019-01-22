@@ -64,6 +64,84 @@ public class OurAssets : MonoBehaviour
     public GameObject Ty;
     public GameObject Tz;
 
+    public GameObject MakeWordFromDiceQ (string word, Vector3 Position, float Scale)
+    {
+        GameObject myWord = new GameObject();
+        myWord.transform.position = Position;
+        for (var i = 0; i < word.Length; i++)
+        {
+            GameObject letter = SpawnDice(""+word[i], new Vector3(Position.x + i, Position.y, Position.z));
+            letter.transform.parent = myWord.transform;
+        }
+        myWord.transform.localScale = new Vector3(Scale, Scale, Scale);
+        return myWord;
+    }
 
+
+    public GameObject SpawnDice (string face, Vector3 position)
+    {
+        string myFace = face.ToLower();
+        GameObject dice;
+        switch (myFace)
+        {
+            case "a":
+                dice = Instantiate(Da, position, Quaternion.identity); break;
+            case "b":
+                dice = Instantiate(Db, position, Quaternion.identity); break;
+            case "c":
+                dice = Instantiate(Dc, position, Quaternion.identity); break;
+            case "d":
+                dice = Instantiate(Dd, position, Quaternion.identity); break;
+            case "e":
+                dice = Instantiate(De, position, Quaternion.identity); break;
+            case "f":
+                dice = Instantiate(Df, position, Quaternion.identity); break;
+            case "g":
+                dice = Instantiate(Dg, position, Quaternion.identity); break;
+            case "h":
+                dice = Instantiate(Dh, position, Quaternion.identity); break;
+            case "i":
+                dice = Instantiate(Di, position, Quaternion.identity); break;
+            case "j":
+                dice = Instantiate(Dj, position, Quaternion.identity); break;
+            case "k":
+                dice = Instantiate(Dk, position, Quaternion.identity); break;
+            case "l":
+                dice = Instantiate(Dl, position, Quaternion.identity); break;
+            case "m":
+                dice = Instantiate(Dm, position, Quaternion.identity); break;
+            case "n":
+                dice = Instantiate(Dn, position, Quaternion.identity); break;
+            case "o":
+                dice = Instantiate(Do, position, Quaternion.identity); break;
+            case "p":
+                dice = Instantiate(Dp, position, Quaternion.identity); break;
+            case "q":
+                dice = Instantiate(Dq, position, Quaternion.identity); break;
+            case "qu":
+                dice = Instantiate(Dqu, position, Quaternion.identity); break;
+            case "r":
+                dice = Instantiate(Dr, position, Quaternion.identity); break;
+            case "s":
+                dice = Instantiate(Ds, position, Quaternion.identity); break;
+            case "t":
+                dice = Instantiate(Dt, position, Quaternion.identity); break;
+            case "u":
+                dice = Instantiate(Du, position, Quaternion.identity); break;
+            case "v":
+                dice = Instantiate(Dv, position, Quaternion.identity); break;
+            case "w":
+                dice = Instantiate(Dw, position, Quaternion.identity); break;
+            case "x":
+                dice = Instantiate(Dx, position, Quaternion.identity); break;
+            case "y":
+                dice = Instantiate(Dy, position, Quaternion.identity); break;
+            case "z":
+                dice = Instantiate(Dz, position, Quaternion.identity); break;
+            default: dice = null; break;
+        }
+        if (dice == null) Debug.Log("OurAssets::Spawn Dice() - Improper String parameter");
+        return dice;
+    }
 
 }

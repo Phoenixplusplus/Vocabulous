@@ -9,6 +9,7 @@ public class ConWordDice : MonoBehaviour
     private GameGrid grid;
     private MaxTrie trie;
     public GameObject tiles;
+    public GameObject myDice;
     public bool Selecting = false;
     public string CurrentWord = "";
     public List<string> FoundWords = new List<string>();
@@ -57,22 +58,39 @@ public class ConWordDice : MonoBehaviour
 
         // Set up Overlay Tiles in a grid, link each tile to the new GameGrid
         int count = 0;
-        for (int y = 4; y > 0; y--)
-        {
-            for (int x = 0; x < 4; x++)
-            {
-                GameObject tile = Instantiate(OverlayPrefab, new Vector3(x, y, 0),Quaternion.identity);
-                tile.transform.parent = tiles.transform;
-                Tile_Controlller tilecon = tile.GetComponent<Tile_Controlller>();
-                tilecon.setID(count);
-                count++;
-                tilecon.myGrid = grid;
-                tilecon.SetVisible(false);
-            }
-        }
+        //for (int y = 4; y > 0; y--)
+        //{
+        //    for (int x = 0; x < 4; x++)
+        //    {
+        //        GameObject tile = Instantiate(OverlayPrefab, new Vector3(x, y, 0),Quaternion.identity);
+        //        tile.transform.parent = tiles.transform;
+        //        Tile_Controlller tilecon = tile.GetComponent<Tile_Controlller>();
+        //        tilecon.setID(count);
+        //        count++;
+        //        tilecon.myGrid = grid;
+        //        tilecon.SetVisible(false);
+        //    }
+        //}
         double Start = Time.realtimeSinceStartup;
         grid.PopulateBOGGLEStrings();
         Debug.Log("Boggle Path Strings - Loaded ("+BoggleWords.Count.ToString()+" found): " + (Time.realtimeSinceStartup - Start).ToString() + " seconds");
+
+        count = 0;
+        for (int z = 4; z > 0; z--)
+        {
+            for (int x = 0; x < 4; x++)
+            {
+                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
+                dice.transform.parent = myDice.transform;
+                ConDice con = dice.GetComponent<ConDice>();
+                con.ID = count;
+                con.myGrid = grid;
+                count++;
+            }
+        }
+
+        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6), 1f);
+
 
     }
 
@@ -146,6 +164,7 @@ public class ConWordDice : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
+                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)), 0.5f);
                         }
                     }
                     else
