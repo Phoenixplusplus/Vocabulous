@@ -350,7 +350,7 @@ public class MaxTrie : MonoBehaviour
         if (Testing) TestScripts();
     }
 
-    void TestScripts ()
+    private void TestScripts ()
     {
         var txt1 = "TEST LENGTHS";
         for (int i = 0; i < 50; i++)
@@ -370,8 +370,8 @@ public class MaxTrie : MonoBehaviour
             txt1 = txt1 + ", " + GetRandomLetter().ToString();
         }
         Debug.Log(txt1);
-        txt1 = "ANAGRAM of (dfgtkjauys):";
-        List<string> anagram = getAnagram("dfgtkjauys", false, 3);
+        txt1 = "ANAGRAM of (auntgroan):";
+        List<string> anagram = getAnagram("auntgroan", false, 7);
         foreach (string s in anagram)
         {
             txt1 = txt1 + ", " + s;
