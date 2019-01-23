@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class ConWordDice : MonoBehaviour
 {
+    #region VARIABLE DECLARATION
     private GC gc;
-    public GameObject OverlayPrefab;
     private GameGrid grid;
     private MaxTrie trie;
-    public GameObject tiles;
-    public GameObject myDice;
+    public GameObject myDice;         // dice instances of letter dice in GameGrid
+    public GameObject FoundList;      // dice "word" instances of player finds 
     public bool Selecting = false;
+    private bool GameRunning = false;
+    private double StartTime = 0.00;
     public string CurrentWord = "";
-    public List<string> FoundWords = new List<string>();
-    public List<int> GridLegals;    // for debug
-    public int currDirection;       // for debug
+    public List<string> FoundWords = new List<string>(); // string list of what the player has found
+    private int GSize; // populated from gc.player
     [SerializeField]
-    private List<string> BoggleWords;
+    private List<string> BoggleWords; // for reference, list of solutions for this grid
     private int[] dicelist = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
     private string[] faces = {
         "S","T","O","S","I","E",
@@ -35,86 +36,25 @@ public class ConWordDice : MonoBehaviour
         "L","R","Y","V","E","D",
         "S","T","Y","D","I","T",
         "P","S","K","F","F","A" };
+    #endregion
+
+    #region UNITY API
+
+    // Called before anything else ... lets connect to the world
+    void Awake()
+    {
+        // Connect to Game Controller and establish links
+        gc = GC.Instance;
+        if (gc != null) Debug.Log("ConWordDice:Awake() - connected to Game Controller");
+        trie = gc.maxTrie;
+        if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
+    }
+
 
     // Start is called before the first frame update
     void Start()
     {
-        // Connect to Game Controller and establish links
-        gc = GC.Instance;
-        if (gc != null) Debug.Log("GAME:Start() - connected to Game Controller");
-        trie = gc.maxTrie;
-        if (trie == null) Debug.Log("oops");
-
-        // Set up GameGrid
-        grid = new GameGrid() { dx = 4, dy = 4 };
-        grid.trie = gc.maxTrie;
-        grid.init();
-        if (grid.trie != null) Debug.Log("grid connected to Trie");
-        GridLegals = grid.legals; // purely for debug purposes
-        currDirection = grid.currDir; // ditto
-        PopulateGrid();
-        BoggleWords = grid.AllWordStrings;
-        Debug.Log("New Grid x: " + grid.dx.ToString() + " y: " + grid.dy.ToString());
-
-        // Set up Overlay Tiles in a grid, link each tile to the new GameGrid
-        int count = 0;
-        //for (int y = 4; y > 0; y--)
-        //{
-        //    for (int x = 0; x < 4; x++)
-        //    {
-        //        GameObject tile = Instantiate(OverlayPrefab, new Vector3(x, y, 0),Quaternion.identity);
-        //        tile.transform.parent = tiles.transform;
-        //        Tile_Controlller tilecon = tile.GetComponent<Tile_Controlller>();
-        //        tilecon.setID(count);
-        //        count++;
-        //        tilecon.myGrid = grid;
-        //        tilecon.SetVisible(false);
-        //    }
-        //}
-        double Start = Time.realtimeSinceStartup;
-        grid.PopulateBOGGLEStrings();
-        Debug.Log("Boggle Path Strings - Loaded ("+BoggleWords.Count.ToString()+" found): " + (Time.realtimeSinceStartup - Start).ToString() + " seconds");
-
-        count = 0;
-        for (int z = 4; z > 0; z--)
-        {
-            for (int x = 0; x < 4; x++)
-            {
-                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
-                dice.transform.parent = myDice.transform;
-                ConDice con = dice.GetComponent<ConDice>();
-                con.ID = count;
-                con.myGrid = grid;
-                count++;
-            }
-        }
-
-        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6), 1f);
-
-
-    }
-
-    void PopulateGrid()
-    {
-        // Using boggle dice.  
-        // Shuffle "dicelist" an array of 0-15 representing the dice
-        // Loop and establish letter from dice, face (rand 0-5) and faces[] Array
-        // Feed the loop counter and letter into the GameGrid
-        // Shuffle as per https://forum.unity.com/threads/randomize-array-in-c.86871/
-        for (int i = 0; i < 16; i++)
-        {
-            int tmp = dicelist[i];
-            int r = Random.Range(i, 16);
-            dicelist[i] = dicelist[r];
-            dicelist[r] = tmp;
-        }
-        for (int i = 0; i < 16; i++)
-        {
-            int dice = Random.Range(0, 6);
-            grid.PopulateBin(i, "" + faces[(6 * dicelist[i]) + dice]);
-        }
-
-
+        StartGame(); // placeholder tester ... will be called by GC eventually
     }
 
     // Update is called once per frame
@@ -135,6 +75,90 @@ public class ConWordDice : MonoBehaviour
         CheckMouseClicks(); // Defines what happens if the user clicks the mouse
     }
 
+    #endregion
+
+    #region GAMECONTROLLER (GC) CALLABLE METHODS
+
+    public void StartGame()
+    {
+        StartTime = Time.realtimeSinceStartup;
+        // TESTER for gc.player ... IT WORKS <<yah me>>
+        //gc.player.WordDiceSize = 4;
+        //gc.SaveStats();
+        SetGrid();
+        PopulateGrid();
+        BoggleWords = grid.AllWordStrings; // will be empty as each game has a new grid (since size may vary)
+        SpawnDice();
+        MakeFoundList();
+
+        Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
+    }
+
+
+    #endregion
+
+    #region GAME (RE)SET METHODS
+
+    void SetGrid()
+    {
+        GSize = gc.player.WordDiceSize;                     // it may have changed between games
+        grid = new GameGrid() { dx = GSize, dy = GSize };   // new grid
+        grid.trie = gc.maxTrie;                             // link to trie
+        grid.init();                                        // initialise
+        if (grid.trie == null) Debug.Log("ConWordDice::grid FAILED to connected to Trie");
+    }
+
+    void PopulateGrid()
+    {
+        // current set for 4x4 (default) ... needs customised for different sizes (GSIZE)
+
+        // Using boggle dice.  
+        // Shuffle "dicelist" an array of 0-15 representing the dice
+        // Loop and establish letter from dice, face (rand 0-5) and faces[] Array
+        // Feed the loop counter and letter into the GameGrid
+        // Shuffle as per https://forum.unity.com/threads/randomize-array-in-c.86871/
+        for (int i = 0; i < dicelist.Length; i++)
+        {
+            int tmp = dicelist[i];
+            int r = Random.Range(i, 16);
+            dicelist[i] = dicelist[r];
+            dicelist[r] = tmp;
+        }
+        for (int i = 0; i < GSize * GSize; i++)
+        {
+            int dice = Random.Range(0, 6);
+            grid.PopulateBin(i, "" + faces[(6 * dicelist[i]) + dice]);
+        }
+        grid.PopulateBOGGLEStrings();
+
+    }
+
+    void SpawnDice()
+    {
+        int count = 0;
+        for (int z = GSize; z > 0; z--)
+        {
+            for (int x = 0; x < GSize; x++)
+            {
+                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
+                dice.transform.parent = myDice.transform;
+                ConDice con = dice.GetComponent<ConDice>();
+                con.ID = count;
+                con.myGrid = grid;
+                count++;
+            }
+        }
+    }
+
+    void MakeFoundList ()
+    {
+        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6), 1f);
+        Found.transform.parent = FoundList.transform;
+    }
+
+    #endregion
+
+    #region GAME RUNNING METHODS
     void CheckMouseClicks()
     {
         if (!Selecting) // not currently selecting anything
@@ -165,6 +189,7 @@ public class ConWordDice : MonoBehaviour
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
                             GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)), 0.5f);
+                            newWord.transform.parent = FoundList.transform;
                         }
                     }
                     else
@@ -189,4 +214,5 @@ public class ConWordDice : MonoBehaviour
             if (grid.legals.Contains(gc.NewHoverOver) || grid.GetPathSecondFromEnd() == gc.NewHoverOver) grid.AddToPath(gc.NewHoverOver);
         }
     }
+    #endregion
 }
