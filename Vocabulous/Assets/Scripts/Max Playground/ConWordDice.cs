@@ -55,6 +55,7 @@ public class ConWordDice : MonoBehaviour
     void Start()
     {
         StartGame(); // placeholder tester ... will be called by GC eventually
+        //MakeDisplayGrid();
     }
 
     // Update is called once per frame
@@ -98,6 +99,26 @@ public class ConWordDice : MonoBehaviour
     #endregion
 
     #region GAME (RE)SET METHODS
+
+    void MakeDisplayGrid()
+    {
+        int count = 0;
+        string word = "  WORD     DICE ";
+        for (int z = 4; z > 0; z--)
+        {
+            for (int x = 0; x < 4; x++)
+            {
+                string value = "" + word[count];
+                if (value == " ") value = "a";
+
+                GameObject dice = gc.assets.SpawnDice(value, new Vector3(x, 0, z));
+                dice.transform.parent = myDice.transform;
+                count++;
+            }
+        }
+
+
+    }
 
     void SetGrid()
     {

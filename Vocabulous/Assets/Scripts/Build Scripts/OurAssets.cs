@@ -144,4 +144,15 @@ public class OurAssets : MonoBehaviour
         return dice;
     }
 
+    // returns a random opaque color
+    public Color GetRandomColor()
+    {
+        Color ret = new Color();
+        ret.r = Random.Range(0, 256);
+        ret.g = Random.Range(0, 256);
+        ret.b = Random.Range(0, 256);
+        ret.a = 1;
+        return ret;
+    }
+
 }
