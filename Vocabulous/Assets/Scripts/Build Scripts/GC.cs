@@ -52,7 +52,26 @@ public class GC : MonoBehaviour
     public Color ColorHighlight = new Color();
     public Color ColorLegal = new Color();
 
-    #endregion
+    [Header("THE GAME STATE")]
+    [SerializeField]
+    private int GameState = 0;
+    //... needs to be agreed ... maybe 
+    // 0 = initialising/loading
+    // 1 = at table (choosing)
+    // 2 = transition to game area
+    // 31 =  Playing WordSearch
+    // 32 = Playing WordDice
+    // 33 = Playing Anagram
+    // 34 = Playing WordDrop
+    // 35 = <<add new game here>>
+    // 4 = Menu's open
+    // 5 = transitioning from a game to 1 again
+    // 9 = Quitting
+
+    [Header("The GAME OBJECTS")]
+    public ConWordDice WordDice;
+
+     #endregion
 
 
     #region Set Singelton
@@ -95,6 +114,8 @@ public class GC : MonoBehaviour
     {
         NewHoverOver = -1;
         OldHoverOver = -1;
+        // all loaded
+        GameState = 1;
     }
 
 
@@ -102,12 +123,13 @@ public class GC : MonoBehaviour
     void Update()
     {
         // sets HoverOver values to the returned value from any IisOverlayTile class (if none, then -1)
-        CheckHoverOver(); 
+        CheckHoverOver();
+        CheckClicks();
     }
     #endregion
 
 
-    #region HoverOver
+    #region HoverOver and Clicks
     void CheckHoverOver()
     {
         OldHoverOver = NewHoverOver;
@@ -128,6 +150,21 @@ public class GC : MonoBehaviour
         if (OldHoverOver == NewHoverOver) HoverChange = false;
         else { HoverChange = true; }
     }
+
+
+    private void CheckClicks()
+    {
+        if (GameState == 1)  // only check clicks if "at table and selecting"
+        {
+            // will need "do transition" eventually ... just going to fire up my game
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881)
+            {
+                GameState = 32;
+                WordDice.KickOff();
+            }
+        }
+    }
+
     #endregion
 
 

@@ -11,7 +11,8 @@ public class ConWordDice : MonoBehaviour
     public GameObject myDice;         // dice instances of letter dice in GameGrid
     public GameObject FoundList;      // dice "word" instances of player finds 
     public bool Selecting = false;
-    private bool GameRunning = false;
+    private bool GameRunning = false;  // sure there will be a use eventually
+    public GameObject myMenu;
     private double StartTime = 0.00;
     public string CurrentWord = "";
     public List<string> FoundWords = new List<string>(); // string list of what the player has found
@@ -48,21 +49,25 @@ public class ConWordDice : MonoBehaviour
         if (gc != null) Debug.Log("ConWordDice:Awake() - connected to Game Controller");
         trie = gc.maxTrie;
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
+        transform.position = gc.PosTranWordDice;
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        StartGame(); // placeholder tester ... will be called by GC eventually
-        //MakeDisplayGrid();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        // probably get rid of this when all is set up
+        if (transform.position != gc.PosTranWordDice) transform.position = gc.PosTranWordDice;
+
+
         // Just for Inspector debug purposes
-        if (Selecting)
+        if (grid != null && Selecting)
         {
             CurrentWord = grid.GetCurrentPath(); // purely for debug
         }
@@ -100,25 +105,12 @@ public class ConWordDice : MonoBehaviour
 
     #region GAME (RE)SET METHODS
 
-    void MakeDisplayGrid()
+    public void KickOff() // to be called by GameController
     {
-        int count = 0;
-        string word = "  WORD     DICE ";
-        for (int z = 4; z > 0; z--)
-        {
-            for (int x = 0; x < 4; x++)
-            {
-                string value = "" + word[count];
-                if (value == " ") value = "a";
-
-                GameObject dice = gc.assets.SpawnDice(value, new Vector3(x, 0, z));
-                dice.transform.parent = myDice.transform;
-                count++;
-            }
-        }
-
-
+        myMenu.SetActive(false);
+        StartGame();
     }
+
 
     void SetGrid()
     {
@@ -161,7 +153,7 @@ public class ConWordDice : MonoBehaviour
         {
             for (int x = 0; x < GSize; x++)
             {
-                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
+                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z) + transform.position);
                 dice.transform.parent = myDice.transform;
                 ConDice con = dice.GetComponent<ConDice>();
                 con.ID = count;
@@ -173,7 +165,7 @@ public class ConWordDice : MonoBehaviour
 
     void MakeFoundList ()
     {
-        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6), 1f);
+        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6)+transform.position, 1f);
         Found.transform.parent = FoundList.transform;
     }
 
@@ -209,7 +201,7 @@ public class ConWordDice : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
-                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)), 0.5f);
+                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
                             newWord.transform.parent = FoundList.transform;
                         }
                     }
