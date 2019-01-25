@@ -13,6 +13,8 @@ public class ConTableWordDice : MonoBehaviour
 
     public GameObject Worddice;
     public GameObject StartDice;
+    public GameObject TimeUp;
+    public GameObject GUIStart;
     private GC gc;
     private bool highlighted;
 
@@ -20,11 +22,13 @@ public class ConTableWordDice : MonoBehaviour
     public Color TitleSelectedColor;
     public Color StartNormalColor;
     public Color StartSelectedColor;
+    public Color TimeUpColor;
     public Tile_Controlller GUITile;
     public float DiceScaleFactor = 1.4f;
 
     private ConDice[] title;
     private ConDice[] start;
+    private ConDice[] timeup;
 
     void Awake()
     {
@@ -41,6 +45,7 @@ public class ConTableWordDice : MonoBehaviour
 
         title = Worddice.GetComponentsInChildren<ConDice>();
         start = StartDice.GetComponentsInChildren<ConDice>();
+        timeup = TimeUp.GetComponentsInChildren<ConDice>();
         foreach (var ConDice in title)
         {
             ConDice.killOverlayTile();
@@ -71,6 +76,31 @@ public class ConTableWordDice : MonoBehaviour
 
     }
 
+    public void OnSceneTable()
+    {
+        TimeUp.SetActive(false);
+        Worddice.SetActive(true);
+        StartDice.SetActive(true);
+        GUIStart.SetActive(true);
+    }
+
+    public void GameRunning()
+    {
+        TimeUp.SetActive(false);
+        Worddice.SetActive(false);
+        StartDice.SetActive(false);
+        GUIStart.SetActive(false);
+    }
+
+    public void GameOver()
+    {
+        TimeUp.SetActive(true);
+        Worddice.SetActive(false);
+        StartDice.SetActive(false);
+        GUIStart.SetActive(false);
+    }
+
+
     private void setToNormal()
     {
         foreach (ConDice die in title)
@@ -81,6 +111,10 @@ public class ConTableWordDice : MonoBehaviour
         foreach (ConDice die in start)
         {
             die.ChangeDiceColor(StartNormalColor);
+        }
+        foreach (ConDice die in timeup)
+        {
+            die.ChangeDiceColor(TimeUpColor);
         }
     }
 

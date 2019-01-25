@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 392254788}
   - component: {fileID: 392254787}
   - component: {fileID: 392254786}
-  - component: {fileID: 392254785}
   m_Layer: 0
   m_Name: Side2 Face
   m_TagString: Untagged
@@ -78,19 +77,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &392254785
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 392254784}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &481797266
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,7 +256,6 @@ GameObject:
   - component: {fileID: 649137213}
   - component: {fileID: 649137212}
   - component: {fileID: 649137211}
-  - component: {fileID: 649137210}
   m_Layer: 0
   m_Name: Side1Face
   m_TagString: Untagged
@@ -337,19 +322,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &649137210
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 649137209}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1404887137
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +469,7 @@ MonoBehaviour:
   Faceside1: {fileID: 649137209}
   Faceside2: {fileID: 392254784}
   DiceBody: {fileID: 495107003}
+  shaking: 0
 --- !u!1 &1648439613
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +589,6 @@ GameObject:
   - component: {fileID: 1722922355}
   - component: {fileID: 1722922354}
   - component: {fileID: 1722922353}
-  - component: {fileID: 1722922352}
   m_Layer: 0
   m_Name: TopFace
   m_TagString: Untagged
@@ -683,19 +655,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1722922352
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722922351}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1967045158
 GameObject:
   m_ObjectHideFlags: 0

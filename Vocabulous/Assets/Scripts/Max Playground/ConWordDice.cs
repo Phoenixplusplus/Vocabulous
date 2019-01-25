@@ -12,7 +12,10 @@ public class ConWordDice : MonoBehaviour
     public GameObject FoundList;      // dice "word" instances of player finds 
     public bool Selecting = false;
     private bool GameRunning = false;  // sure there will be a use eventually
-    public GameObject myMenu;
+    public ConTableWordDice myMenu;
+    public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
+    public double Timer;
+    public int GameTime = 30;
     private double StartTime = 0.00;
     public string CurrentWord = "";
     public List<string> FoundWords = new List<string>(); // string list of what the player has found
@@ -50,6 +53,7 @@ public class ConWordDice : MonoBehaviour
         trie = gc.maxTrie;
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
         transform.position = gc.PosTranWordDice;
+        myMenu.OnSceneTable();
     }
 
 
@@ -65,6 +69,16 @@ public class ConWordDice : MonoBehaviour
         // probably get rid of this when all is set up
         if (transform.position != gc.PosTranWordDice) transform.position = gc.PosTranWordDice;
 
+        // if game running: do timer
+        if (Timer > 0 && gameState == 2)
+        {
+            Timer -= Time.deltaTime;
+            if (Timer < 0)
+            {
+                Timer = 0;
+                TimesUp();
+            }
+        }
 
         // Just for Inspector debug purposes
         if (grid != null && Selecting)
@@ -76,9 +90,12 @@ public class ConWordDice : MonoBehaviour
             CurrentWord = "";
         }
 
-        // Where the game logic really lies
-        CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
-        CheckMouseClicks(); // Defines what happens if the user clicks the mouse
+        // Where the game logic really lies // ONLY if game is running
+        if (gameState == 2)
+        {
+            CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
+            CheckMouseClicks(); // Defines what happens if the user clicks the mouse
+        }
     }
 
     #endregion
@@ -96,8 +113,10 @@ public class ConWordDice : MonoBehaviour
         BoggleWords = grid.AllWordStrings; // will be empty as each game has a new grid (since size may vary)
         SpawnDice();
         MakeFoundList();
-
         Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
+        Timer = GameTime;
+        gameState = 2;
+        myMenu.GameRunning();
     }
 
 
@@ -107,7 +126,6 @@ public class ConWordDice : MonoBehaviour
 
     public void KickOff() // to be called by GameController
     {
-        myMenu.SetActive(false);
         StartGame();
     }
 
@@ -217,7 +235,7 @@ public class ConWordDice : MonoBehaviour
     void CheckHoverOver()
     {
 
-        if (gc.HoverChange && Selecting) // We have a change (whilst selecting)
+        if (gc.HoverChange && Selecting && gameState == 2) // We have a change (whilst selecting and game running)
         {
             if (gc.NewHoverOver == -1) // moves off grid .... reset path
             {
@@ -227,5 +245,18 @@ public class ConWordDice : MonoBehaviour
             if (grid.legals.Contains(gc.NewHoverOver) || grid.GetPathSecondFromEnd() == gc.NewHoverOver) grid.AddToPath(gc.NewHoverOver);
         }
     }
+
+    void TimesUp()
+    {
+        gameState = 3;
+        Selecting = false;
+        myMenu.GameOver();
+        grid.ClearPath();
+        // TO DO
+        // Scoring
+        // Update / Save Player stats
+        // Activate GUI for Times's up, Restart, back or see what could have had
+    }
+
     #endregion
 }
