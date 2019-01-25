@@ -36,7 +36,7 @@ public class ConTableWordDice : MonoBehaviour
     void Start()
     {
         GUITile.SetVisible(false);
-        GUITile.SetLetter("");
+        //GUITile.SetLetter("");
         GUITile.setID(8881);
 
         title = Worddice.GetComponentsInChildren<ConDice>();
