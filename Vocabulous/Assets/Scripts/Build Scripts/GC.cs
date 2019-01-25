@@ -22,6 +22,10 @@ public class GC : MonoBehaviour
     public TrieTest phoenixTrie;
 
     [Header("Player Manager")]
+    [SerializeField]
+    private string PlayerName;
+    [SerializeField]
+    private int WorddiceLength;
     public PlayerStats player;
     public PlayerManager playerManager = new PlayerManager();
 
@@ -98,8 +102,12 @@ public class GC : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+        // ESSENTIAL IF YOU ARE EDDITING PlayerStats stuff
+        playerManager.ResetToDefault();
         player = playerManager.LoadPlayer();
         // Do stuff for a new player?  Say Hi ?
+        PlayerName = player.Name;
+        WorddiceLength = player.WordDiceGameLength;
 
 
 }

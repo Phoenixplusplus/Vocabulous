@@ -10,6 +10,7 @@ public struct PlayerStats
     public float MusicVolume;      // 0 = Mute, 1 = full
     public float SFXVolume;        // 0 = Mute, 1 = full
     public int WordDiceSize;       // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
+    public int WordDiceGameLength; // 30,60,120,180 seconds
     public int WordSearchSize;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
     public int AnagramMinLength;   // 4,5,6 (Default),7,8
 }
@@ -33,6 +34,7 @@ public class PlayerManager
             ret.MusicVolume = PlayerPrefs.GetFloat("MusicVolume");
             ret.SFXVolume = PlayerPrefs.GetFloat("SFXVolume");
             ret.WordDiceSize = PlayerPrefs.GetInt("WordDiceSize");
+            ret.WordDiceGameLength = PlayerPrefs.GetInt("WordDiceGameLength");
             ret.WordSearchSize = PlayerPrefs.GetInt("WordSearchSize");
             ret.AnagramMinLength = PlayerPrefs.GetInt("AnagramMinLength");
         }
@@ -46,6 +48,7 @@ public class PlayerManager
         PlayerPrefs.SetFloat("MusicVolume", player.MusicVolume);
         PlayerPrefs.SetFloat("SFXVolume",player.SFXVolume);
         PlayerPrefs.SetInt("WordDiceSize", player.WordDiceSize);
+        PlayerPrefs.SetInt("WordDiceGameLength", player.WordDiceGameLength);
         PlayerPrefs.SetInt("WordSearchSize", player.WordSearchSize);
         PlayerPrefs.SetInt("AnagramMinLength", player.AnagramMinLength);
     }
@@ -59,10 +62,17 @@ public class PlayerManager
         ret.MusicVolume = 1.0f;    // 0 = Mute, 1 = full
         ret.SFXVolume = 1.0f;      // 0 = Mute, 1 = full
         ret.WordDiceSize = 4;      // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
+        ret.WordDiceGameLength = 30; // purely for testing
         ret.WordSearchSize = 15;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
         ret.AnagramMinLength = 6;
 
         return ret;
+    }
+
+    public void ResetToDefault()
+    {
+        PlayerStats ret = GetDefault();
+        SavePlayer(ret);
     }
 
     // Will need a series of "Reset" functions here laterz

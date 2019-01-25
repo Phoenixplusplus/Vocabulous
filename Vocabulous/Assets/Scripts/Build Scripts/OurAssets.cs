@@ -8,6 +8,9 @@ public class OurAssets : MonoBehaviour
     [Header("Old School Overlay Tile")]
     public GameObject OLayTile;
     [Header("Dice in format Dx")]
+    public GameObject D_;
+    public GameObject DQMark;
+    public GameObject DBlank;
     public GameObject Da;
     public GameObject Db;
     public GameObject Dc;
