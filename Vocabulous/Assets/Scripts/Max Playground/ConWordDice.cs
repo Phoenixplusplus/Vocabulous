@@ -15,7 +15,8 @@ public class ConWordDice : MonoBehaviour
     public ConTableWordDice myMenu;
     public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
     public double Timer;
-    public int GameTime = 30;
+    [SerializeField]
+    private int GameTime = 30;
     private double StartTime = 0.00;
     public string CurrentWord = "";
     public List<string> FoundWords = new List<string>(); // string list of what the player has found
@@ -114,6 +115,7 @@ public class ConWordDice : MonoBehaviour
         SpawnDice();
         MakeFoundList();
         Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
+        Debug.Log("Asking gc.player for desired GameTime .. got:"+ gc.player.WordDiceGameLength.ToString());
         Timer = GameTime;
         gameState = 2;
         myMenu.GameRunning();
