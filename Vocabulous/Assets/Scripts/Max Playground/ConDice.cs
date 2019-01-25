@@ -15,25 +15,38 @@ public class ConDice : MonoBehaviour
     public GameObject Faceside1;
     public GameObject Faceside2;
     public GameObject DiceBody;
+    private Material DiceMaterial;
+    // currently bugged
+    public bool shaking;
+    private float shakeVar = 50.0f;
+    private float shakeRange = 3.0f;
 
 
     void Awake ()
     {
         gc = GC.Instance;
+        top = FaceTop.GetComponent<Renderer>().material;
+        DiceMaterial = DiceBody.GetComponent<Renderer>().material;
     }
 
     // Start is called before the first frame update
     void Start()
     {
         tc.setID(ID);
-        //tc.SetLetter(letter);
         tc.SetVisible(false);
-        top = FaceTop.GetComponent<Renderer>().material;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // are we shaking?
+        if (shaking)
+        {
+            //transform.Rotate(Vector3.up * Mathf.Sin(shakeVar * Time.deltaTime) * shakeRange);
+            // needs work 8-)
+
+        }
+
         if (myGrid != null)
         {
             if (myGrid.legals.Contains(ID))
@@ -54,5 +67,25 @@ public class ConDice : MonoBehaviour
             }
         }
     }
+
+    public void ChangeDiceColor (Color myColor)
+    {
+        DiceMaterial.color = myColor;
+    }
+
+    public void Scale(float factor)
+    {
+        FaceTop.transform.localScale = FaceTop.transform.localScale * factor;
+        Faceside1.transform.localScale = Faceside1.transform.localScale * factor;
+        Faceside2.transform.localScale = Faceside2.transform.localScale * factor;
+        DiceBody.transform.localScale = DiceBody.transform.localScale * factor;
+    }
+
+    public void killOverlayTile()
+    {
+        Destroy(tc);
+        Destroy(GetComponent("OverlayTile"));
+    }
+
 
 }
