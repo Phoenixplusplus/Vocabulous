@@ -9,7 +9,7 @@ public class WordSearchController : MonoBehaviour
 {
     private GC gameController;
     private GameGrid grid;
-    public GameObject tiles;
+    public GameObject diceHolder;
     public GameObject OverlayPrefab;
     public TrieTest trie;
     public int gridXLength = 20;
@@ -44,7 +44,7 @@ public class WordSearchController : MonoBehaviour
     private string defaultString = "0";
     private int debugPlacedWords = 0;
 
-    void Start()
+    public void Initialise()
     {
 
         /* gc */
@@ -72,21 +72,6 @@ public class WordSearchController : MonoBehaviour
         grid.init();
         grid.directional = true;
 
-        int count = 0;
-        for (int y = gridYLength; y > 0; y--)
-        {
-            for (int x = 0; x < gridXLength; x++)
-            {
-                GameObject tile = Instantiate(OverlayPrefab, new Vector3(x, y, 0), Quaternion.identity);
-                tile.transform.parent = tiles.transform;
-                Tile_Controlller tilecon = tile.GetComponent<Tile_Controlller>();
-                tilecon.setID(count);
-                count++;
-                tilecon.myGrid = grid;
-                tilecon.SetVisible(true);
-            }
-        }
-
         /* populate with dummy data so the grid can check 'legals' for placing words in */
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
@@ -113,14 +98,32 @@ public class WordSearchController : MonoBehaviour
         {
             if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight));
         }
+
+        /* now pop the cubes in */
+        int count = 0;
+        for (int z = gridYLength; z > 0; z--)
+        {
+            for (int x = 0; x < gridXLength; x++)
+            {
+                GameObject dice = gameController.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
+                dice.transform.parent = diceHolder.transform;
+                ConDice diceCon = dice.GetComponent<ConDice>();
+                diceCon.ID = count;
+                diceCon.myGrid = grid;
+                count++;
+            }
+        }
     }
 
     void Update()
     {
         if (selecting) grid.GetCurrentPath();
 
-        CheckGCHoverValue();
-        InputAndSearch();
+        if (gameController != null)
+        {
+            CheckGCHoverValue();
+            InputAndSearch();
+        }
     }
 
     /* recursive populate 'unfoundWords' list */

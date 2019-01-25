@@ -70,6 +70,7 @@ public class GC : MonoBehaviour
 
     [Header("The GAME OBJECTS")]
     public ConWordDice WordDice;
+    public WordSearchController wordSearchController;
 
      #endregion
 
@@ -116,6 +117,8 @@ public class GC : MonoBehaviour
         OldHoverOver = -1;
         // all loaded
         GameState = 1;
+
+        wordSearchController.Initialise();
     }
 
 
