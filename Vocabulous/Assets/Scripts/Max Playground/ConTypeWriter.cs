@@ -8,6 +8,7 @@ public class ConTypeWriter : MonoBehaviour
     private string myWord = "";
     private GC gc;
     private TypeKey[] myKeys;
+    public GameObject myInput;
 
     // Code Time
     // Q:7700, W:7701, E:7702, R:7703, T:7704, Y:7705, U:7706, I:7707, O:7708, P7709:
@@ -31,7 +32,7 @@ public class ConTypeWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && gc.NewHoverOver >= 7700 && gc.NewHoverOver <= 7728)
         {
             TypeKey k = null;
             foreach (TypeKey K in myKeys)
@@ -40,12 +41,57 @@ public class ConTypeWriter : MonoBehaviour
             }
             if (k != null)
             {
-                k.press();
                 // check for back space
+                if (k.myKey == "back")
+                {
+                    if (myWord.Length > 0)
+                    {
+                        k.press();
+                        myWord = myWord.Substring(0, myWord.Length - 1);
+                        ChangeInputDisplay();
+                        return;
+                    }
+                }
                 // check for find
+                else if (k.myKey == "find")
+                {
+                    if (myWord.Length >= 3)
+                    {
+                        k.press();
+                        HitMe(myWord);
+                        return;
+                    }
+                }
                 // else add letter
-                myWord = myWord + k.myKey;
+                else
+                {
+                    if (myWord.Length < 16)
+                    {
+                        k.press();
+                        myWord = myWord + k.myKey;
+                        ChangeInputDisplay();
+                        return;
+                    }
+                }
             }
         }
     }
+
+    private void ChangeInputDisplay()
+    {
+        myInput.transform.position = new Vector3(4.5f - ((float)myWord.Length/2), 0, 1.5f);
+
+        foreach (Transform child in myInput.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        GameObject word = gc.assets.MakeWordFromDiceQ(myWord, myInput.transform.position, 1);
+        word.transform.parent = myInput.transform;
+    }
+
+    private void HitMe(string word)
+    {
+
+    }
+
 }
