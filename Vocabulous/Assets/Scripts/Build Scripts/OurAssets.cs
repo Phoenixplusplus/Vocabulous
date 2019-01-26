@@ -87,6 +87,10 @@ public class OurAssets : MonoBehaviour
         GameObject dice;
         switch (myFace)
         {
+            case "?":
+                dice = Instantiate(DQMark, position, Quaternion.identity); break;
+            case "_":
+                dice = Instantiate(D_, position, Quaternion.identity); break;
             case "a":
                 dice = Instantiate(Da, position, Quaternion.identity); break;
             case "b":
@@ -141,7 +145,7 @@ public class OurAssets : MonoBehaviour
                 dice = Instantiate(Dy, position, Quaternion.identity); break;
             case "z":
                 dice = Instantiate(Dz, position, Quaternion.identity); break;
-            default: dice = null; break;
+            default: dice = Instantiate(DBlank, position, Quaternion.identity); break; ; break;
         }
         if (dice == null) Debug.Log("OurAssets::Spawn Dice() - Improper String parameter");
         return dice;
