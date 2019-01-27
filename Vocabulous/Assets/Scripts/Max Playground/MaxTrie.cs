@@ -190,6 +190,8 @@ public class MaxTrie : MonoBehaviour
     {
         List<string> results = new List<string>();
         letters.ToLower();
+        letters = letters.Replace(' ', '_');
+        Debug.Log("Testing " + letters);
         crossMagic(letters, ref results, "", _root);
         return results;
     }

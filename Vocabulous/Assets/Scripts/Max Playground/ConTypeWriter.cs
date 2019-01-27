@@ -9,6 +9,9 @@ public class ConTypeWriter : MonoBehaviour
     private GC gc;
     private TypeKey[] myKeys;
     public GameObject myInput;
+    public ShowList myOutput;
+    public int MyType = 1; // default, use this to customise and use for other things
+    public List<string> answers;
 
     // Code Time
     // Q:7700, W:7701, E:7702, R:7703, T:7704, Y:7705, U:7706, I:7707, O:7708, P7709:
@@ -83,7 +86,7 @@ public class ConTypeWriter : MonoBehaviour
 
         foreach (Transform child in myInput.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            Destroy(child.gameObject);
         }
         GameObject word = gc.assets.MakeWordFromDiceQ(myWord, myInput.transform.position, 1);
         word.transform.parent = myInput.transform;
@@ -91,7 +94,28 @@ public class ConTypeWriter : MonoBehaviour
 
     private void HitMe(string word)
     {
+        switch (MyType)
+        {
+            case 1:
+                if (myWord.Contains(" ") || myWord.Contains("_"))
+                {
+                    answers = gc.maxTrie.SolveCrossword(myWord);
+                }
+                else
+                {
+                    answers = gc.maxTrie.getAnagram(myWord, false, 3);
+                    answers = gc.assets.SortList(answers);
+                }
+                break;
+            default:
+                break;
+        }
+        DisplayAnswers();
+    }
 
+    private void DisplayAnswers()
+    {
+        myOutput.Print(answers);
     }
 
 }

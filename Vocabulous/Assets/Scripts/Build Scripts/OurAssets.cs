@@ -162,4 +162,26 @@ public class OurAssets : MonoBehaviour
         return ret;
     }
 
+    public List<string> SortList(List<string> list)
+    {
+        List<string> ret = new List<string>();
+        int min = 99;
+        int max = 0;
+        foreach (string s in list)
+        {
+            int len = s.Length;
+            if (len < min) min = len;
+            if (len > max) max = len;
+        }
+        for (int i = max; i >= min; i--)
+        {
+            foreach (string s in list)
+            {
+                if (s.Length == i) ret.Add(s);
+            }
+        }
+        return ret;
+    }
+
+
 }
