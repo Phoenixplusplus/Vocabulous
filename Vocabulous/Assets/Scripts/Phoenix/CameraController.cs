@@ -103,6 +103,7 @@ public class CameraController : MonoBehaviour
             {
                 quitting = false;
                 inPlay = false;
+                gameController.GameState = 1;
             }
         }
     }

@@ -228,6 +228,8 @@ public class GC : MonoBehaviour
     {
 
     }
+
+    public void SetGameState(int i) { GameState = i; }
     #endregion
 
 
