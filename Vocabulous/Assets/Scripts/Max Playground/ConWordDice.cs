@@ -48,27 +48,27 @@ public class ConWordDice : MonoBehaviour
     // Called before anything else ... lets connect to the world
     void Awake()
     {
-        // Connect to Game Controller and establish links
-        gc = GC.Instance;
-        if (gc != null) Debug.Log("ConWordDice:Awake() - connected to Game Controller");
-        trie = gc.maxTrie;
-        if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
-        transform.position = gc.PosTranWordDice;
-        myMenu.OnSceneTable();
+
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-
+        // Connect to Game Controller and establish links
+        gc = GC.Instance;
+        if (gc != null) Debug.Log("ConWordDice:Awake() - connected to Game Controller");
+        trie = gc.maxTrie;
+        if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
+        //transform.position = gc.PosTranWordDice;
+        myMenu.OnSceneTable();
     }
 
     // Update is called once per frame
     void Update()
     {
         // probably get rid of this when all is set up
-        if (transform.position != gc.PosTranWordDice) transform.position = gc.PosTranWordDice;
+        //if (transform.position != gc.PosTranWordDice) transform.position = gc.PosTranWordDice;
 
         // if game running: do timer
         if (Timer > 0 && gameState == 2)
@@ -181,12 +181,14 @@ public class ConWordDice : MonoBehaviour
                 count++;
             }
         }
+        myDice.transform.localRotation = transform.localRotation;
     }
 
     void MakeFoundList ()
     {
         GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6)+transform.position, 1f);
         Found.transform.parent = FoundList.transform;
+        FoundList.transform.localRotation = transform.localRotation; // phoenix edit
     }
 
     #endregion
@@ -221,7 +223,9 @@ public class ConWordDice : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
-                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                            //GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(-4f + (FoundWords.Count * 0.6f), 0, 5.6f) + transform.position, 0.5f); // phoenix edit
+                            newWord.transform.localRotation = FoundList.transform.localRotation; // phoenix edit
                             newWord.transform.parent = FoundList.transform;
                         }
                     }

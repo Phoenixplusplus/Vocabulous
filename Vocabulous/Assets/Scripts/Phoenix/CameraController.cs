@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour
 {
+    private GC gameController;
     public Transform cameraParent;
     public Vector3 currentAngle;
     public Vector3 targetAngle;
     public Button PlayThis, QuitThis;
-    //public Animator ButtonAnimations;
+    public Animator OptionsAnimation;
     float mouseX;
     public float mouseSensitivty = 4f;
     public float lerpSpeed = 1f;
@@ -21,11 +22,12 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
+        gameController = GC.Instance;
+
         transform.LookAt(cameraParent);
         targetAngle = new Vector3(0f, 20f, 0f);
 
         PlayThis.gameObject.SetActive(false);
-        //ToggleButtonsSlide();
     }
 
     void Update()
@@ -101,7 +103,6 @@ public class CameraController : MonoBehaviour
             {
                 quitting = false;
                 inPlay = false;
-                //ToggleButtonsSlide();
             }
         }
     }
@@ -110,11 +111,11 @@ public class CameraController : MonoBehaviour
     public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
 
     // UI animations
-    //public void ToggleButtonsSlide()
-    //{
-    //    bool b = ButtonAnimations.GetBool("SlideState");
-    //    ButtonAnimations.SetBool("SlideState", !b);
-    //}
+    public void ToggleOptionsInOut()
+    {
+        bool b = OptionsAnimation.GetBool("OptionsClicked");
+        OptionsAnimation.SetBool("OptionsClicked", !b);
+    }
 
     // button click functions
     public void RotateToGameBwoggle() { targetAngle = new Vector3(0, 298, 0); }
@@ -131,13 +132,10 @@ public class CameraController : MonoBehaviour
         if (onGame3) playGame3 = true;
         if (onGame4) playGame4 = true;
         if (onStats) playStats = true;
-
-        //ToggleButtonsSlide();
     }
 
     public void QuitClicked()
     {
-        //StartCoroutine(ReturnToStartTransform(2f));
         quitting = true;
 
         playBwoggle = false;
@@ -151,34 +149,5 @@ public class CameraController : MonoBehaviour
         onGame4 = false;
         onStats = false;
         ToggleQuitButton(false);
-    }
-
-    IEnumerator ReturnToStartTransform(float lerpTime)
-    {
-        float t = 0;
-
-        playBwoggle = false;
-        playWordSplerch = false;
-        playGame3 = false;
-        playGame4 = false;
-        playStats = false;
-        onBwoggle = false;
-        onWordSplerch = false;
-        onGame3 = false;
-        onGame4 = false;
-        onStats = false;
-        ToggleQuitButton(false);
-
-        while (t < lerpTime)
-        {
-            transform.position = Vector3.Lerp(transform.position, notInPlayTransform.position, t / lerpTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, notInPlayTransform.rotation, t / lerpTime);
-            t += Time.deltaTime;
-            yield return null;
-        }
-        inPlay = false;
-
-        //ToggleButtonsSlide();
-        yield break;
     }
 }

@@ -22,12 +22,36 @@ public class GC : MonoBehaviour
     public TrieTest phoenixTrie;
 
     [Header("Player Manager")]
+
+    [Header("Player Info")]
     [SerializeField]
     private string PlayerName;
-    [SerializeField]
-    private int WorddiceLength;
     public PlayerStats player;
     public PlayerManager playerManager = new PlayerManager();
+
+    [Header("WordDice Info")]
+    [SerializeField]
+    private int WorddiceLength;
+
+    [Header("WordSearch Info")]
+    [Tooltip("WARNING - 10 is minimum as Controller is likely to get stuck in infinite loop looking to place word. CONSIDER reducing word count on longer words")]
+    [Range(10, 25)]
+    public int gridXLength = 12;
+    [Tooltip("WARNING - 10 is minimum as Controller is likely to get stuck in infinite loop looking to place word. CONSIDER reducing word count on longer words")]
+    [Range(10, 25)]
+    public int gridYLength = 12;
+    public int minimumLengthWord = 4;
+    public int maximumLengthWord = 8;
+    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
+    public int fourLetterWordsCount = 4;
+    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
+    public int fiveLetterWordsCount = 4;
+    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
+    public int sixLetterWordsCount = 4;
+    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
+    public int sevenLetterWordsCount = 0;
+    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
+    public int eightLetterWordsCount = 0;
 
     [Header("Assets")]
     public OurAssets assets;
@@ -125,14 +149,15 @@ public class GC : MonoBehaviour
         OldHoverOver = -1;
         // all loaded
         GameState = 1;
-
-        wordSearchController.Initialise();
     }
 
 
     // Update is called once per frame
     void Update()
     {
+        // testings
+        if (Input.GetKeyDown(KeyCode.G)) wordSearchController.Initialise();
+
         // sets HoverOver values to the returned value from any IisOverlayTile class (if none, then -1)
         CheckHoverOver();
         CheckClicks();

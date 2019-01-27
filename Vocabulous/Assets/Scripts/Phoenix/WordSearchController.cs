@@ -12,20 +12,19 @@ public class WordSearchController : MonoBehaviour
     public GameObject diceHolder;
     public GameObject OverlayPrefab;
     public TrieTest trie;
-    public int gridXLength = 20;
-    public int gridYLength = 20;
+    private int gridXLength = 20;
+    private int gridYLength = 20;
     [SerializeField]
     private int minimumLengthWord = 4;
     [SerializeField]
     private int maximumLengthWord = 8;
-    public int numberOfWords = 15;
+    private int numberOfWords = 15;
     //                                  will longer length/default these off some research when less tierd
-    public int threeLetterWordsCount = 2;
-    public int fourLetterWordsCount = 3;
-    public int fiveLetterWordsCount = 4;
-    public int sixLetterWordsCount = 2;
-    public int sevenLetterWordsCount = 2;
-    public int eightLetterWordsCount = 2;
+    private int fourLetterWordsCount = 3;
+    private int fiveLetterWordsCount = 4;
+    private int sixLetterWordsCount = 2;
+    private int sevenLetterWordsCount = 2;
+    private int eightLetterWordsCount = 2;
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
@@ -47,8 +46,18 @@ public class WordSearchController : MonoBehaviour
     public void Initialise()
     {
 
-        /* gc */
+        /* gamecontroller and initialising variables */
         gameController = GC.Instance;
+        trie = gameController.phoenixTrie;
+        gridXLength = gameController.gridXLength;
+        gridYLength = gameController.gridYLength;
+        minimumLengthWord = gameController.minimumLengthWord;
+        maximumLengthWord = gameController.maximumLengthWord;
+        fourLetterWordsCount = gameController.fourLetterWordsCount;
+        fiveLetterWordsCount = gameController.fiveLetterWordsCount;
+        sixLetterWordsCount = gameController.sixLetterWordsCount;
+        sevenLetterWordsCount = gameController.sevenLetterWordsCount;
+        eightLetterWordsCount = gameController.eightLetterWordsCount;
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -79,7 +88,6 @@ public class WordSearchController : MonoBehaviour
         }
 
         /* populate with initial words to be placed 'unfoundWords' List */
-        for (int i = 0; i < threeLetterWordsCount; i++) { PopulateInitialWords(3, threeLetterWordsCount, false); }
         for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
         for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
         for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
@@ -105,7 +113,7 @@ public class WordSearchController : MonoBehaviour
         {
             for (int x = 0; x < gridXLength; x++)
             {
-                GameObject dice = gameController.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z));
+                GameObject dice = gameController.assets.SpawnDice(grid.bins[count], new Vector3(diceHolder.transform.position.x + x, diceHolder.transform.position.y, diceHolder.transform.position.z + z));
                 dice.transform.parent = diceHolder.transform;
                 ConDice diceCon = dice.GetComponent<ConDice>();
                 diceCon.ID = count;
@@ -113,6 +121,7 @@ public class WordSearchController : MonoBehaviour
                 count++;
             }
         }
+        diceHolder.transform.localRotation = transform.localRotation;
     }
 
     void Update()

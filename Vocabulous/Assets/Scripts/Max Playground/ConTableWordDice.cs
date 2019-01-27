@@ -32,13 +32,15 @@ public class ConTableWordDice : MonoBehaviour
 
     void Awake()
     {
-        gc = GC.Instance;
+        
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
+        gc = GC.Instance;
+
         GUITile.SetVisible(false);
         //GUITile.SetLetter("");
         GUITile.setID(8881);
