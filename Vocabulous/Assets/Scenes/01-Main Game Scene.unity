@@ -4044,18 +4044,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff6f2d7e4b16eb47a3e3e001b635615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1735822510 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
-    type: 3}
-  m_PrefabInstance: {fileID: 1480419372}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8475707f7f4c71445a4bf794f3090673, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1746685530 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: eb3c58e9cbadd6849b2e5356e91d4d09,
@@ -4854,17 +4842,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1735822510}
-        m_MethodName: SetGameState
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

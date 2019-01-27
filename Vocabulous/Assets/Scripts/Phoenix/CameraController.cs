@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
         if (currentAngle.y > 360f) currentAngle.y = 0f;
 
         // GameState == 1, looking at table choosing a game
-        if (gameController.GameState == 1)
+        if (!inPlay)
         {
             if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
 
@@ -58,15 +58,15 @@ public class CameraController : MonoBehaviour
             ToggleQuitButton(true);
         }
 
-        if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && gameController.GameState == 1) onWordDice = true;
+        if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && !inPlay) onWordDice = true;
         else onWordDice = false;
-        if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && gameController.GameState == 1) onWordSearch = true;
+        if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && !inPlay) onWordSearch = true;
         else onWordSearch = false;
-        if (currentAngle.y > (gameController.RotTranAnagram.y + 360) - 20f && currentAngle.y < (gameController.RotTranAnagram.y + 360) + 20f && gameController.GameState == 1) onAnagram = true;
+        if (currentAngle.y > (gameController.RotTranAnagram.y + 360) - 20f && currentAngle.y < (gameController.RotTranAnagram.y + 360) + 20f && !inPlay) onAnagram = true;
         else onAnagram = false;
-        if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && gameController.GameState == 1) onWordDrop = true;
+        if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && !inPlay) onWordDrop = true;
         else onWordDrop = false;
-        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && gameController.GameState == 1) onGame5 = true;
+        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && !inPlay) onGame5 = true;
         else onGame5 = false;
         //
 
@@ -103,7 +103,7 @@ public class CameraController : MonoBehaviour
             {
                 quitting = false;
                 inPlay = false;
-                gameController.GameState = 1;
+                //gameController.GameState = 1;
             }
         }
     }
