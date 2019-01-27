@@ -15,10 +15,10 @@ public class CameraController : MonoBehaviour
     public float mouseSensitivty = 4f;
     public float lerpSpeed = 1f;
     public bool inPlay = false;
-    public bool playBwoggle, playWordSplerch, playGame3, playGame4, playStats,
-                onBwoggle, onWordSplerch, onGame3, onGame4, onStats,
+    public bool playWordDice, playWordSearch, playAnagram, playWordDrop, playGame5,
+                onWordDice, onWordSearch, onAnagram, onWordDrop, onGame5,
                 quitting;
-    public Transform notInPlayTransform, bwoggleCameraTransform, wordSplerchTransform, game3Transform, game4Transform, statsTransform;
+    public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, wordDropTransform, game5Transform;
 
     void Start()
     {
@@ -32,11 +32,7 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if (!inPlay)
-        {
-            if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
-        }
-
+        // angle consistency
         currentAngle = new Vector3(
             Mathf.LerpAngle(currentAngle.x, targetAngle.x, Time.deltaTime * lerpSpeed),
             Mathf.LerpAngle(currentAngle.y, targetAngle.y, Time.deltaTime * lerpSpeed),
@@ -47,21 +43,13 @@ public class CameraController : MonoBehaviour
         if (currentAngle.y < 0) currentAngle.y = 360f;
         if (currentAngle.y > 360f) currentAngle.y = 0f;
 
-        if (currentAngle.y > 278 && currentAngle.y < 318f && !inPlay) onBwoggle = true;
-        else onBwoggle = false;
-        if (currentAngle.y > 220f && currentAngle.y < 260 && !inPlay) onWordSplerch = true;
-        else onWordSplerch = false;
-        if (currentAngle.y > 165f && currentAngle.y < 205f && !inPlay) onGame3 = true;
-        else onGame3 = false;
-        if (currentAngle.y > 110f && currentAngle.y < 150f && !inPlay) onGame4 = true;
-        else onGame4 = false;
-        if (currentAngle.y > 57f && currentAngle.y < 97f && !inPlay) onStats = true;
-        else onStats = false;
-
-        if (!inPlay)
+        // GameState == 1, looking at table choosing a game
+        if (gameController.GameState == 1)
         {
+            if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
+
             ToggleQuitButton(false);
-            if (onBwoggle || onWordSplerch || onGame3 || onGame4 || onStats) TogglePlayButton(true);
+            if (onWordDice || onWordSearch || onAnagram || onWordDrop || onGame5) TogglePlayButton(true);
             else TogglePlayButton(false);
         }
         else
@@ -70,30 +58,42 @@ public class CameraController : MonoBehaviour
             ToggleQuitButton(true);
         }
 
-        if (playBwoggle)
+        if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && gameController.GameState == 1) onWordDice = true;
+        else onWordDice = false;
+        if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && gameController.GameState == 1) onWordSearch = true;
+        else onWordSearch = false;
+        if (currentAngle.y > (gameController.RotTranAnagram.y + 360) - 20f && currentAngle.y < (gameController.RotTranAnagram.y + 360) + 20f && gameController.GameState == 1) onAnagram = true;
+        else onAnagram = false;
+        if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && gameController.GameState == 1) onWordDrop = true;
+        else onWordDrop = false;
+        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && gameController.GameState == 1) onGame5 = true;
+        else onGame5 = false;
+        //
+
+        if (playWordDice)
         {
-            transform.position = Vector3.Lerp(transform.position, bwoggleCameraTransform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, bwoggleCameraTransform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, wordDiceCameraTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, wordDiceCameraTransform.rotation, Time.deltaTime);
         }
-        if (playWordSplerch)
+        if (playWordSearch)
         {
-            transform.position = Vector3.Lerp(transform.position, wordSplerchTransform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, wordSplerchTransform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, wordSearchTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, wordSearchTransform.rotation, Time.deltaTime);
         }
-        if (playGame3)
+        if (playAnagram)
         {
-            transform.position = Vector3.Lerp(transform.position, game3Transform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, game3Transform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, anagramTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, anagramTransform.rotation, Time.deltaTime);
         }
-        if (playGame4)
+        if (playWordDrop)
         {
-            transform.position = Vector3.Lerp(transform.position, game4Transform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, game4Transform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, wordDropTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, wordDropTransform.rotation, Time.deltaTime);
         }
-        if (playStats)
+        if (playGame5)
         {
-            transform.position = Vector3.Lerp(transform.position, statsTransform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, statsTransform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, game5Transform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, game5Transform.rotation, Time.deltaTime);
         }
         if (quitting)
         {
@@ -127,27 +127,27 @@ public class CameraController : MonoBehaviour
     public void PlayClicked()
     {
         inPlay = true;
-        if (onBwoggle) { playBwoggle = true; TogglePlayButton(false); }
-        if (onWordSplerch) playWordSplerch = true;
-        if (onGame3) playGame3 = true;
-        if (onGame4) playGame4 = true;
-        if (onStats) playStats = true;
+        if (onWordDice) { playWordDice = true; TogglePlayButton(false); }
+        if (onWordSearch) playWordSearch = true;
+        if (onAnagram) playAnagram = true;
+        if (onWordDrop) playWordDrop = true;
+        if (onGame5) playGame5 = true;
     }
 
     public void QuitClicked()
     {
         quitting = true;
 
-        playBwoggle = false;
-        playWordSplerch = false;
-        playGame3 = false;
-        playGame4 = false;
-        playStats = false;
-        onBwoggle = false;
-        onWordSplerch = false;
-        onGame3 = false;
-        onGame4 = false;
-        onStats = false;
+        playWordDice = false;
+        playWordSearch = false;
+        playAnagram = false;
+        playWordDrop = false;
+        playGame5 = false;
+        onWordDice = false;
+        onWordSearch = false;
+        onAnagram = false;
+        onWordDrop = false;
+        onGame5 = false;
         ToggleQuitButton(false);
     }
 }

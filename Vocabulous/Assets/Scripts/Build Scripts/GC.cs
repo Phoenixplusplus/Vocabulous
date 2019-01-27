@@ -64,16 +64,19 @@ public class GC : MonoBehaviour
     public Vector3 PosTranWordDice = new Vector3();
     public Vector3 PosTranAnagram = new Vector3();
     public Vector3 PosTranWordrop = new Vector3();
+    public Vector3 PosTranGame5 = new Vector3();
     [Header("Game Rotations (for rotational tweaking)")]
     public Vector3 RotWordSearch = new Vector3();
     public Vector3 RotTranWordDice = new Vector3();
     public Vector3 RotTranAnagram = new Vector3();
     public Vector3 RotTranWordrop = new Vector3();
+    public Vector3 RotTranGame5 = new Vector3();
     [Header("Game Scales (for scale tweaking)")]
     public Vector3 ScaleWordSearch = new Vector3();
     public Vector3 ScaleTranWordDice = new Vector3();
     public Vector3 ScaleTranAnagram = new Vector3();
     public Vector3 ScaleTranWordrop = new Vector3();
+    public Vector3 ScaleTranWordDrop = new Vector3();
     [Header("Default Dice/face colours")]
     public Color ColorBase = new Color();
     public Color ColorSelected = new Color();
@@ -81,17 +84,22 @@ public class GC : MonoBehaviour
     public Color ColorLegal = new Color();
 
     [Header("THE GAME STATE")]
-    [SerializeField]
-    private int GameState = 0;
+    public int GameState = 0;
     //... needs to be agreed ... maybe 
     // 0 = initialising/loading
     // 1 = at table (choosing)
+    // 11 = Over WordDice chair
+    // 12 = Over WordSearch chair
+    // 13 = Over Anagram chair
+    // 14 = Over WordDrop chair
+    // 15 = Over game5 chair
     // 2 = transition to game area
-    // 31 =  Playing WordSearch
-    // 32 = Playing WordDice
+    // 30 = In Game
+    // 31 = Playing WordDice
+    // 32 = Playing WordSearch
     // 33 = Playing Anagram
     // 34 = Playing WordDrop
-    // 35 = <<add new game here>>
+    // 35 = Playering game5
     // 4 = Menu's open
     // 5 = transitioning from a game to 1 again
     // 9 = Quitting
@@ -99,6 +107,8 @@ public class GC : MonoBehaviour
     [Header("The GAME OBJECTS")]
     public ConWordDice WordDice;
     public WordSearchController wordSearchController;
+    public CameraController cameraController;
+    private Vector3 cameraAngle;
 
      #endregion
 
@@ -157,10 +167,19 @@ public class GC : MonoBehaviour
     {
         // testings
         if (Input.GetKeyDown(KeyCode.G)) wordSearchController.Initialise();
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            GameObject dice = assets.SpawnDice("?", cameraController.transform.position);
+            Rigidbody rb = dice.AddComponent<Rigidbody>();
+            dice.transform.Translate(cameraController.transform.forward * 5);
+        }
 
         // sets HoverOver values to the returned value from any IisOverlayTile class (if none, then -1)
         CheckHoverOver();
         CheckClicks();
+
+        // sets states for other scripts to act accordingly
+        StateControl();
     }
     #endregion
 
@@ -204,12 +223,33 @@ public class GC : MonoBehaviour
     #endregion
 
 
+    #region State Controls
+    void StateControl()
+    {
+
+    }
+    #endregion
+
+
     #region PlayerStats manipulation
     // Any game/GUI SHOULD use this to save any changes to gc.player (the PlayerStats Struct)
     public void SaveStats()
     {
         playerManager.SavePlayer(player);
     }
+    #endregion
+
+
+    #region CoRoutines
+    //IEnumerator LoadWordSearch()
+    //{
+    //    while (!wordSearchController.isInitialised)
+    //    {
+    //        wordSearchController.Initialise();
+    //        yield return null;
+    //    }
+    //    yield break;
+    //}
     #endregion
 
 }

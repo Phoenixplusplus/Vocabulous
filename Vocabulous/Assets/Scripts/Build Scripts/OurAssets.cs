@@ -145,7 +145,7 @@ public class OurAssets : MonoBehaviour
                 dice = Instantiate(Dy, position, Quaternion.identity); break;
             case "z":
                 dice = Instantiate(Dz, position, Quaternion.identity); break;
-            default: dice = Instantiate(DBlank, position, Quaternion.identity); break; ; break;
+            default: dice = Instantiate(DBlank, position, Quaternion.identity); break;
         }
         if (dice == null) Debug.Log("OurAssets::Spawn Dice() - Improper String parameter");
         return dice;

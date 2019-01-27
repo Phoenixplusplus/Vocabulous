@@ -39,6 +39,7 @@ public class WordSearchController : MonoBehaviour
     private uint totalWeight = 0;
     [SerializeField]
     private bool selecting = false;
+    public bool isInitialised = false;
     private int initialWordsCounter = 0;
     private string defaultString = "0";
     private int debugPlacedWords = 0;
@@ -122,6 +123,8 @@ public class WordSearchController : MonoBehaviour
             }
         }
         diceHolder.transform.localRotation = transform.localRotation;
+
+        isInitialised = true;
     }
 
     void Update()
@@ -135,7 +138,9 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
-    /* recursive populate 'unfoundWords' list */
+    /* recursive populate 'unfoundWords' list, called in the Initialise() 
+     * type is of IEnumerator to allow this function to keep returning null when it fails to find slots to place a word. As the Initialise can then be part of a coroutine
+     * and more efficiently loaded without frame skips and trying to execute the function in a single frame */
     void PopulateInitialWords(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
         Debug.Log("Populating initial words..");

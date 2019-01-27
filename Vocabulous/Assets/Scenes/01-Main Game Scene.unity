@@ -566,13 +566,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 174077243}
-  m_LocalRotation: {x: -0.30367196, y: 0.5862279, z: -0.2515424, w: -0.70770526}
+  m_LocalRotation: {x: 0.30366552, y: -0.586233, z: 0.25154442, w: 0.70770305}
   m_LocalPosition: {x: 30.47, y: 9.60621, z: -6.72}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 46.447002, y: -79.274, z: 0}
 --- !u!1 &197899691
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,13 +1083,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328341939}
-  m_LocalRotation: {x: -0.17160523, y: 0.82738966, z: -0.35502377, w: -0.3999203}
+  m_LocalRotation: {x: 0.17160125, y: -0.82739025, z: 0.3550216, w: 0.39992273}
   m_LocalPosition: {x: 24.76, y: 9.61, z: 18.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 46.447002, y: -128.406, z: -0.001}
+  m_LocalEulerAnglesHint: {x: 46.447002, y: -128.406, z: 0}
 --- !u!1 &517978465
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,23 +1194,23 @@ MonoBehaviour:
   mouseSensitivty: 4
   lerpSpeed: 1
   inPlay: 0
-  playBwoggle: 0
-  playWordSplerch: 0
-  playGame3: 0
-  playGame4: 0
-  playStats: 0
-  onBwoggle: 0
-  onWordSplerch: 0
-  onGame3: 0
-  onGame4: 0
-  onStats: 0
+  playWordDice: 0
+  playWordSearch: 0
+  playAnagram: 0
+  playWordDrop: 0
+  playGame5: 0
+  onWordDice: 0
+  onWordSearch: 0
+  onAnagram: 0
+  onWordDrop: 0
+  onGame5: 0
   quitting: 0
   notInPlayTransform: {fileID: 275900558}
-  bwoggleCameraTransform: {fileID: 174077244}
-  wordSplerchTransform: {fileID: 328341940}
-  game3Transform: {fileID: 2134383184}
-  game4Transform: {fileID: 2000822719}
-  statsTransform: {fileID: 1790834415}
+  wordDiceCameraTransform: {fileID: 174077244}
+  wordSearchTransform: {fileID: 328341940}
+  anagramTransform: {fileID: 2134383184}
+  wordDropTransform: {fileID: 2000822719}
+  game5Transform: {fileID: 1790834415}
 --- !u!1 &540585935
 GameObject:
   m_ObjectHideFlags: 0
@@ -3425,6 +3425,154 @@ PrefabInstance:
       propertyPath: WordDice
       value: 
       objectReference: {fileID: 1911035395}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordDice.x
+      value: 30.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordDice.y
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordDice.z
+      value: -6.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranWordDice.x
+      value: 46.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranWordDice.y
+      value: -79.274
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosWordSearch.x
+      value: 24.76
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosWordSearch.y
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosWordSearch.z
+      value: 18.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotWordSearch.x
+      value: 46.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotWordSearch.y
+      value: -128.406
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranAnagram.x
+      value: 0.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranAnagram.y
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranAnagram.z
+      value: 30.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranAnagram.x
+      value: 46.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranAnagram.y
+      value: -179.373
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordrop.x
+      value: -25.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordrop.y
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranWordrop.z
+      value: 17.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranWordrop.x
+      value: 46.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranWordrop.y
+      value: -231.966
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranGame5.x
+      value: -30.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranGame5.y
+      value: 9.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranGame5.z
+      value: -6.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranGame5.x
+      value: 46.447
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: RotTranGame5.y
+      value: -281.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: cameraController
+      value: 
+      objectReference: {fileID: 517978469}
+    - target: {fileID: 5054742668051640118, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: D_
+      value: 
+      objectReference: {fileID: 91058140746104060, guid: afc8925c94d164542a22d19904ae45f3,
+        type: 3}
+    - target: {fileID: 5054742668051640118, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: DBlank
+      value: 
+      objectReference: {fileID: 371486899896561331, guid: ed0a8cc1218808b4aaf75e5a92108f01,
+        type: 3}
+    - target: {fileID: 5054742668051640118, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: DQMark
+      value: 
+      objectReference: {fileID: 1755797702194765750, guid: 7a43dd03c2284554891e5d8a7918ed8a,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c61bd617e1909ac4b96a8226ebaf7f48, type: 3}
 --- !u!1 &1489634882
@@ -3924,7 +4072,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1790834415}
   m_Layer: 0
-  m_Name: StatsTransform
+  m_Name: Game5Transform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3937,13 +4085,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790834414}
-  m_LocalRotation: {x: 0.30626747, y: 0.5788351, z: -0.24837583, w: 0.7137645}
+  m_LocalRotation: {x: -0.3062678, y: -0.5788336, z: 0.24836943, w: -0.71376777}
   m_LocalPosition: {x: -30.7, y: 9.61, z: -6.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 46.447002, y: -281.919, z: -0.001}
+  m_LocalEulerAnglesHint: {x: 46.447002, y: -281.919, z: 0}
 --- !u!1 &1795165889
 GameObject:
   m_ObjectHideFlags: 0
@@ -4588,7 +4736,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2000822719}
   m_Layer: 0
-  m_Name: Game4Transform
+  m_Name: WordDropTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4601,13 +4749,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000822718}
-  m_LocalRotation: {x: 0.17275141, y: 0.82608604, z: -0.35446727, w: 0.40260616}
+  m_LocalRotation: {x: -0.17275274, y: -0.82608765, z: 0.3544627, w: -0.40260625}
   m_LocalPosition: {x: -25.35, y: 9.61, z: 17.88}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 46.447002, y: -231.96599, z: -0.001}
+  m_LocalEulerAnglesHint: {x: 46.447002, y: -231.96599, z: 0}
 --- !u!1 &2062733029
 GameObject:
   m_ObjectHideFlags: 0
@@ -4865,7 +5013,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2134383184}
   m_Layer: 0
-  m_Name: Game3Transform
+  m_Name: AnagramTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4878,10 +5026,10 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134383183}
-  m_LocalRotation: {x: -0.002160296, y: 0.91895837, z: -0.39431664, w: -0.005026489}
+  m_LocalRotation: {x: 0.002157597, y: -0.9189599, z: 0.3943129, w: 0.0050283554}
   m_LocalPosition: {x: 0.14, y: 9.61, z: 30.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 46.447002, y: -179.373, z: -0.001}
+  m_LocalEulerAnglesHint: {x: 46.447002, y: -179.373, z: 0}
