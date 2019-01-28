@@ -35,7 +35,7 @@ public class Tile_Controlller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        txt = letter.GetComponent<TextMesh>();
+        if (letter != null) txt = letter.GetComponent<TextMesh>();
     }
 
     // Update is called once per frame
