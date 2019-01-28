@@ -15,6 +15,7 @@ public class ConWordDice : MonoBehaviour
     public ConTableWordDice myMenu;
     public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
     public double Timer;
+    public ShowList showList;
     [SerializeField]
     private int GameTime = 30;
     private double StartTime = 0.00;
@@ -112,6 +113,7 @@ public class ConWordDice : MonoBehaviour
         SetGrid();
         PopulateGrid();
         BoggleWords = grid.AllWordStrings; // will be empty as each game has a new grid (since size may vary)
+        BoggleWords = gc.assets.SortList(BoggleWords);
         SpawnDice();
         MakeFoundList();
         Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
@@ -223,10 +225,10 @@ public class ConWordDice : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
-                            //GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
-                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(-4f + (FoundWords.Count * 0.6f), 0, 5.6f) + transform.position, 0.5f); // phoenix edit
-                            newWord.transform.localRotation = FoundList.transform.localRotation; // phoenix edit
+                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                            FoundList.transform.localRotation = Quaternion.identity;
                             newWord.transform.parent = FoundList.transform;
+                            FoundList.transform.localRotation = transform.localRotation; // phoenix edi
                         }
                     }
                     else
@@ -258,6 +260,9 @@ public class ConWordDice : MonoBehaviour
         Selecting = false;
         myMenu.GameOver();
         grid.ClearPath();
+        transform.localRotation = Quaternion.identity;
+        showList.Print(BoggleWords);
+        transform.localRotation = Quaternion.Euler(gc.RotTranWordDice);
         // TO DO
         // Scoring
         // Update / Save Player stats

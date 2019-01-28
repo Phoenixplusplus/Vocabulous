@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
+  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2408,6 +2408,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090764197}
   m_CullTransparentMesh: 0
+--- !u!114 &1098785961 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2556257301525756464, guid: aeb4dd4e772d9bc419f0730190ffed95,
+    type: 3}
+  m_PrefabInstance: {fileID: 1878634409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5897a652653f2754eb3960b2c310e5ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1116291593
 GameObject:
   m_ObjectHideFlags: 0
@@ -3363,7 +3375,7 @@ PrefabInstance:
     - target: {fileID: 2004835231919804276, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2004835231919804276, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -3424,26 +3436,26 @@ PrefabInstance:
         type: 3}
       propertyPath: WordDice
       value: 
-      objectReference: {fileID: 1911035395}
+      objectReference: {fileID: 1098785961}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosTranWordDice.x
-      value: 30.47
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosTranWordDice.y
-      value: 9.61
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosTranWordDice.z
-      value: -6.72
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: RotTranWordDice.x
-      value: 46.447
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -3555,6 +3567,21 @@ PrefabInstance:
       propertyPath: cameraController
       value: 
       objectReference: {fileID: 517978469}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: ScaleTranWordDice.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: ScaleTranWordDice.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: ScaleTranWordDice.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5054742668051640118, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: D_
@@ -4712,20 +4739,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8053996149789280092, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053996149789280092, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.52
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053996149789280093, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: origin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8053996149789280093, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: origin.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeb4dd4e772d9bc419f0730190ffed95, type: 3}
---- !u!114 &1911035395 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8543492185294209299, guid: aeb4dd4e772d9bc419f0730190ffed95,
-    type: 3}
-  m_PrefabInstance: {fileID: 1878634409}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5897a652653f2754eb3960b2c310e5ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2000822718
 GameObject:
   m_ObjectHideFlags: 0

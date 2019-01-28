@@ -26,6 +26,7 @@ public class ConTableWordDice : MonoBehaviour
     public Tile_Controlller GUITile;
     public float DiceScaleFactor = 1.4f;
 
+
     private ConDice[] title;
     private ConDice[] start;
     private ConDice[] timeup;

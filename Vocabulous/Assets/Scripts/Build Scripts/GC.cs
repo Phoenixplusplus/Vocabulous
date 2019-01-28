@@ -159,6 +159,10 @@ public class GC : MonoBehaviour
         OldHoverOver = -1;
         // all loaded
         GameState = 1;
+        // Set game locations/rotation
+        WordDice.transform.position = PosTranWordDice;
+        WordDice.transform.localRotation =  Quaternion.Euler(RotTranWordDice);
+        WordDice.transform.localScale = ScaleTranWordDice;
     }
 
 
