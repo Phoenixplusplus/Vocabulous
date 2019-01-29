@@ -15,6 +15,8 @@ public class ConTableWordDice : MonoBehaviour
     public GameObject StartDice;
     public GameObject TimeUp;
     public GameObject GUIStart;
+    public GameObject Restart;
+    public GameObject Back;
     private GC gc;
     private bool highlighted;
 
@@ -30,6 +32,8 @@ public class ConTableWordDice : MonoBehaviour
     private ConDice[] title;
     private ConDice[] start;
     private ConDice[] timeup;
+    private ConDice[] restart;
+    private ConDice[] back;
 
     void Awake()
     {
@@ -49,6 +53,8 @@ public class ConTableWordDice : MonoBehaviour
         title = Worddice.GetComponentsInChildren<ConDice>();
         start = StartDice.GetComponentsInChildren<ConDice>();
         timeup = TimeUp.GetComponentsInChildren<ConDice>();
+        restart = Restart.GetComponentsInChildren<ConDice>();
+        back = Back.GetComponentsInChildren<ConDice>();
         foreach (var ConDice in title)
         {
             ConDice.killOverlayTile();
@@ -85,6 +91,8 @@ public class ConTableWordDice : MonoBehaviour
         Worddice.SetActive(true);
         StartDice.SetActive(true);
         GUIStart.SetActive(true);
+        Restart.SetActive(false);
+        Back.SetActive(false);
     }
 
     public void GameRunning()
@@ -93,6 +101,8 @@ public class ConTableWordDice : MonoBehaviour
         Worddice.SetActive(false);
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
+        Restart.SetActive(false);
+        Back.SetActive(false);
     }
 
     public void GameOver()
@@ -101,6 +111,8 @@ public class ConTableWordDice : MonoBehaviour
         Worddice.SetActive(false);
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
+        Restart.SetActive(true);
+        Back.SetActive(true);
     }
 
 
@@ -119,6 +131,7 @@ public class ConTableWordDice : MonoBehaviour
         {
             die.ChangeDiceColor(TimeUpColor);
         }
+
     }
 
     private void setToHighlight()

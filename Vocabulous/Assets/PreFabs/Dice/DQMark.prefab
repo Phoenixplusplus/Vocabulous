@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 1755797702194765749}
   - component: {fileID: 1755797702194765748}
   m_Layer: 0
-  m_Name: D_ 1
+  m_Name: DQMark
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -318,7 +318,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1755797702194765750}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.1785245, y: -3.6035204e-17, z: 6.0187793}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1755797703771925950}
