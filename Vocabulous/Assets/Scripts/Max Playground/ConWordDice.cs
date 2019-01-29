@@ -42,6 +42,20 @@ public class ConWordDice : MonoBehaviour
         "L","R","Y","V","E","D",
         "S","T","Y","D","I","T",
         "P","S","K","F","F","A" };
+    [Header("Player Stats & Score")]
+    [SerializeField] private int CurrScore;
+    [SerializeField] private int GamesPlayed;
+    [SerializeField] private int HighScore;
+    [SerializeField] private float AverageScore;
+    [SerializeField] private float AverageWords;
+    [SerializeField] private int Longest;
+    [SerializeField] private int F3;
+    [SerializeField] private int F4;
+    [SerializeField] private int F5;
+    [SerializeField] private int F6;
+    [SerializeField] private int F7;
+    [SerializeField] private int F8;
+
     #endregion
 
     #region UNITY API
@@ -63,6 +77,7 @@ public class ConWordDice : MonoBehaviour
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
         //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
+        LoadStats();
     }
 
     // Update is called once per frame
@@ -93,7 +108,7 @@ public class ConWordDice : MonoBehaviour
         }
 
         // Where the game logic really lies // ONLY if game is running
-        if (gameState == 2)
+        if (gameState == 2 || gameState == 3)
         {
             CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
             CheckMouseClicks(); // Defines what happens if the user clicks the mouse
@@ -106,6 +121,7 @@ public class ConWordDice : MonoBehaviour
 
     public void StartGame()
     {
+        LoadStats();
         StartTime = Time.realtimeSinceStartup;
         // TESTER for gc.player ... IT WORKS <<yah me>>
         //gc.player.WordDiceSize = 4;
@@ -193,48 +209,83 @@ public class ConWordDice : MonoBehaviour
         FoundList.transform.localRotation = transform.localRotation; // phoenix edit
     }
 
+    void ResetGame()
+    {
+        showList.Clear();
+        foreach (Transform child in myDice.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in FoundList.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        FoundWords.Clear();
+        BoggleWords.Clear();
+    }
+
     #endregion
 
     #region GAME RUNNING METHODS
     void CheckMouseClicks()
     {
-        if (!Selecting) // not currently selecting anything
+        if (gameState == 2) // game running
         {
-            // Mouse goes down over a non -1 or 9999 IisOverlayTile object (i.e. a valid letter)
-            if (Input.GetMouseButtonDown(0) && gc.NewHoverOver != -1 && gc.NewHoverOver != 9999)
+            if (!Selecting) // not currently selecting anything
             {
-                Selecting = true;
-                grid.AddToPath(gc.NewHoverOver);
-            }
-        }
-        else
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                Selecting = false;
-                string res = grid.FinishPath();
-                if (res.Length >= 3)
+                // Mouse goes down over a non -1 or 9999 IisOverlayTile object (i.e. a valid letter)
+                if (Input.GetMouseButtonDown(0) && gc.NewHoverOver != -1 && gc.NewHoverOver != 9999)
                 {
-                    if (trie.CheckWord(res))
+                    Selecting = true;
+                    grid.AddToPath(gc.NewHoverOver);
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonUp(0))
+                {
+                    Selecting = false;
+                    string res = grid.FinishPath();
+                    if (res.Length >= 3)
                     {
-                        if (FoundWords.Contains(res))
+                        if (trie.CheckWord(res))
                         {
-                            Debug.Log("You already got that one!");
+                            if (FoundWords.Contains(res))
+                            {
+                                Debug.Log("You already got that one!");
+                            }
+                            else
+                            {
+                                Debug.Log("You got " + res);
+                                midGameScore(res);
+                                FoundWords.Add(res);
+                                GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                                FoundList.transform.localRotation = Quaternion.identity;
+                                newWord.transform.parent = FoundList.transform;
+                                FoundList.transform.localRotation = transform.localRotation; // phoenix edi
+                            }
                         }
                         else
                         {
-                            Debug.Log("You got " + res);
-                            FoundWords.Add(res);
-                            GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
-                            FoundList.transform.localRotation = Quaternion.identity;
-                            newWord.transform.parent = FoundList.transform;
-                            FoundList.transform.localRotation = transform.localRotation; // phoenix edi
+                            Debug.Log("Sorry, " + res + " is not in our Dictionary");
                         }
                     }
-                    else
-                    {
-                        Debug.Log("Sorry, " + res + " is not in our Dictionary");
-                    }
+                }
+            }
+        }
+        if (gameState == 3) // looking for restart
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (gc.NewHoverOver == 8882) // restart game
+                {
+                    Debug.Log("Attempting restart");
+                    ResetGame();
+                    KickOff();
+                }
+                if (gc.NewHoverOver == 8883) // back to menu
+                {
+                    Debug.Log("Want to Return to main table ... but not connected yet");
                 }
             }
         }
@@ -242,7 +293,6 @@ public class ConWordDice : MonoBehaviour
 
     void CheckHoverOver()
     {
-
         if (gc.HoverChange && Selecting && gameState == 2) // We have a change (whilst selecting and game running)
         {
             if (gc.NewHoverOver == -1) // moves off grid .... reset path
@@ -257,6 +307,7 @@ public class ConWordDice : MonoBehaviour
     void TimesUp()
     {
         gameState = 3;
+        endGameScore();
         Selecting = false;
         myMenu.GameOver();
         grid.ClearPath();
@@ -270,4 +321,105 @@ public class ConWordDice : MonoBehaviour
     }
 
     #endregion
+
+    #region PLAYER STATS & SCORING
+    private void LoadStats()
+    {
+        GamesPlayed = gc.player.WDPlays;
+        HighScore = gc.player.WDHighscore;
+        AverageScore = gc.player.WDHighscore;
+        AverageWords = gc.WordDice.AverageWords;
+        Longest = gc.player.WDLongest;
+    }
+
+    private void SaveStats()
+    {
+        gc.player.WDPlays = GamesPlayed;
+        gc.player.WDHighscore = HighScore;
+        gc.player.WDAverageScore = AverageScore;
+        gc.player.WDAverageWords = AverageWords;
+        gc.player.WDLongest = Longest;
+
+        gc.SaveStats();
+    }
+
+    private void midGameScore(string word)
+    {
+        word = word.ToLower();
+        int len = word.Length;
+        if (word.Contains("qu")) len--;
+        switch (len)
+        {
+            case 3:
+                CurrScore++;
+                F3++;
+                Debug.Log("+1 Score");
+                // ANIMATE +1 score
+                break;
+            case 4:
+                CurrScore++;
+                F4++;
+                Debug.Log("+1 Score");
+                // ANIMATE +1 score
+                break;
+            case 5:
+                CurrScore += 2;
+                F5++;
+                Debug.Log("+2 Score");
+                // ANIMATE +2 Score
+                break;
+            case 6:
+                CurrScore += 3;
+                F6++;
+                Debug.Log("+3 Score");
+                // ANIMATE +3 Score
+                break;
+            case 7:
+                CurrScore += 5;
+                F7++;
+                Debug.Log("+5 Score");
+                // ANIMATE +5 Score
+                break;
+            default:
+                F8++;
+                CurrScore += 10;
+                Debug.Log("+10 Score");
+                // ANIMATE +10 Score
+                break;
+        }
+        if (len > Longest)
+        {
+            // ANIMATE New Longest Word
+            Debug.Log("New Longest Word");
+            Longest = len;
+        }
+    }
+
+    private void endGameScore()
+    {
+        if (FoundWords.Count > AverageWords)
+        {
+            // ANIMATE .. Average words found improved
+            Debug.Log("Average Words Improved");
+        }
+        if (CurrScore > AverageScore)
+        {
+            // ANIMATE .. Average Score Improved
+            Debug.Log("Average Score Improved");
+        }
+        if (CurrScore > HighScore)
+        {
+            // ANIMATE .. New High Score
+            Debug.Log("New High Score");
+            HighScore = CurrScore;
+        }
+        AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / (GamesPlayed + 1);
+        AverageScore = ((AverageScore * GamesPlayed) + CurrScore) / (GamesPlayed + 1);
+        GamesPlayed++;
+        SaveStats();
+    }
+
+
+    #endregion
+
 }
