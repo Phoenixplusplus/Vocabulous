@@ -9,7 +9,7 @@ public class ConTableWordDice : MonoBehaviour
     // On table ... shakes and colour changes to highlight it can be clicked to "start"
     // Disappears "in-game"
     // Presents "Restart" after game over
-    // maybe asks "see what you could have had?"
+    // Presents "Back to table" after game over
 
     public GameObject Worddice;
     public GameObject StartDice;
@@ -19,6 +19,8 @@ public class ConTableWordDice : MonoBehaviour
     public GameObject Back;
     private GC gc;
     private bool highlighted;
+    private bool restarthighlight;
+    private bool backhighlight;
 
     public Color TitleNormalColor;
     public Color TitleSelectedColor;
@@ -26,6 +28,8 @@ public class ConTableWordDice : MonoBehaviour
     public Color StartSelectedColor;
     public Color TimeUpColor;
     public Tile_Controlller GUITile;
+    public Tile_Controlller restartGUITile;
+    public Tile_Controlller backGUITile;
     public float DiceScaleFactor = 1.4f;
 
 
@@ -49,6 +53,8 @@ public class ConTableWordDice : MonoBehaviour
         GUITile.SetVisible(false);
         //GUITile.SetLetter("");
         GUITile.setID(8881);
+        restartGUITile.setID(8882);
+        backGUITile.setID(8883);
 
         title = Worddice.GetComponentsInChildren<ConDice>();
         start = StartDice.GetComponentsInChildren<ConDice>();
@@ -70,6 +76,7 @@ public class ConTableWordDice : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // CHECKING - Start GUI Tile
         if (gc.HoverChange && gc.NewHoverOver == 8881 && !highlighted) // have just moved over me ... best do something
         {
             highlighted = true;
@@ -82,7 +89,40 @@ public class ConTableWordDice : MonoBehaviour
             setToNormal();
             ScaleDiceDown();
         }
-
+        // CHECKING - Restart GUI Tile
+        if (gc.HoverChange && gc.NewHoverOver == 8882 && !restarthighlight)
+        {
+            restarthighlight = true;
+            foreach (ConDice c in restart)
+            {
+                c.ChangeDiceColor(StartSelectedColor);
+            }
+        }
+        if (restarthighlight && gc.NewHoverOver != 8882)
+        {
+            restarthighlight = false;
+            foreach (ConDice c in restart)
+            {
+                c.ChangeDiceColor(TitleNormalColor);
+            }
+        }
+        // Checking - Back GUI Tile
+        if (gc.HoverChange && gc.NewHoverOver == 8883 && !backhighlight)
+        {
+            backhighlight = true;
+            foreach (ConDice c in back)
+            {
+                c.ChangeDiceColor(StartSelectedColor);
+            }
+        }
+        if (backhighlight && gc.NewHoverOver != 8883)
+        {
+            backhighlight = false;
+            foreach (ConDice c in back)
+            {
+                c.ChangeDiceColor(TitleNormalColor);
+            }
+        }
     }
 
     public void OnSceneTable()

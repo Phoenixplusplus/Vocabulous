@@ -9,8 +9,15 @@ public struct PlayerStats
     public string Name;
     public float MusicVolume;      // 0 = Mute, 1 = full
     public float SFXVolume;        // 0 = Mute, 1 = full
+
     public int WordDiceSize;       // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
     public int WordDiceGameLength; // 30,60,120,180 seconds
+    public int WDPlays;
+    public int WDHighscore;
+    public int WDLongest;
+    public float WDAverageScore;
+    public float WDAverageWords;
+
     public int WordSearchSize;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
     public int AnagramMinLength;   // 4,5,6 (Default),7,8
 }
@@ -33,11 +40,20 @@ public class PlayerManager
             ret.Name = PlayerPrefs.GetString("Name");
             ret.MusicVolume = PlayerPrefs.GetFloat("MusicVolume");
             ret.SFXVolume = PlayerPrefs.GetFloat("SFXVolume");
+
             ret.WordDiceSize = PlayerPrefs.GetInt("WordDiceSize");
             ret.WordDiceGameLength = PlayerPrefs.GetInt("WordDiceGameLength");
+            ret.WDPlays = PlayerPrefs.GetInt("WDPlays");
+            ret.WDHighscore = PlayerPrefs.GetInt("WDHighscore");
+            ret.WDLongest = PlayerPrefs.GetInt("WDLongest");
+            ret.WDAverageScore = PlayerPrefs.GetFloat("WDAverageScore");
+            ret.WDAverageWords = PlayerPrefs.GetFloat("WDAverageWords");
+
             ret.WordSearchSize = PlayerPrefs.GetInt("WordSearchSize");
+
             ret.AnagramMinLength = PlayerPrefs.GetInt("AnagramMinLength");
-        }
+
+}
         return ret;
     }
 
@@ -47,10 +63,19 @@ public class PlayerManager
         PlayerPrefs.SetString("Name", player.Name);
         PlayerPrefs.SetFloat("MusicVolume", player.MusicVolume);
         PlayerPrefs.SetFloat("SFXVolume",player.SFXVolume);
+
         PlayerPrefs.SetInt("WordDiceSize", player.WordDiceSize);
         PlayerPrefs.SetInt("WordDiceGameLength", player.WordDiceGameLength);
+        PlayerPrefs.SetInt("WDPlays", player.WDPlays);
+        PlayerPrefs.SetInt("WDHighscore", player.WDHighscore);
+        PlayerPrefs.SetInt("WDLongest", player.WDLongest);
+        PlayerPrefs.SetFloat("WDAverageScore", player.WDAverageScore);
+        PlayerPrefs.SetFloat("WDAverageWords", player.WDAverageWords);
+
         PlayerPrefs.SetInt("WordSearchSize", player.WordSearchSize);
+
         PlayerPrefs.SetInt("AnagramMinLength", player.AnagramMinLength);
+
     }
 
     public PlayerStats GetDefault()
@@ -61,9 +86,17 @@ public class PlayerManager
         ret.Name = "NewPlayer";
         ret.MusicVolume = 1.0f;    // 0 = Mute, 1 = full
         ret.SFXVolume = 1.0f;      // 0 = Mute, 1 = full
+
         ret.WordDiceSize = 4;      // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
         ret.WordDiceGameLength = 30; // purely for testing
+        ret.WDPlays = 0;
+        ret.WDHighscore = 0;
+        ret.WDLongest = 0;
+        ret.WDAverageScore = 0.0f;
+        ret.WDAverageWords = 0.0f;
+
         ret.WordSearchSize = 15;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
+
         ret.AnagramMinLength = 6;
 
         return ret;
