@@ -9,16 +9,14 @@ public class CameraController : MonoBehaviour
     public Transform cameraParent;
     public Vector3 currentAngle;
     public Vector3 targetAngle;
-    public Button PlayThis, QuitThis;
-    public Animator OptionsAnimation;
     float mouseX;
     public float mouseSensitivty = 4f;
     public float lerpSpeed = 1f;
     public bool inPlay = false;
-    public bool playWordDice, playWordSearch, playAnagram, playWordDrop, playGame5,
-                onWordDice, onWordSearch, onAnagram, onWordDrop, onGame5,
+    public bool playWordDice, playWordSearch, playAnagram, playWordDrop, playSolver,
+                onWordDice, onWordSearch, onAnagram, onWordDrop, onSolver,
                 quitting;
-    public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, wordDropTransform, game5Transform;
+    public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, wordDropTransform, solverTransform;
 
     void Start()
     {
@@ -26,8 +24,6 @@ public class CameraController : MonoBehaviour
 
         transform.LookAt(cameraParent);
         targetAngle = new Vector3(0f, 20f, 0f);
-
-        PlayThis.gameObject.SetActive(false);
     }
 
     void Update()
@@ -43,20 +39,7 @@ public class CameraController : MonoBehaviour
         if (currentAngle.y < 0) currentAngle.y = 360f;
         if (currentAngle.y > 360f) currentAngle.y = 0f;
 
-        // GameState == 1, looking at table choosing a game
-        if (!inPlay)
-        {
-            if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
-
-            ToggleQuitButton(false);
-            if (onWordDice || onWordSearch || onAnagram || onWordDrop || onGame5) TogglePlayButton(true);
-            else TogglePlayButton(false);
-        }
-        else
-        {
-            TogglePlayButton(false);
-            ToggleQuitButton(true);
-        }
+        if (!inPlay) if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
 
         if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && !inPlay) onWordDice = true;
         else onWordDice = false;
@@ -66,9 +49,8 @@ public class CameraController : MonoBehaviour
         else onAnagram = false;
         if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && !inPlay) onWordDrop = true;
         else onWordDrop = false;
-        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && !inPlay) onGame5 = true;
-        else onGame5 = false;
-        //
+        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && !inPlay) onSolver = true;
+        else onSolver = false;
 
         if (playWordDice)
         {
@@ -90,10 +72,10 @@ public class CameraController : MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, wordDropTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, wordDropTransform.rotation, Time.deltaTime);
         }
-        if (playGame5)
+        if (playSolver)
         {
-            transform.position = Vector3.Lerp(transform.position, game5Transform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, game5Transform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, solverTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, solverTransform.rotation, Time.deltaTime);
         }
         if (quitting)
         {
@@ -103,36 +85,26 @@ public class CameraController : MonoBehaviour
             {
                 quitting = false;
                 inPlay = false;
-                //gameController.GameState = 1;
+                gameController.SetGameState(1);
             }
         }
     }
 
-    public void TogglePlayButton(bool state) { if (PlayThis.gameObject.activeInHierarchy == !state) PlayThis.gameObject.SetActive(state); }
-    public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
-
-    // UI animations
-    public void ToggleOptionsInOut()
-    {
-        bool b = OptionsAnimation.GetBool("OptionsClicked");
-        OptionsAnimation.SetBool("OptionsClicked", !b);
-    }
-
     // button click functions
-    public void RotateToGameBwoggle() { targetAngle = new Vector3(0, 298, 0); }
-    public void RotateToGameWordSplerch() { targetAngle = new Vector3(0, 240, 0); }
-    public void RotateToGame3() { targetAngle = new Vector3(0, 185, 0); }
-    public void RotateToGame4() { targetAngle = new Vector3(0, 130, 0); }
-    public void RotateToStats() { targetAngle = new Vector3(0, 77, 0); }
+    public void RotateToGameWordDice() { targetAngle = new Vector3(0, gameController.RotTranWordDice.y, 0); }
+    public void RotateToGameWordSearch() { targetAngle = new Vector3(0, gameController.RotWordSearch.y, 0); }
+    public void RotateToGameAnagram() { targetAngle = new Vector3(0, gameController.RotTranAnagram.y, 0); }
+    public void RotateToGameWordDrop() { targetAngle = new Vector3(0, gameController.RotTranWordrop.y, 0); }
+    public void RotateToGame5() { targetAngle = new Vector3(0, gameController.RotTranGame5.y, 0); }
 
     public void PlayClicked()
     {
         inPlay = true;
-        if (onWordDice) { playWordDice = true; TogglePlayButton(false); }
+        if (onWordDice) playWordDice = true;
         if (onWordSearch) playWordSearch = true;
         if (onAnagram) playAnagram = true;
         if (onWordDrop) playWordDrop = true;
-        if (onGame5) playGame5 = true;
+        if (onSolver) playSolver = true;
     }
 
     public void QuitClicked()
@@ -143,12 +115,11 @@ public class CameraController : MonoBehaviour
         playWordSearch = false;
         playAnagram = false;
         playWordDrop = false;
-        playGame5 = false;
+        playSolver = false;
         onWordDice = false;
         onWordSearch = false;
         onAnagram = false;
         onWordDrop = false;
-        onGame5 = false;
-        ToggleQuitButton(false);
+        onSolver = false;
     }
 }

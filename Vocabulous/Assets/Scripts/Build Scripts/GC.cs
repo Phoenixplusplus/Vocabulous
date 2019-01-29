@@ -88,27 +88,21 @@ public class GC : MonoBehaviour
     //... needs to be agreed ... maybe 
     // 0 = initialising/loading
     // 1 = at table (choosing)
-    // 11 = Over WordDice chair
-    // 12 = Over WordSearch chair
-    // 13 = Over Anagram chair
-    // 14 = Over WordDrop chair
-    // 15 = Over game5 chair
     // 2 = transition to game area
     // 30 = In Game
     // 31 = Playing WordDice
-    // 32 = Playing WordSearch
+    // 32 = Playing Solver
     // 33 = Playing Anagram
     // 34 = Playing WordDrop
-    // 35 = Playering game5
-    // 4 = Menu's open
+    // 35 = Playing WordSearch
     // 5 = transitioning from a game to 1 again
     // 9 = Quitting
 
     [Header("The GAME OBJECTS")]
+    public UIC UIController;
+    public CameraController cameraController;
     public ConWordDice WordDice;
     public WordSearchController wordSearchController;
-    public CameraController cameraController;
-    private Vector3 cameraAngle;
 
      #endregion
 
@@ -163,6 +157,9 @@ public class GC : MonoBehaviour
         WordDice.transform.position = PosTranWordDice;
         WordDice.transform.localRotation =  Quaternion.Euler(RotTranWordDice);
         WordDice.transform.localScale = ScaleTranWordDice;
+        wordSearchController.transform.position = PosWordSearch;
+        wordSearchController.transform.localRotation = Quaternion.Euler(RotWordSearch);
+        wordSearchController.transform.localScale = ScaleWordSearch;
     }
 
 
@@ -173,17 +170,17 @@ public class GC : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G)) wordSearchController.Initialise();
         if (Input.GetKeyDown(KeyCode.T))
         {
-            GameObject dice = assets.SpawnDice("?", cameraController.transform.position);
-            Rigidbody rb = dice.AddComponent<Rigidbody>();
-            dice.transform.Translate(cameraController.transform.forward * 5);
+            GameObject thing;
+            if (Random.value > 0.5) thing = assets.SpawnTile("questquest", cameraController.transform.position, Random.value > 0.5, Random.value > 0.5);
+            else thing = assets.SpawnDice("?", cameraController.transform.position);
+            Rigidbody rb = thing.AddComponent<Rigidbody>();
+            thing.transform.localRotation = Random.rotation;
+            rb.AddForce((cameraController.transform.forward + new Vector3(0, 0.35f, 0)) * 1000);
         }
 
         // sets HoverOver values to the returned value from any IisOverlayTile class (if none, then -1)
         CheckHoverOver();
         CheckClicks();
-
-        // sets states for other scripts to act accordingly
-        StateControl();
     }
     #endregion
 
@@ -213,14 +210,33 @@ public class GC : MonoBehaviour
 
     private void CheckClicks()
     {
-        if (GameState == 1)  // only check clicks if "at table and selecting"
+        // when clicking the intro object for a game at the table, rotate to it
+        if (GameState == 1)
         {
-            // will need "do transition" eventually ... just going to fire up my game
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881)
-            {
-                GameState = 32;
-                WordDice.KickOff();
-            }
+            // WordDice
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { cameraController.RotateToGameWordDice(); }
+            // Solver
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
+            // Anagram
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { cameraController.RotateToGameAnagram(); }
+            // WordDrop
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { cameraController.RotateToGameWordDrop(); }
+            // WordSearch
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441) { cameraController.RotateToGameWordSearch(); }
+        }
+        // however, if we already transitioned to that game, go start it up
+        if (GameState == 2)
+        {
+            // WordDice
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { SetGameState(31); }
+            // Solver
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
+            // Anagram
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
+            // WordDrop
+            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { SetGameState(34); }
+            // WordSearch
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441) { SetGameState(35); }
         }
     }
 
@@ -228,12 +244,92 @@ public class GC : MonoBehaviour
 
 
     #region State Controls
-    void StateControl()
+    // main function for all controllers
+    public void SetGameState(int i)
     {
+        GameState = i;
 
+        switch (i)
+        {
+            case 0: break;
+            case 1:
+                {
+                    // called at Start() and by cameraController once it has finished its lerp back out of game area
+                    // 1 = at table (choosing)
+                    break;
+                }
+            case 2:
+                {
+                    // called by 'Play' Button in inspector
+                    // 2 = transition to game area
+                    cameraController.PlayClicked();
+                    UIController.PlayClicked();
+                    break;
+                }
+            case 5:
+                {
+                    // called by 'Quit' Button in inspector
+                    // 5 = transitioning from a game to 1 again
+                    cameraController.QuitClicked();
+                    UIController.QuitClicked();
+                    ReEnableAllGames();
+                    break;
+                }
+            case 31:
+                {
+                    // called in 'CheckClicks()'
+                    // 31 = Playing WordDice
+                    WordDice.KickOff();
+                    DisableOtherGames(WordDice.gameObject);
+                    break;
+                }
+            case 32:
+                {
+                    // called in 'CheckClicks()'
+                    // 32 = Playing Solver
+                    break;
+                }
+            case 33:
+                {
+                    // called in 'CheckClicks()'
+                    // 33 = Playing Anagram
+                    break;
+                }
+            case 34:
+                {
+                    // called in 'CheckClicks()'
+                    // 34 = Playing WordDrop
+                    break;
+                }
+            case 35:
+                {
+                    // called in 'CheckClicks()'
+                    // 35 = Playing WordSearch
+                    wordSearchController.Initialise();
+                    DisableOtherGames(wordSearchController.gameObject);
+                    break;
+                }
+        }
     }
 
-    public void SetGameState(int i) { GameState = i; }
+    void DisableOtherGames(GameObject thisController)
+    {
+        if (thisController != WordDice.gameObject) WordDice.gameObject.SetActive(false);
+        if (thisController != wordSearchController.gameObject) wordSearchController.gameObject.SetActive(false);
+        //if (thisController != anagramController.gameObject) anagramController.gameObject.SetActive(false);
+        //if (thisController != wordDropController.gameObject) wordDropController.gameObject.SetActive(false);
+        //if (thisController != solver.gameObject) solver.gameObject.SetActive(false);
+    }
+
+    void ReEnableAllGames()
+    {
+        WordDice.gameObject.SetActive(true);
+        wordSearchController.gameObject.SetActive(true);
+        //anagramController.gameObject.SetActive(true);
+        //wordDropController.gameObject.SetActive(true);
+        //solver.gameObject.SetActive(true);
+    }
+
     #endregion
 
 
@@ -244,18 +340,4 @@ public class GC : MonoBehaviour
         playerManager.SavePlayer(player);
     }
     #endregion
-
-
-    #region CoRoutines
-    //IEnumerator LoadWordSearch()
-    //{
-    //    while (!wordSearchController.isInitialised)
-    //    {
-    //        wordSearchController.Initialise();
-    //        yield return null;
-    //    }
-    //    yield break;
-    //}
-    #endregion
-
 }
