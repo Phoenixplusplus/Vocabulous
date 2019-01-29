@@ -225,7 +225,7 @@ public class ConWordDice : MonoBehaviour
                         {
                             Debug.Log("You got " + res);
                             FoundWords.Add(res);
-                            GameObject newWord = gc.assets.MakeWordFromDiceQ(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                            GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
                             FoundList.transform.localRotation = Quaternion.identity;
                             newWord.transform.parent = FoundList.transform;
                             FoundList.transform.localRotation = transform.localRotation; // phoenix edi
@@ -261,7 +261,7 @@ public class ConWordDice : MonoBehaviour
         myMenu.GameOver();
         grid.ClearPath();
         transform.localRotation = Quaternion.identity;
-        showList.Print(BoggleWords);
+        showList.Print(BoggleWords,"qu");
         transform.localRotation = Quaternion.Euler(gc.RotTranWordDice);
         // TO DO
         // Scoring

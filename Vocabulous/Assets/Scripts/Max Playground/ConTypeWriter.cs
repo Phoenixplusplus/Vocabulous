@@ -115,7 +115,7 @@ public class ConTypeWriter : MonoBehaviour
 
     private void DisplayAnswers()
     {
-        myOutput.Print(answers);
+        myOutput.Print(answers,"q");
     }
 
 }

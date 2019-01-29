@@ -35,7 +35,7 @@ public class ShowList : MonoBehaviour
         }
     }
 
-    public void Print(List<string> list)
+    public void Print(List<string> list, string Qstatus)
     {
         double start = Time.timeSinceLevelLoad;
         Clear();
@@ -60,7 +60,15 @@ public class ShowList : MonoBehaviour
                 count += 1;
             }
             Vector3 pos = new Vector3(origin.x + (count * diceScale), origin.y + (diceScale / 2), origin.z + (row * pitch * mod));
-            GameObject dice = gc.assets.MakeWordFromDiceQ(s, pos, diceScale);
+            GameObject dice;
+            if (Qstatus == "q")
+            {
+                dice = gc.assets.MakeWordFromDiceQ(s, pos, diceScale);
+            }
+            else
+            {
+                dice = gc.assets.MakeWordFromDiceQU(s, pos, diceScale);
+            }
             dice.transform.parent = transform;
             count += len;
         }
