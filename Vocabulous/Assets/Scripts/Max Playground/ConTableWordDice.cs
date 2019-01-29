@@ -69,6 +69,14 @@ public class ConTableWordDice : MonoBehaviour
         {
             ConDice.killOverlayTile();
         }
+        foreach (var ConDice in restart)
+        {
+            ConDice.killOverlayTile();
+        }
+        foreach (var ConDice in back)
+        {
+            ConDice.killOverlayTile();
+        }
         setToNormal();
 
     }
