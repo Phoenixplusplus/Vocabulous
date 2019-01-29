@@ -5709,6 +5709,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SceneController
       objectReference: {fileID: 0}
+    - target: {fileID: 7456341068547838673, guid: ed335e704d640834fb1fd2110fc8ba27,
+        type: 3}
+      propertyPath: Trie
+      value: 
+      objectReference: {fileID: 1736841179}
     - target: {fileID: 7456341068547838672, guid: ed335e704d640834fb1fd2110fc8ba27,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5764,11 +5769,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7456341068547838673, guid: ed335e704d640834fb1fd2110fc8ba27,
-        type: 3}
-      propertyPath: Trie
-      value: 
-      objectReference: {fileID: 1736841179}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ed335e704d640834fb1fd2110fc8ba27, type: 3}
 --- !u!1001 &8789202370055647635
