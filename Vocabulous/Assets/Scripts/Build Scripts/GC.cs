@@ -247,6 +247,7 @@ public class GC : MonoBehaviour
     // main function for all controllers
     public void SetGameState(int i)
     {
+        int prevState = GameState;
         GameState = i;
 
         switch (i)
@@ -273,6 +274,7 @@ public class GC : MonoBehaviour
                     cameraController.QuitClicked();
                     UIController.QuitClicked();
                     ReEnableAllGames();
+                    OnThisGameQuit(prevState);
                     break;
                 }
             case 31:
@@ -328,6 +330,38 @@ public class GC : MonoBehaviour
         //anagramController.gameObject.SetActive(true);
         //wordDropController.gameObject.SetActive(true);
         //solver.gameObject.SetActive(true);
+    }
+
+    void OnThisGameQuit(int i)
+    {
+        switch(i)
+        {
+            case 31:
+                {
+                    // we just quit WordDice, do something special
+                    break;
+                }
+            case 32:
+                {
+                    // we just quit Solver, do something special
+                    break;
+                }
+            case 33:
+                {
+                    // we just quit Anagram, do something special
+                    break;
+                }
+            case 34:
+                {
+                    // we just quit WordDrop, do something special
+                    break;
+                }
+            case 35:
+                {
+                    // we just quit WordSearch, do something special
+                    break;
+                }
+        }
     }
 
     #endregion
