@@ -186,6 +186,7 @@ public class ConWordDice : MonoBehaviour
 
     void SpawnDice()
     {
+        myDice.transform.localRotation = Quaternion.identity;
         int count = 0;
         for (int z = GSize; z > 0; z--)
         {
@@ -204,6 +205,7 @@ public class ConWordDice : MonoBehaviour
 
     void MakeFoundList ()
     {
+        FoundList.transform.localRotation = Quaternion.identity;
         GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6)+transform.position, 1f);
         Found.transform.parent = FoundList.transform;
         FoundList.transform.localRotation = transform.localRotation; // phoenix edit
