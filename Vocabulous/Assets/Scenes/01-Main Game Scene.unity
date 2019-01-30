@@ -311,6 +311,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.64
       objectReference: {fileID: 0}
+    - target: {fileID: 2556257300717574531, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2556257301837148958, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: Offset.z
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2556257301837148958, guid: aeb4dd4e772d9bc419f0730190ffed95,
+        type: 3}
+      propertyPath: columns
+      value: 20
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeb4dd4e772d9bc419f0730190ffed95, type: 3}
 --- !u!114 &74344126 stripped

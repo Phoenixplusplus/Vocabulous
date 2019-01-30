@@ -293,8 +293,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5354845a30c2070478e55c7e3ea15efb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartPos: {x: 0, y: 0}
-  FinishPos: {x: 0, y: 0}
+  StartPos: {x: 0, y: 0, z: 0}
+  FinishPos: {x: 0, y: 0, z: 0}
   StartScale: 0
   FinishScale: 0
   AnimTime: 0
@@ -362,6 +362,6 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 4.23, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}

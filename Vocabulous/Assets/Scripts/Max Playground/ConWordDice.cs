@@ -13,6 +13,7 @@ public class ConWordDice : MonoBehaviour
     public bool Selecting = false;
     private bool GameRunning = false;  // sure there will be a use eventually
     public ConTableWordDice myMenu;
+    public Found_List_Display foundListDisplay;
     public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
     public double Timer;
     public ShowList showList;
@@ -77,15 +78,11 @@ public class ConWordDice : MonoBehaviour
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
         //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
-        LoadStats();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // probably get rid of this when all is set up
-        //if (transform.position != gc.PosTranWordDice) transform.position = gc.PosTranWordDice;
-
         // if game running: do timer
         if (Timer > 0 && gameState == 2)
         {
@@ -107,7 +104,7 @@ public class ConWordDice : MonoBehaviour
             CurrentWord = "";
         }
 
-        // Where the game logic really lies // ONLY if game is running
+        // Where the game logic really lies // ONLY if game is running (or over)
         if (gameState == 2 || gameState == 3)
         {
             CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
@@ -121,20 +118,25 @@ public class ConWordDice : MonoBehaviour
 
     public void StartGame()
     {
-        LoadStats();
-        StartTime = Time.realtimeSinceStartup;
+
         // TESTER for gc.player ... IT WORKS <<yah me>>
-        //gc.player.WordDiceSize = 4;
-        //gc.SaveStats();
+        gc.player.WordDiceGameLength = 60;
+        gc.SaveStats();
+
+        LoadStats();
+        GameTime = gc.player.WordDiceGameLength;
+        StartTime = Time.realtimeSinceStartup;
         SetGrid();
         PopulateGrid();
         BoggleWords = grid.AllWordStrings; // will be empty as each game has a new grid (since size may vary)
         BoggleWords = gc.assets.SortList(BoggleWords);
         SpawnDice();
-        MakeFoundList();
+        //MakeFoundList();
+        foundListDisplay.init();
         Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
         Debug.Log("Asking gc.player for desired GameTime .. got:"+ gc.player.WordDiceGameLength.ToString());
         Timer = GameTime;
+        CurrScore = 0;
         gameState = 2;
         myMenu.GameRunning();
     }
@@ -203,13 +205,13 @@ public class ConWordDice : MonoBehaviour
         myDice.transform.localRotation = transform.localRotation;
     }
 
-    void MakeFoundList ()
-    {
-        FoundList.transform.localRotation = Quaternion.identity;
-        GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6)+transform.position, 1f);
-        Found.transform.parent = FoundList.transform;
-        FoundList.transform.localRotation = transform.localRotation; // phoenix edit
-    }
+    //void MakeFoundList ()
+    //{
+    //    FoundList.transform.localRotation = Quaternion.identity;
+    //    GameObject Found = gc.assets.MakeWordFromDiceQ("Found", new Vector3(4.5f, 0, 6)+transform.position, 1f);
+    //    Found.transform.parent = FoundList.transform;
+    //    FoundList.transform.localRotation = transform.localRotation; // phoenix edit
+    //}
 
     void ResetGame()
     {
@@ -254,21 +256,25 @@ public class ConWordDice : MonoBehaviour
                         {
                             if (FoundWords.Contains(res))
                             {
+                                // ANIMATE
                                 Debug.Log("You already got that one!");
                             }
                             else
                             {
+                                // ANIMATE
                                 Debug.Log("You got " + res);
                                 midGameScore(res);
                                 FoundWords.Add(res);
-                                GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
-                                FoundList.transform.localRotation = Quaternion.identity;
-                                newWord.transform.parent = FoundList.transform;
-                                FoundList.transform.localRotation = transform.localRotation; // phoenix edi
+                                foundListDisplay.addWord(res, "qu");
+                                //GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
+                                //FoundList.transform.localRotation = Quaternion.identity;
+                                //newWord.transform.parent = FoundList.transform;
+                                //FoundList.transform.localRotation = transform.localRotation; // phoenix edi
                             }
                         }
                         else
                         {
+                            // ANIMATE
                             Debug.Log("Sorry, " + res + " is not in our Dictionary");
                         }
                     }
@@ -392,7 +398,7 @@ public class ConWordDice : MonoBehaviour
         if (len > Longest)
         {
             // ANIMATE New Longest Word
-            Debug.Log("New Longest Word");
+            Debug.Log("New Longest Word : "+len.ToString());
             Longest = len;
         }
     }
@@ -402,17 +408,17 @@ public class ConWordDice : MonoBehaviour
         if (FoundWords.Count > AverageWords)
         {
             // ANIMATE .. Average words found improved
-            Debug.Log("Average Words Improved");
+            Debug.Log("Average Words Improved : "+ AverageWords.ToString()+" -> "+FoundWords.Count.ToString());
         }
         if (CurrScore > AverageScore)
         {
             // ANIMATE .. Average Score Improved
-            Debug.Log("Average Score Improved");
+            Debug.Log("Average Score Improved : "+ AverageScore.ToString()+" -> "+CurrScore.ToString());
         }
         if (CurrScore > HighScore)
         {
             // ANIMATE .. New High Score
-            Debug.Log("New High Score");
+            Debug.Log("New High Score : " + CurrScore.ToString());
             HighScore = CurrScore;
         }
         AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / (GamesPlayed + 1);

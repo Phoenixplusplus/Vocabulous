@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FlashController : MonoBehaviour
 {
-    public Vector2 StartPos = new Vector2(50,50);
-    public Vector2 FinishPos = new Vector2(600, 600);
+    public Vector2 StartPos = new Vector2(0.1f,0.1f);
+    public Vector2 FinishPos = new Vector2(0.9f,0.9f);
     private Vector3 Velocity;
     public float StartScale = 0.5f;
     public float FinishScale = 1.5f;
@@ -21,10 +21,22 @@ public class FlashController : MonoBehaviour
     }
 
 
+    //
+
+ //   var pos = Camera.main.WorldToViewportPoint(transform.position);
+ //   pos.x = Mathf.Clamp(pos.x, 0.1, 0.9);
+ //pos.y = Mathf.Clamp(pos.y, 0.1, 0.9);
+ //transform.position = Camera.main.ViewportToWorldPoint(pos);
+
     // Start is called before the first frame update
     void Start()
     {
-        rt.transform.localPosition = new Vector3(0, StartPos.y, StartPos.x);
+
+        rt.localPosition = Camera.main.WorldToViewportPoint(StartPos);
+
+    //StartPos = new Vector3(-Screen.width, 0, 0);
+    //FinishPos = new Vector3(Screen.width, 0, 0);
+    //rt.transform.localPosition = StartPos;
         //rt.localScale = new Vector3(StartScale, StartScale, StartScale);
         SetValues();
     }
@@ -34,10 +46,10 @@ public class FlashController : MonoBehaviour
     {
         if (AnimTime > 0)
         {
-            rt.transform.Translate(Velocity * Time.deltaTime);
-            float s = rt.localScale.x * ScaleMod * Time.deltaTime;
+            //rt.transform.Translate(Velocity * Time.deltaTime);
+            //float s = rt.localScale.x * ScaleMod * Time.deltaTime;
             //rt.localScale = new Vector3(s, s, s);
-            AnimTime -= Time.deltaTime;
+            //AnimTime -= Time.deltaTime;
         }
         else
         {
@@ -47,9 +59,8 @@ public class FlashController : MonoBehaviour
 
     private void SetValues ()
     {
-        Vector2 move = (FinishPos - StartPos) / AnimTime;
-        Velocity = new Vector3(0,move.y,move.x);
-        ScaleMod = (FinishScale - StartScale) / AnimTime;
+        //Vector3 move = (FinishPos - StartPos) / AnimTime;
+        //ScaleMod = (FinishScale - StartScale) / AnimTime;
     }
 
 }

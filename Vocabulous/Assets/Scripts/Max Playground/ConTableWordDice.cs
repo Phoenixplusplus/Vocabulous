@@ -173,7 +173,7 @@ public class ConTableWordDice : MonoBehaviour
         }
         foreach (ConDice die in start)
         {
-            die.ChangeDiceColor(StartNormalColor);
+            die.ChangeDiceColor(TitleNormalColor);
         }
         foreach (ConDice die in timeup)
         {
