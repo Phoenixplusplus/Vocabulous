@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     public bool inPlay = false;
     public bool playWordDice, playWordSearch, playAnagram, playWordDrop, playSolver,
                 onWordDice, onWordSearch, onAnagram, onWordDrop, onSolver,
+                clickedWordDice, clickedWordSearch, clickedAnagram, clickedWordDrop, clickedSolver,
                 quitting;
     public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, wordDropTransform, solverTransform;
 
@@ -41,6 +42,7 @@ public class CameraController : MonoBehaviour
 
         if (!inPlay) if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
 
+        // for UIC to display play game button
         if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && !inPlay) onWordDice = true;
         else onWordDice = false;
         if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && !inPlay) onWordSearch = true;
@@ -52,6 +54,7 @@ public class CameraController : MonoBehaviour
         if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && !inPlay) onSolver = true;
         else onSolver = false;
 
+        // transitioning into game area
         if (playWordDice)
         {
             transform.position = Vector3.Lerp(transform.position, wordDiceCameraTransform.position, Time.deltaTime);
@@ -88,14 +91,92 @@ public class CameraController : MonoBehaviour
                 gameController.SetGameState(1);
             }
         }
+
+        // clicked on 3d asset of a game, rotate to it, then transition in
+        if (clickedWordDice)
+        {
+            if (targetAngle == new Vector3(0, gameController.RotTranWordDice.y, 0))
+            {
+                if (onWordDice)
+                {
+                    gameController.SetGameState(2);
+                    clickedWordDice = false;
+                }
+            }
+        }
+        if (clickedWordSearch)
+        {
+            if (targetAngle == new Vector3(0, gameController.RotWordSearch.y, 0))
+            {
+                if (onWordSearch)
+                {
+                    gameController.SetGameState(2);
+                    clickedWordSearch = false;
+                }
+            }
+        }
+        if (clickedAnagram)
+        {
+            if (targetAngle == new Vector3(0, gameController.RotTranAnagram.y, 0))
+            {
+                if (onAnagram)
+                {
+                    gameController.SetGameState(2);
+                    clickedAnagram = false;
+                }
+            }
+        }
+        if (clickedWordDrop)
+        {
+            if (targetAngle == new Vector3(0, gameController.RotTranWordrop.y, 0))
+            {
+                if (onWordDrop)
+                {
+                    gameController.SetGameState(2);
+                    clickedWordDrop = false;
+                }
+            }
+        }
+        if (clickedSolver)
+        {
+            if (targetAngle == new Vector3(0, gameController.RotTranGame5.y, 0))
+            {
+                if (onSolver)
+                {
+                    gameController.SetGameState(2);
+                    clickedSolver = false;
+                }
+            }
+        }
     }
 
     // button click functions
-    public void RotateToGameWordDice() { targetAngle = new Vector3(0, gameController.RotTranWordDice.y, 0); }
-    public void RotateToGameWordSearch() { targetAngle = new Vector3(0, gameController.RotWordSearch.y, 0); }
-    public void RotateToGameAnagram() { targetAngle = new Vector3(0, gameController.RotTranAnagram.y, 0); }
-    public void RotateToGameWordDrop() { targetAngle = new Vector3(0, gameController.RotTranWordrop.y, 0); }
-    public void RotateToGame5() { targetAngle = new Vector3(0, gameController.RotTranGame5.y, 0); }
+    public void RotateToGameWordDice()
+    {
+        clickedWordDice = true;
+        targetAngle = new Vector3(0, gameController.RotTranWordDice.y, 0);
+
+    }
+    public void RotateToGameWordSearch()
+    {
+        clickedWordSearch = true;
+        targetAngle = new Vector3(0, gameController.RotWordSearch.y, 0);
+    }
+    public void RotateToGameAnagram()
+    {
+        clickedAnagram = true;
+        targetAngle = new Vector3(0, gameController.RotTranAnagram.y, 0);
+    }
+    public void RotateToGameWordDrop()
+    {
+        clickedWordDrop = true;
+        targetAngle = new Vector3(0, gameController.RotTranWordrop.y, 0);
+    }
+    public void RotateToSolver()
+    {
+        clickedSolver = true;
+        targetAngle = new Vector3(0, gameController.RotTranGame5.y, 0);
+    }
 
     public void PlayClicked()
     {
