@@ -155,15 +155,24 @@ public class GC : MonoBehaviour
         // all loaded
         GameState = 1;
         // Set game locations/rotation
-        WordDice.transform.position = PosTranWordDice;
-        WordDice.transform.localRotation = Quaternion.Euler(RotTranWordDice);
-        WordDice.transform.localScale = ScaleTranWordDice;
-        wordSearchController.transform.position = PosWordSearch;
-        wordSearchController.transform.localRotation = Quaternion.Euler(RotWordSearch);
-        wordSearchController.transform.localScale = ScaleWordSearch;
-        solverController.transform.position = PosTranSolver;
-        solverController.transform.rotation = Quaternion.Euler(RotTranSolver);
-        solverController.transform.localScale = ScaleTranSolver;
+        if (WordDice != null)
+        {
+            WordDice.transform.position = PosTranWordDice;
+            WordDice.transform.localRotation = Quaternion.Euler(RotTranWordDice);
+            WordDice.transform.localScale = ScaleTranWordDice;
+        }
+        if (wordSearchController != null)
+        {
+            wordSearchController.transform.position = PosWordSearch;
+            wordSearchController.transform.localRotation = Quaternion.Euler(RotWordSearch);
+            wordSearchController.transform.localScale = ScaleWordSearch;
+        }
+        if (solverController != null)
+        {
+            solverController.transform.position = PosTranSolver;
+            solverController.transform.rotation = Quaternion.Euler(RotTranSolver);
+            solverController.transform.localScale = ScaleTranSolver;
+        }
     }
 
 

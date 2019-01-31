@@ -3695,6 +3695,11 @@ PrefabInstance:
       propertyPath: PosTranSolver.z
       value: 0.28
       objectReference: {fileID: 0}
+    - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
+        type: 3}
+      propertyPath: PosTranSolver.y
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2004835231919804276, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: m_LocalPosition.x
