@@ -121,6 +121,7 @@ public class CameraController : MonoBehaviour
         }
 
         // for UIC to display play game button
+        // for angles that are positive, do not + 360
         if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && !inPlay) onWordDice = true;
         else onWordDice = false;
         if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && !inPlay) onWordSearch = true;
@@ -129,7 +130,7 @@ public class CameraController : MonoBehaviour
         else onAnagram = false;
         if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && !inPlay) onWordDrop = true;
         else onWordDrop = false;
-        if (currentAngle.y > (gameController.RotTranGame5.y + 360) - 20f && currentAngle.y < (gameController.RotTranGame5.y + 360) + 20f && !inPlay) onSolver = true;
+        if (currentAngle.y > (gameController.RotTranSolver.y) - 20f && currentAngle.y < (gameController.RotTranSolver.y) + 20f && !inPlay) onSolver = true;
         else onSolver = false;
 
         // transitioning into game area
@@ -217,7 +218,7 @@ public class CameraController : MonoBehaviour
         }
         if (clickedSolver)
         {
-            if (targetAngle == new Vector3(0, gameController.RotTranGame5.y, 0))
+            if (targetAngle == new Vector3(0, gameController.RotTranSolver.y, 0))
             {
                 if (onSolver)
                 {
@@ -253,7 +254,7 @@ public class CameraController : MonoBehaviour
     public void RotateToSolver()
     {
         clickedSolver = true;
-        targetAngle = new Vector3(0, gameController.RotTranGame5.y, 0);
+        targetAngle = new Vector3(0, gameController.RotTranSolver.y, 0);
     }
 
     public void PlayClicked()

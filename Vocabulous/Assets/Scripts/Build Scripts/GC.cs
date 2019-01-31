@@ -64,19 +64,19 @@ public class GC : MonoBehaviour
     public Vector3 PosTranWordDice = new Vector3();
     public Vector3 PosTranAnagram = new Vector3();
     public Vector3 PosTranWordrop = new Vector3();
-    public Vector3 PosTranGame5 = new Vector3();
+    public Vector3 PosTranSolver = new Vector3();
     [Header("Game Rotations (for rotational tweaking)")]
     public Vector3 RotWordSearch = new Vector3();
     public Vector3 RotTranWordDice = new Vector3();
     public Vector3 RotTranAnagram = new Vector3();
     public Vector3 RotTranWordrop = new Vector3();
-    public Vector3 RotTranGame5 = new Vector3();
+    public Vector3 RotTranSolver = new Vector3();
     [Header("Game Scales (for scale tweaking)")]
     public Vector3 ScaleWordSearch = new Vector3();
     public Vector3 ScaleTranWordDice = new Vector3();
     public Vector3 ScaleTranAnagram = new Vector3();
-    public Vector3 ScaleTranWordrop = new Vector3();
     public Vector3 ScaleTranWordDrop = new Vector3();
+    public Vector3 ScaleTranSolver = new Vector3();
     [Header("Default Dice/face colours")]
     public Color ColorBase = new Color();
     public Color ColorSelected = new Color();
@@ -103,6 +103,7 @@ public class GC : MonoBehaviour
     public CameraController cameraController;
     public ConWordDice WordDice;
     public WordSearchController wordSearchController;
+    public ConTypeWriter solverController;
 
      #endregion
 
@@ -155,11 +156,14 @@ public class GC : MonoBehaviour
         GameState = 1;
         // Set game locations/rotation
         WordDice.transform.position = PosTranWordDice;
-        WordDice.transform.localRotation =  Quaternion.Euler(RotTranWordDice);
+        WordDice.transform.localRotation = Quaternion.Euler(RotTranWordDice);
         WordDice.transform.localScale = ScaleTranWordDice;
         wordSearchController.transform.position = PosWordSearch;
         wordSearchController.transform.localRotation = Quaternion.Euler(RotWordSearch);
         wordSearchController.transform.localScale = ScaleWordSearch;
+        solverController.transform.position = PosTranSolver;
+        solverController.transform.rotation = Quaternion.Euler(RotTranSolver);
+        solverController.transform.localScale = ScaleTranSolver;
     }
 
 

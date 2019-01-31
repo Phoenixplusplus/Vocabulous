@@ -21,15 +21,15 @@ public class ConTypeWriter : MonoBehaviour
 
     void Awake()
     {
-        gc = GC.Instance;
-        if (gc != null) Debug.Log("TypeWriter Connected to GC");
-        myKeys = GetComponentsInChildren<TypeKey>();
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        gc = GC.Instance;
+        if (gc != null) Debug.Log("TypeWriter Connected to GC");
+        myKeys = GetComponentsInChildren<TypeKey>();
     }
 
     // Update is called once per frame
