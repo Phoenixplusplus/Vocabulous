@@ -11,6 +11,7 @@ public class WordSearchController : MonoBehaviour
     private GameGrid grid;
     public GameObject diceHolder;
     public GameObject OverlayPrefab;
+    public WordSearchTable wordSearchTable;
     public TrieTest trie;
     private int gridXLength = 20;
     private int gridYLength = 20;
@@ -46,6 +47,8 @@ public class WordSearchController : MonoBehaviour
 
     public void Initialise()
     {
+        /* hide table prefab */
+        wordSearchTable.HideStartObjects();
 
         /* gamecontroller and initialising variables */
         gameController = GC.Instance;
