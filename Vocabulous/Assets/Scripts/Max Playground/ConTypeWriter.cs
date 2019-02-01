@@ -49,7 +49,7 @@ public class ConTypeWriter : MonoBehaviour
                 {
                     if (myWord.Length > 0)
                     {
-                        k.press();
+                        k.press(transform);
                         myWord = myWord.Substring(0, myWord.Length - 1);
                         ChangeInputDisplay();
                         return;
@@ -60,7 +60,7 @@ public class ConTypeWriter : MonoBehaviour
                 {
                     if (myWord.Length >= 3)
                     {
-                        k.press();
+                        k.press(transform);
                         HitMe(myWord);
                         return;
                     }
@@ -70,7 +70,7 @@ public class ConTypeWriter : MonoBehaviour
                 {
                     if (myWord.Length < 16)
                     {
-                        k.press();
+                        k.press(transform);
                         myWord = myWord + k.myKey;
                         ChangeInputDisplay();
                         return;
@@ -82,14 +82,14 @@ public class ConTypeWriter : MonoBehaviour
 
     private void ChangeInputDisplay()
     {
-        myInput.transform.position = new Vector3(4.5f - ((float)myWord.Length/2), 0, 1.5f);
-
         foreach (Transform child in myInput.transform)
         {
             Destroy(child.gameObject);
         }
-        GameObject word = gc.assets.MakeWordFromDiceQ(myWord, myInput.transform.position, 1);
+        GameObject word = gc.assets.MakeWordFromDiceQ(myWord, Vector3.zero, 1);
         word.transform.parent = myInput.transform;
+        word.transform.localPosition = new Vector3(4.5f - ((float)myWord.Length / 2), 0, 1.5f);
+        word.transform.rotation = transform.rotation;
     }
 
     private void HitMe(string word)

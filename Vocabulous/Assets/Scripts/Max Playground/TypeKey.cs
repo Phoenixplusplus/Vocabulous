@@ -12,12 +12,12 @@ public class TypeKey : MonoBehaviour
     private bool animating = false;
     private Vector3 OPosition;
 
-    public void press()
+    public void press(Transform trans)
     {
-        if (!animating) StartCoroutine("myPress");
+        if (!animating) StartCoroutine("myPress",trans);
     }
 
-    IEnumerator myPress ()
+    IEnumerator myPress (Transform trans)
     {
         animating = true;
         bool dropping = true;
@@ -25,17 +25,17 @@ public class TypeKey : MonoBehaviour
         {
             float rate = transform.localScale.y * 0.9f;
             float bottom = OPosition.y - (transform.localScale.y * 0.2f);
-            if (dropping && transform.position.y > bottom)
+            if (dropping && transform.localPosition.y > bottom)
             {
                 transform.Translate(new Vector3(0, -rate * Time.deltaTime, 0));
-                if (transform.position.y <= bottom) dropping = false;
+                if (transform.localPosition.y <= bottom) dropping = false;
             }
-            if (!dropping && transform.position.y < OPosition.y)
+            if (!dropping && transform.localPosition.y < OPosition.y)
             {
                 transform.Translate(new Vector3(0, rate * Time.deltaTime, 0));
-                if (transform.position.y <= OPosition.y)
+                if (transform.localPosition.y <= OPosition.y)
                 {
-                    transform.position = OPosition;
+                    transform.localPosition = OPosition;
                     animating = false;
                 }
             }
@@ -50,21 +50,19 @@ public class TypeKey : MonoBehaviour
         myCon = GetComponentInParent<ConTypeWriter>();
         myDiceCon = GetComponentInChildren<ConDice>();
         myDiceCon.ID = myHoverID;
-        myTile = GetComponentInChildren<Tile_Controlller>();
-        //myTile.setID(myHoverID);
-        OPosition = transform.position;
+        myTile = GetComponentInChildren<Tile_Controlller>();        
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //press();
+        OPosition = transform.localPosition;
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
         
-    }
+    //}
 }

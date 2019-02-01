@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
+  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -309,12 +309,12 @@ PrefabInstance:
     - target: {fileID: 8053996149789280093, guid: aeb4dd4e772d9bc419f0730190ffed95,
         type: 3}
       propertyPath: origin.x
-      value: 20
+      value: -6.2
       objectReference: {fileID: 0}
     - target: {fileID: 8053996149789280093, guid: aeb4dd4e772d9bc419f0730190ffed95,
         type: 3}
       propertyPath: origin.z
-      value: -3
+      value: 7.25
       objectReference: {fileID: 0}
     - target: {fileID: 2556257300717574531, guid: aeb4dd4e772d9bc419f0730190ffed95,
         type: 3}
@@ -5338,6 +5338,46 @@ PrefabInstance:
     - target: {fileID: 2318639520696641423, guid: 3897dc84bf2933548ac4c5b30062ebae,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639520767793823, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: EmptyListReturn
+      value: No Solutions found
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639521311480212, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639521311480212, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

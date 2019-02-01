@@ -37,7 +37,6 @@ public class ShowList : MonoBehaviour
 
     public void Print(List<string> list, string Qstatus)
     {
-        double start = Time.timeSinceLevelLoad;
         Clear();
         if (gc == null) gc = GC.Instance;
 
@@ -63,16 +62,16 @@ public class ShowList : MonoBehaviour
             GameObject dice;
             if (Qstatus == "q")
             {
-                dice = gc.assets.MakeWordFromDiceQ(s, pos, diceScale);
+                dice = gc.assets.MakeWordFromDiceQ(s, Vector3.zero, diceScale);
             }
             else
             {
-                dice = gc.assets.MakeWordFromDiceQU(s, pos, diceScale);
+                dice = gc.assets.MakeWordFromDiceQU(s, Vector3.zero, diceScale);
             }
             dice.transform.parent = transform;
+            dice.transform.localPosition = pos;
             count += len;
         }
-        Debug.Log("Time to Print ("+list.Count.ToString()+" words): "+(Time.timeSinceLevelLoad - start).ToString()+" secs");
     }
 
 }
