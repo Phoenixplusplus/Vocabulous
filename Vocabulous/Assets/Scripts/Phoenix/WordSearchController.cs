@@ -131,8 +131,9 @@ public class WordSearchController : MonoBehaviour
         /* do board animations */
         for (int i = 0; i < unfoundWords.Count; i++)
         {
-            wordSearchTable.unfoundWordObjects[i].WriteWord(unfoundWords[i], 0.3f);
-            wordSearchTable.foundWordObjects[i].ScrubWord(0.3f);
+            wordSearchTable.unfoundWordObjects[i].WriteWord(unfoundWords[i], 2f);
+            wordSearchTable.foundWordObjects[i].GetComponent<TextMesh>().text = unfoundWords[i];
+            wordSearchTable.foundWordObjects[i].ScrubWord(2f);
         }
         
 
@@ -324,8 +325,9 @@ public class WordSearchController : MonoBehaviour
                             {
                                 Debug.Log("You got " + res);
                                 isFound = true;
-                                wordSearchTable.unfoundWordObjects[i].ScrubWord(0.3f);
-                                wordSearchTable.foundWordObjects[foundWords.Count].WriteWord(res, 0.3f);
+                                wordSearchTable.unfoundWordObjects[i].ScrubWord(1f);
+                                wordSearchTable.unfoundWordObjects[i].UseScrubber(1f);
+                                wordSearchTable.foundWordObjects[foundWords.Count].WriteWord(res, 1f);
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
                                 grid.HighlightCurrentPath();
