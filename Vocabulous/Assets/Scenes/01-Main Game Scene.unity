@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
+  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -513,7 +513,7 @@ PrefabInstance:
     - target: {fileID: 5852842637405468087, guid: a4a6e2509e884a5468f30f9e3753293f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 24.4
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 5852842637405468087, guid: a4a6e2509e884a5468f30f9e3753293f,
         type: 3}
@@ -523,7 +523,7 @@ PrefabInstance:
     - target: {fileID: 5852842637405468087, guid: a4a6e2509e884a5468f30f9e3753293f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 11.05
+      value: 13.62
       objectReference: {fileID: 0}
     - target: {fileID: 5852842637405468087, guid: a4a6e2509e884a5468f30f9e3753293f,
         type: 3}
@@ -1195,7 +1195,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 328341939}
   m_LocalRotation: {x: 0.17160125, y: -0.82739025, z: 0.3550216, w: 0.39992273}
-  m_LocalPosition: {x: 24.76, y: 9.61, z: 18.41}
+  m_LocalPosition: {x: 25.43, y: 10.51, z: 18.94}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1032091472}
@@ -3453,12 +3453,12 @@ PrefabInstance:
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: gridXLength
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: gridYLength
-      value: 12
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -3478,7 +3478,7 @@ PrefabInstance:
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: sixLetterWordsCount
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -3523,7 +3523,7 @@ PrefabInstance:
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosWordSearch.x
-      value: 24.34
+      value: 26
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -3533,7 +3533,7 @@ PrefabInstance:
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosWordSearch.z
-      value: 10.97
+      value: 13.62
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}

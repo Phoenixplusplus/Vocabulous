@@ -48,7 +48,8 @@ public class WordSearchController : MonoBehaviour
     public void Initialise()
     {
         /* hide table prefab */
-        wordSearchTable.HideStartObjects();
+        wordSearchTable.ToggleStartObjects(false);
+        wordSearchTable.ToggleBoards(true);
 
         /* gamecontroller and initialising variables */
         gameController = GC.Instance;
@@ -126,6 +127,14 @@ public class WordSearchController : MonoBehaviour
             }
         }
         diceHolder.transform.localRotation = transform.localRotation;
+
+        /* do board animations */
+        for (int i = 0; i < unfoundWords.Count; i++)
+        {
+            wordSearchTable.unfoundWordObjects[i].WriteWord(unfoundWords[i], 0.3f);
+            wordSearchTable.foundWordObjects[i].ScrubWord(0.3f);
+        }
+        
 
         isInitialised = true;
     }
@@ -315,9 +324,12 @@ public class WordSearchController : MonoBehaviour
                             {
                                 Debug.Log("You got " + res);
                                 isFound = true;
+                                wordSearchTable.unfoundWordObjects[i].ScrubWord(0.3f);
+                                wordSearchTable.foundWordObjects[foundWords.Count].WriteWord(res, 0.3f);
                                 foundWords.Add(res);
-                                unfoundWords.Remove(res);
+                                unfoundWords[i] = "";
                                 grid.HighlightCurrentPath();
+                                break;
                             }
                         }
                         if (!isFound) Debug.Log("Sorry, " + res + " is not on the list!");

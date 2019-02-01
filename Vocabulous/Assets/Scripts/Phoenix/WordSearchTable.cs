@@ -7,12 +7,15 @@ public class WordSearchTable : MonoBehaviour
     private GC gameController;
     public Tile_Controlller startOverlay;
     public GameObject startObjects;
+    public GameObject boards;
     public bool onHoverOver;
     public Color normalColour, hoveredColour;
 
     ConDice[] tableDice;
-    Vector3[] diceStartPos = new Vector3[10];
-    Quaternion[] diceStartRot = new Quaternion[10];
+    Vector3[] diceStartPos = new Vector3[9];
+    Quaternion[] diceStartRot = new Quaternion[9];
+    public BoardAnimator[] unfoundWordObjects = new BoardAnimator[9];
+    public BoardAnimator[] foundWordObjects = new BoardAnimator[9];
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,11 @@ public class WordSearchTable : MonoBehaviour
             diceStartRot[i] = tableDice[i].gameObject.transform.rotation;
             tableDice[i].killOverlayTile();
         }
+
+        ToggleBoards(false);
+
+        unfoundWordObjects = boards.transform.GetChild(1).GetComponentsInChildren<BoardAnimator>();
+        foundWordObjects = boards.transform.GetChild(0).GetComponentsInChildren<BoardAnimator>();
     }
 
     // Update is called once per frame
@@ -50,10 +58,12 @@ public class WordSearchTable : MonoBehaviour
         }
     }
 
-    public void HideStartObjects() { startObjects.SetActive(false); }
+    public void ToggleStartObjects(bool state) { if (startObjects.activeInHierarchy == !state) startObjects.SetActive(state); }
+    public void ToggleBoards(bool state) { if (boards.activeInHierarchy == !state) boards.SetActive(state); }
     public void HideAll()
     {
         startObjects.SetActive(false);
+        boards.SetActive(false);
     }
 
     public void SetHoverColourOn()
@@ -104,5 +114,10 @@ public class WordSearchTable : MonoBehaviour
             yield return null;
         }
         yield break;
+    }
+
+    void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }
