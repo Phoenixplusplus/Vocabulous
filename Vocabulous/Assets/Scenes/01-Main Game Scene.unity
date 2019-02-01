@@ -3688,12 +3688,12 @@ PrefabInstance:
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosTranSolver.x
-      value: -22.61
+      value: -24.5
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
       propertyPath: PosTranSolver.z
-      value: 0.28
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7278992054764881352, guid: c61bd617e1909ac4b96a8226ebaf7f48,
         type: 3}
@@ -5344,6 +5344,16 @@ PrefabInstance:
         type: 3}
       propertyPath: EmptyListReturn
       value: No Solutions found
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639520767793823, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: lineLength
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 2318639520767793823, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: origin.x
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 2318639522816832374, guid: 3897dc84bf2933548ac4c5b30062ebae,
         type: 3}

@@ -141,6 +141,12 @@ public class ConWordDice : MonoBehaviour
         myMenu.GameRunning();
     }
 
+    public void TidyUp()
+    {
+        ResetGame();
+        myMenu.OnSceneTable();
+    }
+
 
     #endregion
 

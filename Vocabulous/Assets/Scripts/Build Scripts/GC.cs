@@ -352,11 +352,13 @@ public class GC : MonoBehaviour
             case 31:
                 {
                     // we just quit WordDice, do something special
+                    WordDice.TidyUp();
                     break;
                 }
             case 32:
                 {
                     // we just quit Solver, do something special
+                    solverController.TidyUp();
                     break;
                 }
             case 33:

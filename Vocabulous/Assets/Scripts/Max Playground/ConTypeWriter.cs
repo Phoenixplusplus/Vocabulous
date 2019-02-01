@@ -19,6 +19,8 @@ public class ConTypeWriter : MonoBehaviour
     // Z:7719, X:7720, C:7721, V:7722, B:7723, N:7724, M:7725
     // Space:7726, Back:7727, Find:7728
 
+    #region UNITY API
+
     void Awake()
     {
 
@@ -35,6 +37,10 @@ public class ConTypeWriter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //transform.position = gc.PosTranSolver;
+
+        
         if (Input.GetMouseButtonDown(0) && gc.NewHoverOver >= 7700 && gc.NewHoverOver <= 7728)
         {
             TypeKey k = null;
@@ -79,6 +85,22 @@ public class ConTypeWriter : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region GC CALLABLE METHODS
+
+    public void TidyUp()
+    {
+        myWord = "";
+        foreach (Transform child in myInput.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        myOutput.Clear();
+        StopAllCoroutines();
+    }
+
+    #endregion
 
     private void ChangeInputDisplay()
     {

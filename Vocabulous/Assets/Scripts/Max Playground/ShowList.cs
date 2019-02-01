@@ -58,7 +58,7 @@ public class ShowList : MonoBehaviour
             {
                 count += 1;
             }
-            Vector3 pos = new Vector3(origin.x + (count * diceScale), origin.y + (diceScale / 2), origin.z + (row * pitch * mod));
+            Vector3 pos = new Vector3(origin.x + (count * diceScale), origin.y - (diceScale / 2), origin.z + (row * pitch * mod));
             GameObject dice;
             if (Qstatus == "q")
             {
@@ -70,6 +70,7 @@ public class ShowList : MonoBehaviour
             }
             dice.transform.parent = transform;
             dice.transform.localPosition = pos;
+            dice.transform.localRotation = Quaternion.identity;
             count += len;
         }
     }
