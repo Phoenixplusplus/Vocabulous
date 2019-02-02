@@ -519,10 +519,5 @@ PrefabInstance:
       propertyPath: Trie
       value: 
       objectReference: {fileID: 63929015}
-    - target: {fileID: 1652748351942625636, guid: a4a6e2509e884a5468f30f9e3753293f,
-        type: 3}
-      propertyPath: m_DynamicOccludee
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4a6e2509e884a5468f30f9e3753293f, type: 3}

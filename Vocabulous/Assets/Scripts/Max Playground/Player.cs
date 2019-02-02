@@ -19,6 +19,15 @@ public struct PlayerStats
     public float WDAverageWords;
 
     public int WordSearchSize;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
+    public int WordSearchGameLength;
+    public int WordSearchMinimumLengthWord;
+    public int WordSearchMaximumLengthWord;
+    public int WordSearchFourLetterWordsCount;
+    public int WordSearchFiveLetterWordsCount;
+    public int WordSearchSixLetterWordsCount;
+    public int WordSearchSevenLetterWordsCount;
+    public int WordSearchEightLetterWordsCount;
+
     public int AnagramMinLength;   // 4,5,6 (Default),7,8
 }
 
@@ -50,6 +59,14 @@ public class PlayerManager
             ret.WDAverageWords = PlayerPrefs.GetFloat("WDAverageWords");
 
             ret.WordSearchSize = PlayerPrefs.GetInt("WordSearchSize");
+            ret.WordSearchGameLength = PlayerPrefs.GetInt("WordSearchGameLength");
+            ret.WordSearchMinimumLengthWord = PlayerPrefs.GetInt("WordSearchMinimumLengthWord");
+            ret.WordSearchMaximumLengthWord = PlayerPrefs.GetInt("WordSearchMaximumLengthWord");
+            ret.WordSearchFourLetterWordsCount = PlayerPrefs.GetInt("WordSearchFourLetterWordsCount");
+            ret.WordSearchFiveLetterWordsCount = PlayerPrefs.GetInt("WordSearchFiveLetterWordsCount");
+            ret.WordSearchSixLetterWordsCount = PlayerPrefs.GetInt("WordSearchSixLetterWordsCount");
+            ret.WordSearchSevenLetterWordsCount = PlayerPrefs.GetInt("WordSearchSevenLetterWordsCount");
+            ret.WordSearchEightLetterWordsCount = PlayerPrefs.GetInt("WordSearchEightLetterWordsCount");
 
             ret.AnagramMinLength = PlayerPrefs.GetInt("AnagramMinLength");
 
@@ -73,6 +90,14 @@ public class PlayerManager
         PlayerPrefs.SetFloat("WDAverageWords", player.WDAverageWords);
 
         PlayerPrefs.SetInt("WordSearchSize", player.WordSearchSize);
+        PlayerPrefs.SetInt("WordSearchGameLength", player.WordSearchGameLength);
+        PlayerPrefs.SetInt("WordSearchMinimumLengthWord", player.WordSearchMinimumLengthWord);
+        PlayerPrefs.SetInt("WordSearchMaximumLengthWord", player.WordSearchMaximumLengthWord);
+        PlayerPrefs.SetInt("WordSearchFourLetterWordsCount", player.WordSearchFourLetterWordsCount);
+        PlayerPrefs.SetInt("WordSearchFiveLetterWordsCount", player.WordSearchFiveLetterWordsCount);
+        PlayerPrefs.SetInt("WordSearchSixLetterWordsCount", player.WordSearchSixLetterWordsCount);
+        PlayerPrefs.SetInt("WordSearchSevenLetterWordsCount", player.WordSearchSevenLetterWordsCount);
+        PlayerPrefs.SetInt("WordSearchEightLetterWordsCount", player.WordSearchEightLetterWordsCount);
 
         PlayerPrefs.SetInt("AnagramMinLength", player.AnagramMinLength);
 
@@ -95,7 +120,15 @@ public class PlayerManager
         ret.WDAverageScore = 0.0f;
         ret.WDAverageWords = 0.0f;
 
-        ret.WordSearchSize = 15;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
+        ret.WordSearchSize = 10;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
+        ret.WordSearchGameLength = 60;
+        ret.WordSearchMinimumLengthWord = 4;
+        ret.WordSearchMaximumLengthWord = 8;
+        ret.WordSearchFourLetterWordsCount = 4;
+        ret.WordSearchFiveLetterWordsCount = 4;
+        ret.WordSearchSixLetterWordsCount = 2;
+        ret.WordSearchSevenLetterWordsCount = 0;
+        ret.WordSearchEightLetterWordsCount = 0;
 
         ret.AnagramMinLength = 6;
 

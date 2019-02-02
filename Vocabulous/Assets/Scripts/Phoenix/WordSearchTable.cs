@@ -6,8 +6,7 @@ public class WordSearchTable : MonoBehaviour
 {
     private GC gameController;
     public Tile_Controlller startOverlay;
-    public GameObject startObjects;
-    public GameObject boards;
+    public GameObject startObjects, boards, scrubber, chalk, clock;
     public bool onHoverOver;
     public Color normalColour, hoveredColour;
 
@@ -34,7 +33,7 @@ public class WordSearchTable : MonoBehaviour
             tableDice[i].killOverlayTile();
         }
 
-        ToggleBoards(false);
+        StartSetup();
 
         unfoundWordObjects = boards.transform.GetChild(1).GetComponentsInChildren<BoardAnimator>();
         foundWordObjects = boards.transform.GetChild(0).GetComponentsInChildren<BoardAnimator>();
@@ -60,10 +59,30 @@ public class WordSearchTable : MonoBehaviour
 
     public void ToggleStartObjects(bool state) { if (startObjects.activeInHierarchy == !state) startObjects.SetActive(state); }
     public void ToggleBoards(bool state) { if (boards.activeInHierarchy == !state) boards.SetActive(state); }
+    public void ToggleScrubberChalk(bool state) { if (scrubber.activeInHierarchy == !state) { scrubber.SetActive(state); chalk.SetActive(state); } }
+    public void ToggleClock(bool state) { if (clock.activeInHierarchy == !state) clock.SetActive(state); }
     public void HideAll()
     {
-        startObjects.SetActive(false);
-        boards.SetActive(false);
+        ToggleStartObjects(false);
+        ToggleBoards(false);
+        ToggleScrubberChalk(false);
+        ToggleClock(false);
+    }
+
+    public void StartSetup()
+    {
+        ToggleStartObjects(true);
+        ToggleBoards(false);
+        ToggleScrubberChalk(false);
+        ToggleClock(false);
+    }
+
+    public void IngameSetup()
+    {
+        ToggleStartObjects(false);
+        ToggleBoards(true);
+        ToggleScrubberChalk(true);
+        ToggleClock(true);
     }
 
     public void SetHoverColourOn()

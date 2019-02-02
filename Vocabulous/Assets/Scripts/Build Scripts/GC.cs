@@ -34,24 +34,24 @@ public class GC : MonoBehaviour
     private int WorddiceLength;
 
     [Header("WordSearch Info")]
-    [Tooltip("WARNING - 10 is minimum as Controller is likely to get stuck in infinite loop looking to place word. CONSIDER reducing word count on longer words")]
-    [Range(10, 25)]
-    public int gridXLength = 12;
-    [Tooltip("WARNING - 10 is minimum as Controller is likely to get stuck in infinite loop looking to place word. CONSIDER reducing word count on longer words")]
-    [Range(10, 25)]
-    public int gridYLength = 12;
-    public int minimumLengthWord = 4;
-    public int maximumLengthWord = 8;
-    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
-    public int fourLetterWordsCount = 4;
-    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
-    public int fiveLetterWordsCount = 4;
-    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
-    public int sixLetterWordsCount = 4;
-    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
-    public int sevenLetterWordsCount = 0;
-    [Tooltip("Be careful with these values, controller is not smart enough to abort infinite recursion")]
-    public int eightLetterWordsCount = 0;
+    [SerializeField]
+    int wordSearchGridXLength;
+    [SerializeField]
+    int wordSearchGridYLength;
+    [SerializeField]
+    int wordSearchMinimumLengthWord;
+    [SerializeField]
+    int wordSearchMaximumLengthWord;
+    [SerializeField]
+    int wordSearchFourLetterWordsCount;
+    [SerializeField]
+    int wordSearchFiveLetterWordsCount;
+    [SerializeField]
+    int wordSearchSixLetterWordsCount;
+    [SerializeField]
+    int wordSearchSevenLetterWordsCount;
+    [SerializeField]
+    int wordSearchEightLetterWordsCount;
 
     [Header("Assets")]
     public OurAssets assets;
@@ -136,9 +136,18 @@ public class GC : MonoBehaviour
         player = playerManager.LoadPlayer();
         // Do stuff for a new player?  Say Hi ?
         PlayerName = player.Name;
+
         WorddiceLength = player.WordDiceGameLength;
 
-
+        wordSearchGridXLength = player.WordSearchSize;
+        wordSearchGridYLength = player.WordSearchSize;
+        wordSearchMinimumLengthWord = player.WordSearchMinimumLengthWord;
+        wordSearchMinimumLengthWord = player.WordSearchMaximumLengthWord;
+        wordSearchFourLetterWordsCount = player.WordSearchFourLetterWordsCount;
+        wordSearchFiveLetterWordsCount = player.WordSearchFiveLetterWordsCount;
+        wordSearchSixLetterWordsCount = player.WordSearchSixLetterWordsCount;
+        wordSearchSevenLetterWordsCount = player.WordSearchSevenLetterWordsCount;
+        wordSearchEightLetterWordsCount = player.WordSearchEightLetterWordsCount;
 }
     //---------------------------//
     // Finished Singelton set up //
@@ -320,7 +329,8 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 35 = Playing WordSearch
-                    wordSearchController.Initialise();
+                    if (!wordSearchController.isInitialised) wordSearchController.Initialise();
+                    else wordSearchController.Restart();
                     DisableOtherGames(wordSearchController.gameObject);
                     break;
                 }
@@ -374,6 +384,7 @@ public class GC : MonoBehaviour
             case 35:
                 {
                     // we just quit WordSearch, do something special
+                    wordSearchController.TidyUp();
                     break;
                 }
         }
