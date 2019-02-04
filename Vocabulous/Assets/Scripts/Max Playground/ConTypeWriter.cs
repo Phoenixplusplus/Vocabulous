@@ -10,6 +10,8 @@ public class ConTypeWriter : MonoBehaviour
     private TypeKey[] myKeys;
     public GameObject myInput;
     public ShowList myOutput;
+    public GameObject TableOverlayTile;
+    public Tile_Controlller tc;
     public int MyType = 1; // default, use this to customise and use for other things
     public List<string> answers;
 
@@ -32,6 +34,14 @@ public class ConTypeWriter : MonoBehaviour
         gc = GC.Instance;
         if (gc != null) Debug.Log("TypeWriter Connected to GC");
         myKeys = GetComponentsInChildren<TypeKey>();
+        tc.setID(7771);
+    }
+
+
+    // Called by gc to start game
+    public void KickOff()
+    {
+        TableOverlayTile.SetActive(false);
     }
 
     // Update is called once per frame
@@ -98,6 +108,7 @@ public class ConTypeWriter : MonoBehaviour
         }
         myOutput.Clear();
         StopAllCoroutines();
+        TableOverlayTile.SetActive(true);
     }
 
     #endregion

@@ -238,7 +238,7 @@ public class GC : MonoBehaviour
             // WordDice
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { cameraController.RotateToGameWordDice(); }
             // Solver
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
             // Anagram
             //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { cameraController.RotateToGameAnagram(); }
             // WordDrop
@@ -252,7 +252,7 @@ public class GC : MonoBehaviour
             // WordDice
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { SetGameState(31); }
             // Solver
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
             // Anagram
             //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
             // WordDrop
@@ -311,6 +311,8 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 32 = Playing Solver
+                    solverController.KickOff();
+                    DisableOtherGames(solverController.gameObject);
                     break;
                 }
             case 33:

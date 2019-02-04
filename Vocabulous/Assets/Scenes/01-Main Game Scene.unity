@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
+  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3854,6 +3854,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489634882}
   m_CullTransparentMesh: 0
+--- !u!1 &1498369683 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4209468990829229242, guid: 3897dc84bf2933548ac4c5b30062ebae,
+    type: 3}
+  m_PrefabInstance: {fileID: 2122602600}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1498369685 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4209468990829229243, guid: 3897dc84bf2933548ac4c5b30062ebae,
+    type: 3}
+  m_PrefabInstance: {fileID: 2122602600}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498369683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b6455c493e194d4f96e01621ffa522b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1514129626
 GameObject:
   m_ObjectHideFlags: 0
@@ -5285,6 +5303,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: SolverController
       objectReference: {fileID: 0}
+    - target: {fileID: 2318639520696641420, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: TableOverlayTile
+      value: 
+      objectReference: {fileID: 1498369683}
+    - target: {fileID: 2318639520696641420, guid: 3897dc84bf2933548ac4c5b30062ebae,
+        type: 3}
+      propertyPath: tc
+      value: 
+      objectReference: {fileID: 1498369685}
     - target: {fileID: 2318639520696641423, guid: 3897dc84bf2933548ac4c5b30062ebae,
         type: 3}
       propertyPath: m_LocalPosition.x
