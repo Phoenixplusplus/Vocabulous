@@ -13,6 +13,7 @@ public class ConWordDice : MonoBehaviour
     public bool Selecting = false;
     private bool GameRunning = false;  // sure there will be a use eventually
     public ConTableWordDice myMenu;
+    public dicebox dbox;
     public Found_List_Display foundListDisplay;
     public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
     public double Timer;
@@ -120,7 +121,7 @@ public class ConWordDice : MonoBehaviour
     {
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
-        gc.player.WordDiceGameLength = 60;
+        gc.player.WordDiceGameLength = 15;
         gc.SaveStats();
 
         LoadStats();
@@ -200,7 +201,8 @@ public class ConWordDice : MonoBehaviour
         {
             for (int x = 0; x < GSize; x++)
             {
-                GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z) + transform.position);
+                //GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z) + transform.position);
+                GameObject dice = gc.assets.SpawnDice(grid.bins[count], dbox.slots[count] + transform.position);
                 dice.transform.parent = myDice.transform;
                 ConDice con = dice.GetComponent<ConDice>();
                 con.ID = count;

@@ -17,10 +17,11 @@ public class ConTableWordDice : MonoBehaviour
     public GameObject GUIStart;
     public GameObject Restart;
     public GameObject Back;
+    public GameObject Box;
     private GC gc;
     private bool highlighted;
     private bool restarthighlight;
-    private bool backhighlight;
+    //private bool backhighlight;
 
     public Color TitleNormalColor;
     public Color TitleSelectedColor;
@@ -37,7 +38,7 @@ public class ConTableWordDice : MonoBehaviour
     private ConDice[] start;
     private ConDice[] timeup;
     private ConDice[] restart;
-    private ConDice[] back;
+    //private ConDice[] back;
 
     void Awake()
     {
@@ -60,7 +61,8 @@ public class ConTableWordDice : MonoBehaviour
         start = StartDice.GetComponentsInChildren<ConDice>();
         timeup = TimeUp.GetComponentsInChildren<ConDice>();
         restart = Restart.GetComponentsInChildren<ConDice>();
-        back = Back.GetComponentsInChildren<ConDice>();
+        //back = Back.GetComponentsInChildren<ConDice>();
+        Back.SetActive(false);
         foreach (var ConDice in title)
         {
             ConDice.killOverlayTile();
@@ -73,10 +75,10 @@ public class ConTableWordDice : MonoBehaviour
         {
             ConDice.killOverlayTile();
         }
-        foreach (var ConDice in back)
-        {
-            ConDice.killOverlayTile();
-        }
+        //foreach (var ConDice in back)
+        //{
+        //    ConDice.killOverlayTile();
+        //}
         setToNormal();
 
     }
@@ -115,22 +117,22 @@ public class ConTableWordDice : MonoBehaviour
             }
         }
         // Checking - Back GUI Tile
-        if (gc.HoverChange && gc.NewHoverOver == 8883 && !backhighlight)
-        {
-            backhighlight = true;
-            foreach (ConDice c in back)
-            {
-                c.ChangeDiceColor(StartSelectedColor);
-            }
-        }
-        if (backhighlight && gc.NewHoverOver != 8883)
-        {
-            backhighlight = false;
-            foreach (ConDice c in back)
-            {
-                c.ChangeDiceColor(TitleNormalColor);
-            }
-        }
+        //if (gc.HoverChange && gc.NewHoverOver == 8883 && !backhighlight)
+        //{
+        //    backhighlight = true;
+        //    foreach (ConDice c in back)
+        //    {
+        //        c.ChangeDiceColor(StartSelectedColor);
+        //    }
+        //}
+        //if (backhighlight && gc.NewHoverOver != 8883)
+        //{
+        //    backhighlight = false;
+        //    foreach (ConDice c in back)
+        //    {
+        //        c.ChangeDiceColor(TitleNormalColor);
+        //    }
+        //}
     }
 
     public void OnSceneTable()
@@ -140,7 +142,8 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(true);
         GUIStart.SetActive(true);
         Restart.SetActive(false);
-        Back.SetActive(false);
+        Box.SetActive(false);
+        //Back.SetActive(false);
     }
 
     public void GameRunning()
@@ -150,7 +153,8 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
         Restart.SetActive(false);
-        Back.SetActive(false);
+        Box.SetActive(true);
+        //Back.SetActive(false);
     }
 
     public void GameOver()
@@ -160,7 +164,8 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
         Restart.SetActive(true);
-        Back.SetActive(true);
+        Box.SetActive(true);
+        //Back.SetActive(true);
     }
 
 
