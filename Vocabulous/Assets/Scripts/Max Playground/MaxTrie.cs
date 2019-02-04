@@ -303,6 +303,35 @@ public class MaxTrie : MonoBehaviour
         return results;
     }
 
+    public string GetRandomWord(int length)
+    {
+        double Start = Time.realtimeSinceStartup;
+        int count = 0;
+        bool found = false;
+        string ret = "";
+        while (found == false)
+        {
+            count++;
+            string test = GetRandomWordStart();
+            for (int i = 0; i < length-1; i++)
+            {
+                test += GetRandomLetter();
+            }
+            List<string> myPossibles = getAnagram(test, false, 3);
+            foreach (string s in myPossibles)
+            {
+                if (s.Length == length)
+                {
+                    ret = s;
+                    found = true;
+                }
+            }
+        }
+        Debug.Log("maxTrie: Get Random Word in " + (Time.realtimeSinceStartup - Start).ToString() + " seconds "+ count.ToString()+" attempts");
+        return ret;
+    }
+
+
     // Returns a WEIGHTED random word length
     public int GetRandWordLength()
     {

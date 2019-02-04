@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 24781935}
   m_Layer: 0
-  m_Name: Answers
+  m_Name: AnswersDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 85949464}
   m_Layer: 0
-  m_Name: Tiles
+  m_Name: TilesDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -263,6 +263,11 @@ PrefabInstance:
         type: 3}
       propertyPath: ScaleTranWordDice.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6776935130134317499, guid: 39081cda580a8ac408c729871e3547c7,
+        type: 3}
+      propertyPath: Testing
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
@@ -1209,6 +1214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd4885ad73696345820db3b9d5ff34a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AnswersDisplay: {fileID: 24781934}
+  TilesDisplay: {fileID: 85949463}
 --- !u!4 &1593885397
 Transform:
   m_ObjectHideFlags: 0
