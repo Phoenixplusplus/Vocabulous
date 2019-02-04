@@ -17,6 +17,7 @@ public class ConTableWordDice : MonoBehaviour
     public GameObject GUIStart;
     public GameObject Restart;
     public GameObject Back;
+    public GameObject Box;
     private GC gc;
     private bool highlighted;
     private bool restarthighlight;
@@ -141,6 +142,7 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(true);
         GUIStart.SetActive(true);
         Restart.SetActive(false);
+        Box.SetActive(false);
         //Back.SetActive(false);
     }
 
@@ -151,6 +153,7 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
         Restart.SetActive(false);
+        Box.SetActive(true);
         //Back.SetActive(false);
     }
 
@@ -161,6 +164,7 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
         Restart.SetActive(true);
+        Box.SetActive(true);
         //Back.SetActive(true);
     }
 
