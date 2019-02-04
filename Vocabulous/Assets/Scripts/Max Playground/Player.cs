@@ -29,6 +29,9 @@ public struct PlayerStats
     public int WordSearchEightLetterWordsCount;
 
     public int AnagramMinLength;   // 4,5,6 (Default),7,8
+    public int ALevel;
+    public int AExtras;
+
 }
 
 
@@ -69,6 +72,8 @@ public class PlayerManager
             ret.WordSearchEightLetterWordsCount = PlayerPrefs.GetInt("WordSearchEightLetterWordsCount");
 
             ret.AnagramMinLength = PlayerPrefs.GetInt("AnagramMinLength");
+            ret.ALevel = PlayerPrefs.GetInt("ALevel");
+            ret.AExtras = PlayerPrefs.GetInt("AExtras");
 
 }
         return ret;
@@ -100,6 +105,8 @@ public class PlayerManager
         PlayerPrefs.SetInt("WordSearchEightLetterWordsCount", player.WordSearchEightLetterWordsCount);
 
         PlayerPrefs.SetInt("AnagramMinLength", player.AnagramMinLength);
+        PlayerPrefs.SetInt("ALevel", player.ALevel);
+        PlayerPrefs.SetInt("AExtras", player.AExtras);
 
     }
 
@@ -131,6 +138,8 @@ public class PlayerManager
         ret.WordSearchEightLetterWordsCount = 0;
 
         ret.AnagramMinLength = 6;
+        ret.ALevel = 0;
+        ret.AExtras = 0;
 
         return ret;
     }

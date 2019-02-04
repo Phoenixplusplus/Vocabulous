@@ -345,7 +345,7 @@ public class GC : MonoBehaviour
         if (thisController != wordSearchController.gameObject) wordSearchController.gameObject.SetActive(false);
         //if (thisController != anagramController.gameObject) anagramController.gameObject.SetActive(false);
         //if (thisController != wordDropController.gameObject) wordDropController.gameObject.SetActive(false);
-        //if (thisController != solver.gameObject) solver.gameObject.SetActive(false);
+        if (thisController != solverController.gameObject) solverController.gameObject.SetActive(false);
     }
 
     void ReEnableAllGames()
@@ -354,7 +354,7 @@ public class GC : MonoBehaviour
         wordSearchController.gameObject.SetActive(true);
         //anagramController.gameObject.SetActive(true);
         //wordDropController.gameObject.SetActive(true);
-        //solver.gameObject.SetActive(true);
+        solverController.gameObject.SetActive(true);
     }
 
     void OnThisGameQuit(int i)
