@@ -64,7 +64,7 @@ public class WordSearchController : MonoBehaviour
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(gameTime);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 120);
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -153,9 +153,7 @@ public class WordSearchController : MonoBehaviour
             /* do the same but pick at random for 1 word, not the same anagram for all words */
             else
             {
-                int randIndex = Random.Range(0, trie.lastStoredWords.Count);
-                if (unfoundWords.Contains(trie.lastStoredWords[randIndex])) success = false;
-                else unfoundWords.Add(trie.lastStoredWords[randIndex]);
+                PopulateUnfoundWordsList(len, numberOfWordsCount, basedOnSameAnagram);
             }
         }
         /* recursion */
@@ -164,6 +162,17 @@ public class WordSearchController : MonoBehaviour
             Debug.Log("Failed to populate words, repopulating");
             PopulateInitialWords(len, numberOfWordsCount, false);
         }
+    }
+
+    /* populate unfound words with random word from anagram, and check to see if not already in list, if so recurse */
+    void PopulateUnfoundWordsList(int len, int numberOfWordsCount, bool basedOnSameAnagram)
+    {
+        int randIndex = Random.Range(0, trie.lastStoredWords.Count);
+        if (unfoundWords.Contains(trie.lastStoredWords[randIndex]))
+        {
+            PopulateInitialWords(len, numberOfWordsCount, basedOnSameAnagram);
+        }
+        else unfoundWords.Add(trie.lastStoredWords[randIndex]);
     }
 
     /* based on accumulated weight > random number, return string 'Key' in Dictionary 'weights' */
@@ -256,6 +265,51 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
+    public void PlaceCubesInGrid()
+    {
+        /* populate with dummy data so the grid can check 'legals' for placing words in */
+        for (int i = 0; i < gridXLength * gridYLength; i++)
+        {
+            grid.PopulateBin(i, defaultString);
+        }
+
+        /* populate with initial words to be placed 'unfoundWords' List */
+        for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
+        for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
+        for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
+        for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
+        for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
+
+        /* start placing words in the grid and check their legality (possible recursion for each word) */
+        foreach (string word in unfoundWords)
+        {
+            InsertWordToGrid(word);
+        }
+        Debug.Log("Finished populating words, successfully placed " + debugPlacedWords + " words out of " + unfoundWords.Count + " on the unfoundWords list");
+
+        /* bosh in some random weighted letters where there are only 'defaultLetters' left */
+        for (int i = 0; i < gridXLength * gridYLength; i++)
+        {
+            if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight));
+        }
+
+        /* now pop the cubes in */
+        int count = 0;
+        for (int z = gridYLength; z > 0; z--)
+        {
+            for (int x = 0; x < gridXLength; x++)
+            {
+                GameObject dice = gameController.assets.SpawnDice(grid.bins[count], new Vector3(diceHolder.transform.position.x + x, diceHolder.transform.position.y, diceHolder.transform.position.z + z));
+                dice.transform.parent = diceHolder.transform;
+                ConDice diceCon = dice.GetComponent<ConDice>();
+                diceCon.ID = count;
+                diceCon.myGrid = grid;
+                count++;
+            }
+        }
+        diceHolder.transform.localRotation = transform.localRotation;
+    }
+
     /* input and trie search */
     void InputAndSearch()
     {
@@ -335,7 +389,7 @@ public class WordSearchController : MonoBehaviour
         {
             Destroy(dice.gameObject);
         }
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(gameTime);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 120);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
@@ -350,51 +404,6 @@ public class WordSearchController : MonoBehaviour
             Destroy(dice.gameObject);
         }
         wordSearchTable.StartSetup();
-    }
-
-    public void PlaceCubesInGrid()
-    {
-        /* populate with dummy data so the grid can check 'legals' for placing words in */
-        for (int i = 0; i < gridXLength * gridYLength; i++)
-        {
-            grid.PopulateBin(i, defaultString);
-        }
-
-        /* populate with initial words to be placed 'unfoundWords' List */
-        for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
-        for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
-        for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
-        for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
-        for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
-
-        /* start placing words in the grid and check their legality (possible recursion for each word) */
-        foreach (string word in unfoundWords)
-        {
-            InsertWordToGrid(word);
-        }
-        Debug.Log("Finished populating words, successfully placed " + debugPlacedWords + " words out of " + unfoundWords.Count + " on the unfoundWords list");
-
-        /* bosh in some random weighted letters where there are only 'defaultLetters' left */
-        for (int i = 0; i < gridXLength * gridYLength; i++)
-        {
-            if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight));
-        }
-
-        /* now pop the cubes in */
-        int count = 0;
-        for (int z = gridYLength; z > 0; z--)
-        {
-            for (int x = 0; x < gridXLength; x++)
-            {
-                GameObject dice = gameController.assets.SpawnDice(grid.bins[count], new Vector3(diceHolder.transform.position.x + x, diceHolder.transform.position.y, diceHolder.transform.position.z + z));
-                dice.transform.parent = diceHolder.transform;
-                ConDice diceCon = dice.GetComponent<ConDice>();
-                diceCon.ID = count;
-                diceCon.myGrid = grid;
-                count++;
-            }
-        }
-        diceHolder.transform.localRotation = transform.localRotation;
     }
 
     public void RunInitialBoardAnimations()
