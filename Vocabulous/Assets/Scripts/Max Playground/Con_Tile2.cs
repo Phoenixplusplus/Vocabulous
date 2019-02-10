@@ -43,7 +43,7 @@ public class Con_Tile2 : MonoBehaviour
     void Start()
     {
         // TESTING
-        SetID(54, 77);
+        //SetID(54, 77);
     }
 
     // Update is called once per frame
@@ -93,6 +93,12 @@ public class Con_Tile2 : MonoBehaviour
     {
         TC_front.setID(frontID);
         TC_back.setID(backID);
+    }
+
+    public void SetFullFaceID (int frontID, int backID)
+    {
+        TC_front.SetBothID(frontID);
+        TC_back.SetBothID(backID);
     }
 
 

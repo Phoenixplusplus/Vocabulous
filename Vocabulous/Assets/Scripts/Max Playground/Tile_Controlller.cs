@@ -26,6 +26,13 @@ public class Tile_Controlller : MonoBehaviour
         InnerQuad.ID = value;
     }
 
+    public void SetBothID (int value)
+    {
+        ID = value;
+        InnerQuad.ID = value;
+        OuterQuad.ID = value;
+    }
+
     public void SetVisible(bool value)
     {
         InnerQuad.setVisible(value);
