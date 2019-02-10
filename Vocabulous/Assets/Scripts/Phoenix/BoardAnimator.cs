@@ -41,7 +41,8 @@ public class BoardAnimator : MonoBehaviour
 
     IEnumerator UseChalkIE(float initialLerpTime)
     {
-        chalk.GetComponent<Scrubber>().ShakeScrubber(1f);
+        chalk.GetComponent<Scrubber>().shaking = true;
+        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.forward);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -51,6 +52,7 @@ public class BoardAnimator : MonoBehaviour
             yield return null;
         }
         t = 0;
+        chalk.GetComponent<Scrubber>().shaking = false;
         while (t < initialLerpTime)
         {
             chalk.transform.position = Vector3.Lerp(chalk.transform.position, chalkOriginPos + new Vector3(0, .5f, 0), t / initialLerpTime);
@@ -74,7 +76,8 @@ public class BoardAnimator : MonoBehaviour
 
     IEnumerator UseScrubberIE(float initialLerpTime)
     {
-        scrubber.GetComponent<Scrubber>().ShakeScrubber(1f);
+        scrubber.GetComponent<Scrubber>().shaking = true;
+        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.forward);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -84,6 +87,7 @@ public class BoardAnimator : MonoBehaviour
             yield return null;
         }
         t = 0;
+        scrubber.GetComponent<Scrubber>().shaking = false;
         while (t < initialLerpTime)
         {
             scrubber.transform.position = Vector3.Lerp(scrubber.transform.position, scrubOriginPos + new Vector3(0, .5f, 0), t / initialLerpTime);

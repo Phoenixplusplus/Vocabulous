@@ -45,7 +45,12 @@ public class WordSearchController : MonoBehaviour
     string defaultString = "0";
     int debugPlacedWords = 0;
     public bool timeUp;
+    bool showingRestart;
 
+
+
+    #region StartUp
+    /* main initialise function, will call subsequent StartUp functions */
     public void Initialise()
     {
         /* gamecontroller and initialising variables */
@@ -64,7 +69,7 @@ public class WordSearchController : MonoBehaviour
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 120);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -97,25 +102,9 @@ public class WordSearchController : MonoBehaviour
         isInitialised = true;
     }
 
-    void Update()
-    {
-        if (!timeUp) if (selecting) grid.GetCurrentPath();
-
-        if (gameController != null)
-        {
-            CheckGCHoverValue();
-            if (!timeUp) InputAndSearch();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Restart();
-        }
-    }
-
     /* recursive populate 'unfoundWords' list, called in the Initialise() 
-     * type is of IEnumerator to allow this function to keep returning null when it fails to find slots to place a word. As the Initialise can then be part of a coroutine
-     * and more efficiently loaded without frame skips and trying to execute the function in a single frame */
+ * type is of IEnumerator to allow this function to keep returning null when it fails to find slots to place a word. As the Initialise can then be part of a coroutine
+ * and more efficiently loaded without frame skips and trying to execute the function in a single frame */
     void PopulateInitialWords(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
         Debug.Log("Populating initial words..");
@@ -265,6 +254,7 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
+    /* triggers recursive function, places words into the grid where it can, then spawns the actual cube meshes according to strings/random weighted letters */
     public void PlaceCubesInGrid()
     {
         /* populate with dummy data so the grid can check 'legals' for placing words in */
@@ -308,6 +298,35 @@ public class WordSearchController : MonoBehaviour
             }
         }
         diceHolder.transform.localRotation = transform.localRotation;
+    }
+    #endregion
+
+
+
+    #region Update Loop and Functions
+    /* update */
+    void Update()
+    {
+        if (!timeUp) if (selecting) grid.GetCurrentPath();
+
+        if (gameController != null)
+        {
+            CheckGCHoverValue();
+            if (!timeUp) InputAndSearch();
+        }
+
+        if (foundWords.Count == 10) wordSearchTable.clock.GetComponent<Clock>().StopClock();
+
+        if (timeUp)
+        {
+            if (!showingRestart)
+            {
+                wordSearchTable.RestartSetup();
+                ClearCubesAndBoard();
+                showingRestart = true;
+            }
+            if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
+        }
     }
 
     /* input and trie search */
@@ -377,24 +396,25 @@ public class WordSearchController : MonoBehaviour
             if (grid.legals.Contains(gameController.NewHoverOver) || grid.GetPathSecondFromEnd() == gameController.NewHoverOver) grid.AddToPath(gameController.NewHoverOver);
         }
     }
+    #endregion
 
+
+
+    #region Restart and TidyUp
     /* restarting fresh / initialising functions*/
     public void Restart()
     {
         wordSearchTable.IngameSetup();
         grid.init();
-        foundWords.Clear();
-        unfoundWords.Clear();
-        foreach (ConDice dice in diceHolder.GetComponentsInChildren<ConDice>())
-        {
-            Destroy(dice.gameObject);
-        }
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 120);
+        ClearCubesAndBoard();
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
+        showingRestart = false;
     }
 
+    /* clear previous words on the board, delete all dice, change tabledice to view when around table */
     public void TidyUp()
     {
         foundWords.Clear();
@@ -406,6 +426,18 @@ public class WordSearchController : MonoBehaviour
         wordSearchTable.StartSetup();
     }
 
+    /* essentially same as TidyUp, though we do not change any prefabs */
+    public void ClearCubesAndBoard()
+    {
+        foundWords.Clear();
+        unfoundWords.Clear();
+        foreach (ConDice dice in diceHolder.GetComponentsInChildren<ConDice>())
+        {
+            Destroy(dice.gameObject);
+        }
+    }
+
+    /* populate chalk board with words (animation) */
     public void RunInitialBoardAnimations()
     {
         for (int i = 0; i < unfoundWords.Count; i++)
@@ -415,4 +447,5 @@ public class WordSearchController : MonoBehaviour
             wordSearchTable.foundWordObjects[i].ScrubWord(2f);
         }
     }
+    #endregion
 }

@@ -5,17 +5,37 @@ using UnityEngine;
 public class Scrubber : MonoBehaviour
 {
     public float shakePower = 0.5f;
+    float t;
+    bool movingUp;
+    public bool shaking;
+    Vector3 startPos;
 
-    public void ShakeScrubber(float initialTime) { StartCoroutine(ShakeScrubberIE(1f)); }
+    public void ShakeScrubber(float initialTime, float threshold, Vector3 localUp) { StartCoroutine(ShakeScrubberIE(initialTime, threshold , localUp)); }
 
-    IEnumerator ShakeScrubberIE(float initialTime)
+    IEnumerator ShakeScrubberIE(float initialTime, float threshold, Vector3 localUp)
     {
-        float t = 0;
-        while (t < initialTime)
+        if (shaking)
         {
-            transform.localPosition = transform.localPosition + Random.insideUnitSphere * shakePower;
-            t += Time.deltaTime;
-            yield return null;
+            float t = 0;
+            float ti = 0;
+            while (t < initialTime)
+            {
+                t += Time.deltaTime;
+                ti += Time.deltaTime;
+
+                if (ti > threshold)
+                {
+                    ti = 0;
+                    movingUp = !movingUp;
+                }
+
+                if (movingUp == true) { transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition + localUp, t / initialTime); }
+                else { transform.localPosition = Vector3.Lerp(transform.localPosition, transform.localPosition - localUp, t / initialTime); }
+
+                if (!shaking) yield break;
+
+                yield return null;
+            }
         }
         yield break;
     }

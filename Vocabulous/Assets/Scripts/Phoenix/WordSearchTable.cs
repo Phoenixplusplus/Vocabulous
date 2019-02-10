@@ -5,14 +5,16 @@ using UnityEngine;
 public class WordSearchTable : MonoBehaviour
 {
     private GC gameController;
-    public Tile_Controlller startOverlay;
-    public GameObject startObjects, boards, scrubber, chalk, clock;
-    public bool onHoverOver;
+    public Tile_Controlller startOverlay, restartOverlay;
+    public GameObject startObjects, restartObjects, boards, scrubber, chalk, clock;
+    public bool onStartHoverOver, onRestartHoverOver;
     public Color normalColour, hoveredColour;
 
-    ConDice[] tableDice;
+    ConDice[] tableDice, restartDice;
     Vector3[] diceStartPos = new Vector3[9];
+    Vector3[] restartDiceStartPos = new Vector3[8];
     Quaternion[] diceStartRot = new Quaternion[9];
+    Quaternion[] restartDiceStartRot = new Quaternion[8];
     public BoardAnimator[] unfoundWordObjects = new BoardAnimator[9];
     public BoardAnimator[] foundWordObjects = new BoardAnimator[9];
 
@@ -21,8 +23,10 @@ public class WordSearchTable : MonoBehaviour
     {
         gameController = GC.Instance;
         startOverlay.setID(4441);
+        restartOverlay.setID(4442);
 
         tableDice = startObjects.GetComponentsInChildren<ConDice>();
+        restartDice = restartObjects.GetComponentsInChildren<ConDice>();
 
         normalColour = tableDice[0].DiceBody.GetComponent<Renderer>().material.color;
 
@@ -31,6 +35,12 @@ public class WordSearchTable : MonoBehaviour
             diceStartPos[i] = tableDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
             diceStartRot[i] = tableDice[i].gameObject.transform.rotation;
             tableDice[i].killOverlayTile();
+        }
+        for (int i = 0; i < restartDice.Length; i++)
+        {
+            restartDiceStartPos[i] = restartDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
+            restartDiceStartRot[i] = restartDice[i].gameObject.transform.rotation;
+            restartDice[i].killOverlayTile();
         }
 
         StartSetup();
@@ -43,21 +53,33 @@ public class WordSearchTable : MonoBehaviour
     void Update()
     {
         // checking hover over
-        if (gameController.HoverChange && gameController.NewHoverOver == 4441 && !onHoverOver)
+        if (gameController.HoverChange && gameController.NewHoverOver == 4441 && !onStartHoverOver)
         {
-            onHoverOver = true;
-            SetHoverColourOn();
+            onStartHoverOver = true;
+            SetHoverColourOnStartDice();
             StartCoroutine(ShiftDiceToReadyPosition(3f));
         }
-        if (onHoverOver && gameController.NewHoverOver != 4441)
+        if (onStartHoverOver && gameController.NewHoverOver != 4441)
         {
-            onHoverOver = false;
-            SetNormalColourOn();
+            onStartHoverOver = false;
+            SetNormalColourOnStartDice();
             StartCoroutine(ShiftDiceToStartPosition(3f));
+        }
+
+        if (gameController.HoverChange && gameController.NewHoverOver == 4442 && !onRestartHoverOver)
+        {
+            onRestartHoverOver = true;
+            SetHoverColourOnRestartDice();
+        }
+        if (onRestartHoverOver && gameController.NewHoverOver != 4442)
+        {
+            onRestartHoverOver = false;
+            SetNormalColourOnRestartDice();
         }
     }
 
     public void ToggleStartObjects(bool state) { if (startObjects.activeInHierarchy == !state) startObjects.SetActive(state); }
+    public void ToggleRestartObjects(bool state) { if (restartObjects.activeInHierarchy == !state) restartObjects.SetActive(state); }
     public void ToggleBoards(bool state) { if (boards.activeInHierarchy == !state) boards.SetActive(state); }
     public void ToggleScrubberChalk(bool state) { if (scrubber.activeInHierarchy == !state) { scrubber.SetActive(state); chalk.SetActive(state); } }
     public void ToggleClock(bool state) { if (clock.activeInHierarchy == !state) clock.SetActive(state); }
@@ -67,6 +89,8 @@ public class WordSearchTable : MonoBehaviour
         ToggleBoards(false);
         ToggleScrubberChalk(false);
         ToggleClock(false);
+        ToggleRestartObjects(false);
+        ResetRestartDiceOrientation();
     }
 
     public void StartSetup()
@@ -75,6 +99,8 @@ public class WordSearchTable : MonoBehaviour
         ToggleBoards(false);
         ToggleScrubberChalk(false);
         ToggleClock(false);
+        ToggleRestartObjects(false);
+        ResetRestartDiceOrientation();
     }
 
     public void IngameSetup()
@@ -83,9 +109,30 @@ public class WordSearchTable : MonoBehaviour
         ToggleBoards(true);
         ToggleScrubberChalk(true);
         ToggleClock(true);
+        ToggleRestartObjects(false);
+        ResetRestartDiceOrientation();
     }
 
-    public void SetHoverColourOn()
+    public void RestartSetup()
+    {
+        ToggleRestartObjects(true);
+        ToggleBoards(true);
+        ToggleClock(true);
+        ToggleScrubberChalk(true);
+        ResetRestartDiceOrientation();
+        StartCoroutine(ShiftDiceToRestartPosition(3f));
+    }
+
+    public void ResetRestartDiceOrientation()
+    {
+        for (int i = 0; i < restartDice.Length; i++)
+        {
+            restartDice[i].transform.position = restartDiceStartPos[i];
+            restartDice[i].transform.rotation = restartDiceStartRot[i];
+        }
+    }
+
+    public void SetHoverColourOnStartDice()
     {
         foreach(ConDice dice in tableDice)
         {
@@ -93,9 +140,25 @@ public class WordSearchTable : MonoBehaviour
         }
     }
 
-    public void SetNormalColourOn()
+    public void SetNormalColourOnStartDice()
     {
         foreach (ConDice dice in tableDice)
+        {
+            dice.ChangeDiceColor(normalColour);
+        }
+    }
+
+    public void SetHoverColourOnRestartDice()
+    {
+        foreach (ConDice dice in restartDice)
+        {
+            dice.ChangeDiceColor(hoveredColour);
+        }
+    }
+
+    public void SetNormalColourOnRestartDice()
+    {
+        foreach (ConDice dice in restartDice)
         {
             dice.ChangeDiceColor(normalColour);
         }
@@ -112,7 +175,7 @@ public class WordSearchTable : MonoBehaviour
                 dice.transform.rotation = Quaternion.Lerp(dice.transform.rotation, dice.transform.parent.transform.rotation, t / finishTime);
             }
             t += Time.deltaTime;
-            if (onHoverOver && gameController.NewHoverOver != 4441 || gameController.GameState == 35) yield break;
+            if (onStartHoverOver && gameController.NewHoverOver != 4441 || gameController.GameState == 35) yield break;
             yield return null;
         }
         yield break;
@@ -129,7 +192,23 @@ public class WordSearchTable : MonoBehaviour
                 tableDice[i].transform.rotation = Quaternion.Lerp(tableDice[i].transform.rotation, diceStartRot[i], t / finishTime);
             }
             t += Time.deltaTime;
-            if (gameController.HoverChange && gameController.NewHoverOver == 4441 && !onHoverOver || gameController.GameState == 35) yield break;
+            if (gameController.HoverChange && gameController.NewHoverOver == 4441 && !onStartHoverOver || gameController.GameState == 35) yield break;
+            yield return null;
+        }
+        yield break;
+    }
+
+    IEnumerator ShiftDiceToRestartPosition(float finishTime)
+    {
+        float t = 0;
+        while (t < finishTime)
+        {
+            foreach (ConDice dice in restartDice)
+            {
+                dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
+                dice.transform.rotation = Quaternion.Lerp(dice.transform.rotation, dice.transform.parent.transform.rotation, t / finishTime);
+            }
+            t += Time.deltaTime;
             yield return null;
         }
         yield break;
