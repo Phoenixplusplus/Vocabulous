@@ -11,6 +11,7 @@ public class ConAnagram : MonoBehaviour
     [SerializeField]
     private List<string> AnswersList;
     private List<ConAnagramWord> ToGets;
+    public ATableCon TableCon;
     public Vector3 AnswerListOffset;
     public int AnswersListWidth;
     public float AnswersListPitch;
@@ -40,7 +41,7 @@ public class ConAnagram : MonoBehaviour
         selected = new List<int>();
         playerAnswers = new List<string>();
 
-        StartGame();
+        KickOff();
     }
 
     void StartGame ()
@@ -114,12 +115,14 @@ public class ConAnagram : MonoBehaviour
 
     public void KickOff()
     {
-
+        TableCon.GameStart();
+        StartGame();
     }
     
     public void TidyUp()
     {
-
+        killDisplays();
+        TableCon.Table();
     }
 
     // Update is called once per frame
@@ -217,6 +220,7 @@ public class ConAnagram : MonoBehaviour
                 if (gc.NewHoverOver == 6663) // back to menu
                 {
                     Debug.Log("Want to Return to main table ... but not connected yet");
+                    TidyUp();
                 }
             }
         }
@@ -252,27 +256,30 @@ public class ConAnagram : MonoBehaviour
         Debug.Log("Game Over .. you got them all");
         gc.player.ALevel++;
         gc.SaveStats();
-        ResetGame();
+        GameState = 3;
+        TableCon.EndGame();
     }
 
     void ResetGame()
     {
-        foreach (Transform child in AnswersDisplay.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        Transform[] let = TilesDisplay.GetComponentsInChildren<Transform>();
-        for (int i = 1; i < let.Length; i++) // first one is the Overlay Tile 
-        {
-            Destroy(let[i].gameObject);
-        }
-
+        killDisplays();
         AnswersList = new List<string>();
         ToGets = new List<ConAnagramWord>();
         letters = new List<string>();
         selected = new List<int>();
         playerAnswers = new List<string>();
-        StartGame();
+    }
+
+    void killDisplays ()
+    {
+        foreach (Transform child in AnswersDisplay.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in TilesDisplay.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
 
