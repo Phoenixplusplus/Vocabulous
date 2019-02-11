@@ -10,6 +10,11 @@ public class ConAnagram : MonoBehaviour
     private string CurrWord;
     [SerializeField]
     private List<string> AnswersList;
+    private List<ConAnagramWord> ToGets;
+    public ATableCon TableCon;
+    public Vector3 AnswerListOffset;
+    public int AnswersListWidth;
+    public float AnswersListPitch;
     private AnagramLevels AL;
     public GameObject AnswersDisplay;
     public GameObject TilesDisplay;
@@ -31,10 +36,12 @@ public class ConAnagram : MonoBehaviour
         AL = GetComponent<AnagramLevels>();
         gc = GC.Instance;
         AnswersList = new List<string>();
+        ToGets = new List<ConAnagramWord>();
         letters = new List<string>();
         selected = new List<int>();
         playerAnswers = new List<string>();
-        StartGame();
+
+        KickOff();
     }
 
     void StartGame ()
@@ -49,6 +56,7 @@ public class ConAnagram : MonoBehaviour
         shuffle(letters);
         Debug.Log(Anagram);
         DisplayHand();
+        DisplayToGets();
         GameState = 2;
     }
 
@@ -71,6 +79,28 @@ public class ConAnagram : MonoBehaviour
 
     }
 
+    void DisplayToGets()
+    {
+        int row = 0;
+        int count = 0;
+        for (int i = 1; i < AnswersList.Count; i++)
+        {
+            int len = AnswersList[i].Length;
+            if (count + len >= AnswersListWidth)
+            {
+                row++;
+                count = 0;
+            }
+            GameObject ToGet = gc.assets.MakeWordFromTiles(AnswersList[i], Vector3.zero, 1f, true, false, false);
+            ToGet.transform.parent = AnswersDisplay.transform;
+            ToGet.transform.localPosition = AnswerListOffset + new Vector3(count, 0, row * AnswersListPitch);
+            ToGet.AddComponent<ConAnagramWord>();
+            ToGet.GetComponent<ConAnagramWord>().myWord = AnswersList[i];
+            ToGets.Add(ToGet.GetComponent<ConAnagramWord>());
+            count += len + 1;
+        }
+    }
+
     private List<string> shuffle(List<string> list)
     {
         for (int i = 0; i < list.Count; i++)
@@ -85,12 +115,14 @@ public class ConAnagram : MonoBehaviour
 
     public void KickOff()
     {
-
+        TableCon.GameStart();
+        StartGame();
     }
     
     public void TidyUp()
     {
-
+        killDisplays();
+        TableCon.Table();
     }
 
     // Update is called once per frame
@@ -140,6 +172,13 @@ public class ConAnagram : MonoBehaviour
                         Debug.Log("You found: " + res);
                         playerAnswers.Add(res);
                         ToFind--;
+                        foreach (ConAnagramWord t in ToGets)
+                        {
+                            if (t.myWord == res)
+                            {
+                                t.Roll(0.1f);
+                            }
+                        }
                         // check for game end
                         if (ToFind == 0)
                         {
@@ -181,6 +220,7 @@ public class ConAnagram : MonoBehaviour
                 if (gc.NewHoverOver == 6663) // back to menu
                 {
                     Debug.Log("Want to Return to main table ... but not connected yet");
+                    TidyUp();
                 }
             }
         }
@@ -214,11 +254,32 @@ public class ConAnagram : MonoBehaviour
     void EndGame()
     {
         Debug.Log("Game Over .. you got them all");
+        gc.player.ALevel++;
+        gc.SaveStats();
+        GameState = 3;
+        TableCon.EndGame();
     }
 
     void ResetGame()
     {
+        killDisplays();
+        AnswersList = new List<string>();
+        ToGets = new List<ConAnagramWord>();
+        letters = new List<string>();
+        selected = new List<int>();
+        playerAnswers = new List<string>();
+    }
 
+    void killDisplays ()
+    {
+        foreach (Transform child in AnswersDisplay.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in TilesDisplay.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
 
