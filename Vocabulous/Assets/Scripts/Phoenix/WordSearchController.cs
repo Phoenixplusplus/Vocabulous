@@ -102,9 +102,7 @@ public class WordSearchController : MonoBehaviour
         isInitialised = true;
     }
 
-    /* recursive populate 'unfoundWords' list, called in the Initialise() 
- * type is of IEnumerator to allow this function to keep returning null when it fails to find slots to place a word. As the Initialise can then be part of a coroutine
- * and more efficiently loaded without frame skips and trying to execute the function in a single frame */
+    /* recursive populate 'unfoundWords' list, called in the Initialise() */
     void PopulateInitialWords(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
         Debug.Log("Populating initial words..");
@@ -112,7 +110,8 @@ public class WordSearchController : MonoBehaviour
         string s = "";
         for (int i = 0; i < len; i++)
         {
-            s = s + GetRandomLetter(totalWeight);
+            if (Random.value < 0.7) s = s + GetRandomLetter(totalWeight, true);
+            else s = s + GetRandomLetter(0, false);
         }
         /* search trie with string 's' and store result with..
          * s = string, anagram = true, exactCompare = false, storeWords = true, lengthOfStoredWords = len, debug = false */
@@ -165,98 +164,133 @@ public class WordSearchController : MonoBehaviour
     }
 
     /* based on accumulated weight > random number, return string 'Key' in Dictionary 'weights' */
-    string GetRandomLetter(uint tw)
+    string GetRandomLetter(uint tw, bool isWeighted)
     {
-        float rand = Random.Range(0, tw + 1);
-        float accumWeight = 0;
-        int count;
-
-        for (count = 0; count < weights.Count; count++)
+        if (isWeighted)
         {
-            accumWeight = accumWeight + weights.Values.ElementAt(count);
-            if (accumWeight > rand) break;
+            float rand = Random.Range(0, tw + 1);
+            float accumWeight = 0;
+            int count;
+
+            for (count = 0; count < weights.Count; count++)
+            {
+                accumWeight = accumWeight + weights.Values.ElementAt(count);
+                if (accumWeight > rand) break;
+            }
+            return weights.ElementAt(count).Key;
         }
-        return weights.ElementAt(count).Key;
+        else
+        {
+            string str = "abcdefghijklmnopqrstuvwxyz";
+            char c = str[Random.Range(0, str.Length)];
+            return str = "" + c;
+        }
     }
 
     /* place words in 'unfoundWords' into the grid at random start position while checking if it would be legal */
     void InsertWordToGrid(string word)
     {
         Debug.Log("-- Function Start with: " + word + " --");
-        /* clean up in case of recursion 
-         * stringPos is for where we will need to compare which letter is at the current path so we can cross through or not */
-        bool success = true;
 
-        /* add first position anywhere */
-        grid.AddToPath(Random.Range(0, gridXLength * gridYLength));
+        List<int[]> precalculatedRoutes = new List<int[]>();
+        precalculatedRoutes = PrecalculateRoutes(word, gridXLength, gridYLength);
+        int rand = Random.Range(0, precalculatedRoutes.Count);
 
-        /* add another path at any legal spot and record the direction */
-        grid.AddToPath(grid.legals[Random.Range(0, grid.legals.Count)]);
+        // it's possible that there may not be any legal moves left for this word, restart from scratch to be safe
+        if (precalculatedRoutes.Count == 0) { Debug.Log("There were no legal paths for " + word + " restarting.."); Restart(); }
 
-        /* for the rest of the positions, now the 'diagonal' bool will kick in and now there can only be 1 possible legal move */
-        for (int i = 0; i < word.Length - 1; i++)
+        Debug.Log(word + " has " + precalculatedRoutes.Count + " legal routes");
+
+        /* all checks done: choosing a random path, populate each part of the string for each path in the grid we took */
+        for (int i = 0; i < precalculatedRoutes[rand].Length; i++)
         {
-            /* before we do the rest of the loop, are we at an edge with no legal moves? set success to false, make sure to call FINISHPATH() not CLEARPATH() or there will be errors (direction will not be reset) */
-            if (grid.legals.Count == 0)
-            {
-                success = false;
-                Debug.Log("Failed to find space for " + word);
-                grid.FinishPath();
-                break;
-            }
-            /* now just keep going to the only legal move */
-            grid.AddToPath(grid.legals[0]);
-            /* check again if we are at edge */
-            if (grid.legals.Count == 0)
-            {
-                success = false;
-                Debug.Log("Failed to find space for " + word);
-                grid.FinishPath();
-                break;
-            }
+            grid.PopulateBin(precalculatedRoutes[rand][i], word[i].ToString());
         }
+        Debug.Log("Placed word: " + word);
+        debugPlacedWords++;
+    }
 
-
-        /* one last check to see if our path consists of any words that have been taken and that do not cross over with the string at the right character */
-        if (success)
+    /* with a word, this function will check all legal possible paths to place the word inside the grid 
+     * as this is called word by word, it will also check by char, if it can put it's string over another string */
+    List<int[]> PrecalculateRoutes(string word, int gridX, int gridY)
+    {
+        List<int[]> successfulRoutes = new List<int[]>();
+        int wordLength = word.Length;
+        int positionsCount = gridX * gridY;
+        for (int i = 0; i < positionsCount; i++)
         {
-            for (int i = 0; i < grid.path.Count - 1; i++)
+            grid.AddToPath(i);
+            int legalsCount = grid.legals.Count;
+            for (int a = 0; a < legalsCount; a++)
             {
-                if (grid.bins[grid.path[i]] != defaultString)
+                // tidy up for new legal iteration
+                int arrayCounter = 0;
+                int[] routeTaken = new int[word.Length];
+                bool success = true;
+                grid.FinishPath();
+
+                routeTaken[arrayCounter] = i;
+                grid.AddToPath(i);
+                // check if we can actually place part of the string here based on if char is != default string, or a char that matches
+                if (grid.bins[grid.GetPathEnd()] != defaultString)
                 {
-                    if (grid.bins[grid.path[i]] != word[i].ToString())
+                    if (grid.bins[grid.GetPathEnd()] != word[arrayCounter].ToString()) success = false;
+                }
+                arrayCounter++;
+
+                routeTaken[arrayCounter] = grid.legals[a];
+                grid.AddToPath(grid.legals[a]);
+                if (grid.bins[grid.GetPathEnd()] != defaultString)
+                {
+                    if (grid.bins[grid.GetPathEnd()] != word[arrayCounter].ToString()) success = false;
+                }
+                arrayCounter++;
+
+                // only 1 possible legal move starts to kick in
+                for (int b = 0; b < wordLength - 2; b++)
+                {
+                    // before we do the rest of the loop, are we at an edge with no legal moves? set success to false, make sure to call FINISHPATH() not CLEARPATH() or there will be errors (direction will not be reset)
+                    if (grid.legals.Count == 0)
                     {
-                        Debug.Log("Detected trying to put " + word[i] + " onto " + grid.bins[grid.path[i]]);
+                        success = false;
+                        break;
+                    }
+
+                    // now just keep going to the only legal move
+                    routeTaken[arrayCounter] = grid.legals[0];
+                    grid.AddToPath(grid.legals[0]);
+                    if (grid.bins[grid.GetPathEnd()] != defaultString)
+                    {
+                        if (grid.bins[grid.GetPathEnd()] != word[arrayCounter].ToString()) success = false;
+                    }
+                    arrayCounter++;
+
+                    // check again if we are at edge
+                    if (grid.legals.Count == 0)
+                    {
                         success = false;
                         break;
                     }
                 }
+                if (success)
+                {
+                    grid.FinishPath();
+                    successfulRoutes.Add(routeTaken);
+                }
+                else
+                {
+                    grid.FinishPath();
+                }
             }
         }
-
-        if (success)
-        {
-            /* succeeded: populate each part of the string for each position in the grid we took */
-            for (int i = 0; i < grid.path.Count - 1; i++)
-            {
-                grid.PopulateBin(grid.path[i], word[i].ToString());
-            }
-            Debug.Log("Placed word: " + word);
-            debugPlacedWords++;
-            grid.FinishPath();
-        }
-        /* reached unsuccessful somewhere, recurse */
-        else
-        {
-            grid.FinishPath();
-            Debug.Log("Going recursive");
-            InsertWordToGrid(word);
-        }
+        return successfulRoutes;
     }
 
     /* triggers recursive function, places words into the grid where it can, then spawns the actual cube meshes according to strings/random weighted letters */
     public void PlaceCubesInGrid()
     {
+        debugPlacedWords = 0;
+
         /* populate with dummy data so the grid can check 'legals' for placing words in */
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
@@ -280,7 +314,7 @@ public class WordSearchController : MonoBehaviour
         /* bosh in some random weighted letters where there are only 'defaultLetters' left */
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
-            if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight));
+            if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight, true));
         }
 
         /* now pop the cubes in */
@@ -327,6 +361,9 @@ public class WordSearchController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
         }
+
+        // DEBUG - REMEMBER TO TAKE THIS OUT FOR BUILD
+        if (Input.GetKeyDown(KeyCode.L)) Restart();
     }
 
     /* input and trie search */
