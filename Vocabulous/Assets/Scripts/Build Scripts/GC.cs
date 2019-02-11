@@ -189,7 +189,6 @@ public class GC : MonoBehaviour
     void Update()
     {
         // testings
-        if (Input.GetKeyDown(KeyCode.G)) wordSearchController.Initialise();
         if (Input.GetKeyDown(KeyCode.T))
         {
             GameObject thing;
