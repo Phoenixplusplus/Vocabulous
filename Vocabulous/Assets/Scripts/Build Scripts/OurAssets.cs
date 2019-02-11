@@ -138,6 +138,22 @@ public class OurAssets : MonoBehaviour
         return myWord;
     }
 
+    public GameObject MakeWordFromTiles (string word, Vector3 Position, float Scale, bool QuestionSet, bool vertical, bool forward)
+    {
+        string myWord = word.ToLower();
+        GameObject ret = new GameObject();
+        ret.transform.position = Position;
+        for (int i = 0; i < myWord.Length; i++)
+        {
+            GameObject letter;
+            string add = ""+ myWord[i];
+            if (QuestionSet) add = "_";
+            letter = SpawnTile(myWord[i] + add, new Vector3(i, 0, 0), vertical, forward);
+            letter.transform.parent = ret.transform;
+        }
+        ret.transform.localScale = new Vector3(Scale, Scale, Scale);
+        return ret;
+    }
 
 
     public GameObject SpawnDice (string face, Vector3 position)

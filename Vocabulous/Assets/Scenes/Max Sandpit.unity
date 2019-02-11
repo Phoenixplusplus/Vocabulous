@@ -1120,6 +1120,9 @@ MonoBehaviour:
   Anagram: 
   CurrWord: 
   AnswersList: []
+  AnswerListOffset: {x: -8, y: 0, z: 3}
+  AnswersListWidth: 16
+  AnswersListPitch: 1.2
   AnswersDisplay: {fileID: 24781934}
   TilesDisplay: {fileID: 85949463}
   letters: []

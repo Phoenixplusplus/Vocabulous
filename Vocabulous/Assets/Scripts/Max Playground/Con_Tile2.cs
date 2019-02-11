@@ -42,7 +42,9 @@ public class Con_Tile2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         // TESTING
+        // Roll(1f);
         //SetID(54, 77);
     }
 
@@ -50,12 +52,17 @@ public class Con_Tile2 : MonoBehaviour
     void Update()
     {
         // TESTING
-        if (oldforw != forward || oldVert != vertical)
-        {
-            FlipTo(vertical, forward);
-            oldforw = forward;
-            oldVert = vertical;
-        }
+        //if (oldforw != forward || oldVert != vertical)
+        //{
+        //    FlipTo(vertical, forward);
+        //    oldforw = forward;
+        //    oldVert = vertical;
+        //}
+    }
+
+    void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 
     public void FlipTo(bool Vertical, bool Forward)
@@ -74,12 +81,39 @@ public class Con_Tile2 : MonoBehaviour
         Internal.transform.localEulerAngles = dir;
     }
 
-    public void RollTo(bool Vertical, bool Forward)
+    public void Roll(float speed)
     {
+        if (animating)
+        {
+            Debug.Log("Tile already Animating");
+            return;
+        }
         // work in progress ....
+        Rot_rate = speed;
+        animating = true;
+        StartCoroutine("myRoll");
     }
 
-    public void ChangeDiceColor (Color color)
+    IEnumerator myRoll()
+    {
+        float oRot = transform.localEulerAngles.z;
+        float oY = transform.localPosition.y;
+        float nRot = oRot - 180;
+        while (nRot < oRot)
+        {
+            oRot -= 180 / Rot_rate * Time.deltaTime;
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, oRot);
+            transform.localPosition = new Vector3(transform.localPosition.x, oY + (transform.localScale.x/2) * Mathf.Sin((oRot - nRot) * Mathf.Deg2Rad), transform.localPosition.z);
+            yield return null;
+        }
+        transform.localPosition = new Vector3(transform.localPosition.x, oY, transform.localPosition.z);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, nRot);
+        vertical = !vertical;
+        animating = false;
+
+    }
+
+    public void ChangeTileColor (Color color)
     {
         Body_Material.color = color;
     }
