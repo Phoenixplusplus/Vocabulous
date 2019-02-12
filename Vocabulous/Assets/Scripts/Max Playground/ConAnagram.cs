@@ -18,6 +18,8 @@ public class ConAnagram : MonoBehaviour
     private AnagramLevels AL;
     public GameObject AnswersDisplay;
     public GameObject TilesDisplay;
+    public LineRenderer LR;
+    private List<Vector3> TileSpots;
     [SerializeField]
     private List<string> letters;
     private List<int> selected;
@@ -26,6 +28,7 @@ public class ConAnagram : MonoBehaviour
     private bool Selecting = false;
     public Vector3 GridCentre;
     public float radius;
+
     [SerializeField]
     private int GameState = 0; // 0 = on Big Table, 1 = starting, 2 = playing, 3 = ended, awaiting restart
     private int ToFind = 0;
@@ -40,13 +43,15 @@ public class ConAnagram : MonoBehaviour
         letters = new List<string>();
         selected = new List<int>();
         playerAnswers = new List<string>();
-
+        LR.SetPosition(0, new Vector3(0, 0.1f, 0));
+        LR.SetPosition(1, new Vector3(1, 0.1f, 1));
         KickOff();
     }
 
     void StartGame ()
     {
         AnswersList = AL.GetAnagramLevel(gc.player.ALevel);
+        //AnswersList = AL.GetAnagramLevel(20);
         Anagram = AnswersList[0];
         ToFind = AnswersList.Count - 1;
         foreach (char c in Anagram)
@@ -62,13 +67,15 @@ public class ConAnagram : MonoBehaviour
 
     void DisplayHand ()
     {
+        TileSpots = new List<Vector3>();
         int count = letters.Count;
         float angle = 360.0f / (float)count;
-        Vector3 offset = new Vector3(radius, 0, 0);
+        Vector3 offset = new Vector3(0, 0, radius);
         for (int i = 0; i < count; i++)
         {
             // thanks to https://forum.unity.com/threads/rotating-a-vector-by-an-eular-angle.18485/ (Feb 2019)
             offset = Quaternion.AngleAxis(angle, Vector3.up) * offset;
+            TileSpots.Add(offset);
             string IWant = letters[i] + "_";
             GameObject tile = gc.assets.SpawnTile(IWant, Vector3.zero, false, true);
             tile.transform.parent = TilesDisplay.transform;
@@ -97,6 +104,7 @@ public class ConAnagram : MonoBehaviour
             ToGet.AddComponent<ConAnagramWord>();
             ToGet.GetComponent<ConAnagramWord>().myWord = AnswersList[i];
             ToGets.Add(ToGet.GetComponent<ConAnagramWord>());
+            //ToGet.GetComponent<ConAnagramWord>().RevealHint();
             count += len + 1;
         }
     }
@@ -141,6 +149,24 @@ public class ConAnagram : MonoBehaviour
         CheckHoverOver();
     }
 
+    void GiveHint ()
+    {
+        // find "unsolved words" ...
+        List<int> pos = new List<int>();
+        for (int i = 0; i < ToGets.Count; i++)
+        {
+            if (ToGets[i].IsHintable()) pos.Add(i);
+        }
+        if (pos.Count == 0)
+        {
+            Debug.Log("Sorry no hints possible !!");
+        }
+        else
+        {
+            ToGets[pos[Random.Range(0, pos.Count)]].RevealHint();
+        }
+    }
+
     void CheckMouseClicks()
     {
         if (GameState == 2) // game running
@@ -148,10 +174,17 @@ public class ConAnagram : MonoBehaviour
             if (!Selecting) // not currently selecting anything
             {
                 // Mouse goes down over a non -1 or 9999 IisOverlayTile object (i.e. a valid letter)
-                if (Input.GetMouseButtonDown(0) && gc.NewHoverOver != -1 && gc.NewHoverOver != 9999)
+                if (Input.GetMouseButtonDown(0))
                 {
-                    Selecting = true;
-                    selected.Add(gc.NewHoverOver);
+                    if  (gc.NewHoverOver != -1 && gc.NewHoverOver <= 999)
+                    {
+                        Selecting = true;
+                        selected.Add(gc.NewHoverOver);
+                    }
+                    else if (gc.NewHoverOver == 6664)
+                    {
+                        GiveHint();
+                    }
                 }
             }
             else // are selecting

@@ -9,6 +9,7 @@ public class ATableCon : MonoBehaviour
     public GameObject InGame;
     public GameObject Restart;
     private Con_Tile2[] nextTiles;
+    private Con_Tile2[] hintTiles;
     public Color BaseTileColor;
     public Color HighLightTileColor;
 
@@ -40,6 +41,8 @@ public class ATableCon : MonoBehaviour
         gc = GC.Instance;
         nextTiles = Restart.GetComponentsInChildren<Con_Tile2>();
         ChangeNextColor(BaseTileColor);
+        hintTiles = InGame.GetComponentsInChildren<Con_Tile2>();
+        ChangeHintColor(BaseTileColor);
     }
 
     // Update is called once per frame
@@ -55,12 +58,29 @@ public class ATableCon : MonoBehaviour
             {
                 ChangeNextColor(BaseTileColor);
             }
+
+            if (gc.NewHoverOver == 6664)
+            {
+                ChangeHintColor(HighLightTileColor);
+            }
+            else if (gc.OldHoverOver == 6664)
+            {
+                ChangeHintColor(BaseTileColor);
+            }
         }
     }
 
     void ChangeNextColor (Color color)
     {
         foreach (Con_Tile2 tile in nextTiles)
+        {
+            tile.ChangeTileColor(color);
+        }
+    }
+
+    void ChangeHintColor(Color color)
+    {
+        foreach (Con_Tile2 tile in hintTiles)
         {
             tile.ChangeTileColor(color);
         }

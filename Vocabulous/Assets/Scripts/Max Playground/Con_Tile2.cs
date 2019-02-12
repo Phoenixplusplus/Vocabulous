@@ -79,6 +79,8 @@ public class Con_Tile2 : MonoBehaviour
             else { dir = HB; }
         }
         Internal.transform.localEulerAngles = dir;
+        vertical = Vertical;
+        forward = Forward;
     }
 
     public void Roll(float speed)
@@ -88,7 +90,6 @@ public class Con_Tile2 : MonoBehaviour
             Debug.Log("Tile already Animating");
             return;
         }
-        // work in progress ....
         Rot_rate = speed;
         animating = true;
         StartCoroutine("myRoll");
@@ -108,9 +109,8 @@ public class Con_Tile2 : MonoBehaviour
         }
         transform.localPosition = new Vector3(transform.localPosition.x, oY, transform.localPosition.z);
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, nRot);
-        vertical = !vertical;
+        forward = !forward;
         animating = false;
-
     }
 
     public void ChangeTileColor (Color color)
