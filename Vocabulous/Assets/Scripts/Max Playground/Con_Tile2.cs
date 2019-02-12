@@ -40,25 +40,25 @@ public class Con_Tile2 : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    //void Start()
+    //{
         
-        // TESTING
-        // Roll(1f);
-        //SetID(54, 77);
-    }
+    //    // TESTING
+    //    // Roll(1f);
+    //    //SetID(54, 77);
+    //}
 
-    // Update is called once per frame
-    void Update()
-    {
-        // TESTING
-        //if (oldforw != forward || oldVert != vertical)
-        //{
-        //    FlipTo(vertical, forward);
-        //    oldforw = forward;
-        //    oldVert = vertical;
-        //}
-    }
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    // TESTING
+    //    //if (oldforw != forward || oldVert != vertical)
+    //    //{
+    //    //    FlipTo(vertical, forward);
+    //    //    oldforw = forward;
+    //    //    oldVert = vertical;
+    //    //}
+    //}
 
     void OnDestroy()
     {
@@ -100,6 +100,7 @@ public class Con_Tile2 : MonoBehaviour
         float oRot = transform.localEulerAngles.z;
         float oY = transform.localPosition.y;
         float nRot = oRot - 180;
+        forward = !forward;
         while (nRot < oRot)
         {
             oRot -= 180 / Rot_rate * Time.deltaTime;
@@ -109,7 +110,6 @@ public class Con_Tile2 : MonoBehaviour
         }
         transform.localPosition = new Vector3(transform.localPosition.x, oY, transform.localPosition.z);
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, nRot);
-        forward = !forward;
         animating = false;
     }
 

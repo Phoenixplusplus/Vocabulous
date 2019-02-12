@@ -104,6 +104,7 @@ public class GC : MonoBehaviour
     public ConWordDice WordDice;
     public WordSearchController wordSearchController;
     public ConTypeWriter solverController;
+    public ConAnagram anagramController;
 
      #endregion
 
@@ -182,6 +183,12 @@ public class GC : MonoBehaviour
             solverController.transform.rotation = Quaternion.Euler(RotTranSolver);
             solverController.transform.localScale = ScaleTranSolver;
         }
+        if (anagramController != null)
+        {
+            anagramController.transform.position = PosTranAnagram;
+            anagramController.transform.rotation = Quaternion.Euler(RotTranAnagram);
+            anagramController.transform.localScale = ScaleTranAnagram;
+        }
     }
 
 
@@ -239,7 +246,7 @@ public class GC : MonoBehaviour
             // Solver
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
             // Anagram
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { cameraController.RotateToGameAnagram(); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { cameraController.RotateToGameAnagram(); }
             // WordDrop
             //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { cameraController.RotateToGameWordDrop(); }
             // WordSearch
@@ -253,7 +260,7 @@ public class GC : MonoBehaviour
             // Solver
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
             // Anagram
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
             // WordDrop
             //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { SetGameState(34); }
             // WordSearch
@@ -318,6 +325,8 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 33 = Playing Anagram
+                    anagramController.KickOff();
+                    DisableOtherGames(anagramController.gameObject);
                     break;
                 }
             case 34:
@@ -342,7 +351,7 @@ public class GC : MonoBehaviour
     {
         if (thisController != WordDice.gameObject) WordDice.gameObject.SetActive(false);
         if (thisController != wordSearchController.gameObject) wordSearchController.gameObject.SetActive(false);
-        //if (thisController != anagramController.gameObject) anagramController.gameObject.SetActive(false);
+        if (thisController != anagramController.gameObject) anagramController.gameObject.SetActive(false);
         //if (thisController != wordDropController.gameObject) wordDropController.gameObject.SetActive(false);
         if (thisController != solverController.gameObject) solverController.gameObject.SetActive(false);
     }
@@ -351,7 +360,7 @@ public class GC : MonoBehaviour
     {
         WordDice.gameObject.SetActive(true);
         wordSearchController.gameObject.SetActive(true);
-        //anagramController.gameObject.SetActive(true);
+        anagramController.gameObject.SetActive(true);
         //wordDropController.gameObject.SetActive(true);
         solverController.gameObject.SetActive(true);
     }
@@ -375,6 +384,7 @@ public class GC : MonoBehaviour
             case 33:
                 {
                     // we just quit Anagram, do something special
+                    anagramController.TidyUp();
                     break;
                 }
             case 34:

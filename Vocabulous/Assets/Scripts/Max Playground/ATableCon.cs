@@ -8,8 +8,10 @@ public class ATableCon : MonoBehaviour
     public GameObject Main;
     public GameObject InGame;
     public GameObject Restart;
+    public GameObject Shuffle;
     private Con_Tile2[] nextTiles;
     private Con_Tile2[] hintTiles;
+    private Con_Tile2[] shuffleTiles;
     public Color BaseTileColor;
     public Color HighLightTileColor;
 
@@ -17,6 +19,7 @@ public class ATableCon : MonoBehaviour
     {
         Main.SetActive(true);
         InGame.SetActive(false);
+        Shuffle.SetActive(false);
         Restart.SetActive(false);
     }
 
@@ -24,6 +27,7 @@ public class ATableCon : MonoBehaviour
     {
         Main.SetActive(false);
         InGame.SetActive(true);
+        Shuffle.SetActive(true);
         Restart.SetActive(false);
     }
 
@@ -31,6 +35,7 @@ public class ATableCon : MonoBehaviour
     {
         Main.SetActive(false);
         InGame.SetActive(false);
+        Shuffle.SetActive(false);
         Restart.SetActive(true);
     }
 
@@ -43,6 +48,8 @@ public class ATableCon : MonoBehaviour
         ChangeNextColor(BaseTileColor);
         hintTiles = InGame.GetComponentsInChildren<Con_Tile2>();
         ChangeHintColor(BaseTileColor);
+        shuffleTiles = Shuffle.GetComponentsInChildren<Con_Tile2>();
+        ChangeShuffleColor(BaseTileColor);
     }
 
     // Update is called once per frame
@@ -67,6 +74,16 @@ public class ATableCon : MonoBehaviour
             {
                 ChangeHintColor(BaseTileColor);
             }
+
+            if (gc.NewHoverOver == 6665)
+            {
+                ChangeShuffleColor(HighLightTileColor);
+            }
+            else if (gc.OldHoverOver == 6665)
+            {
+                ChangeShuffleColor(BaseTileColor);
+            }
+
         }
     }
 
@@ -86,5 +103,12 @@ public class ATableCon : MonoBehaviour
         }
     }
 
+    void ChangeShuffleColor(Color color)
+    {
+        foreach (Con_Tile2 tile in shuffleTiles)
+        {
+            tile.ChangeTileColor(color);
+        }
+    }
 
 }

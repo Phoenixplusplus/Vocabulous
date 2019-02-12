@@ -28,6 +28,8 @@ public class ConAnagram : MonoBehaviour
     private bool Selecting = false;
     public Vector3 GridCentre;
     public float radius;
+    private bool animating = false;
+    private float animTimer = 0;
 
     [SerializeField]
     private int GameState = 0; // 0 = on Big Table, 1 = starting, 2 = playing, 3 = ended, awaiting restart
@@ -43,9 +45,7 @@ public class ConAnagram : MonoBehaviour
         letters = new List<string>();
         selected = new List<int>();
         playerAnswers = new List<string>();
-        LR.SetPosition(0, new Vector3(0, 0.1f, 0));
-        LR.SetPosition(1, new Vector3(1, 0.1f, 1));
-        KickOff();
+        TableCon.Table();
     }
 
     void StartGame ()
@@ -75,15 +75,32 @@ public class ConAnagram : MonoBehaviour
         {
             // thanks to https://forum.unity.com/threads/rotating-a-vector-by-an-eular-angle.18485/ (Feb 2019)
             offset = Quaternion.AngleAxis(angle, Vector3.up) * offset;
-            TileSpots.Add(offset);
             string IWant = letters[i] + "_";
             GameObject tile = gc.assets.SpawnTile(IWant, Vector3.zero, false, true);
             tile.transform.parent = TilesDisplay.transform;
-            tile.transform.localPosition = GridCentre + offset;
+            tile.transform.localRotation = TilesDisplay.transform.localRotation;
+            tile.transform.localPosition = GridCentre;
+            TileSpots.Add( tile.transform.position + ( (Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * offset) ) );
             Con_Tile2 con = tile.GetComponent<Con_Tile2>();
             con.SetFullFaceID(i, i);
-        }
 
+            tile.AddComponent<Lerp>();
+            Lerp L = tile.GetComponent<Lerp>();
+            L.Configure(tile.transform.localPosition, tile.transform.localPosition + offset, 0.5f, true);
+            L.Go();
+            animTimer = 0.5f;
+
+        }
+    }
+
+    void ShuffleHand()
+    {
+        foreach (Transform child in TilesDisplay.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        shuffle(letters);
+        DisplayHand();
     }
 
     void DisplayToGets()
@@ -100,11 +117,11 @@ public class ConAnagram : MonoBehaviour
             }
             GameObject ToGet = gc.assets.MakeWordFromTiles(AnswersList[i], Vector3.zero, 1f, true, false, false);
             ToGet.transform.parent = AnswersDisplay.transform;
+            ToGet.transform.localRotation = AnswersDisplay.transform.localRotation;
             ToGet.transform.localPosition = AnswerListOffset + new Vector3(count, 0, row * AnswersListPitch);
             ToGet.AddComponent<ConAnagramWord>();
             ToGet.GetComponent<ConAnagramWord>().myWord = AnswersList[i];
             ToGets.Add(ToGet.GetComponent<ConAnagramWord>());
-            //ToGet.GetComponent<ConAnagramWord>().RevealHint();
             count += len + 1;
         }
     }
@@ -131,6 +148,7 @@ public class ConAnagram : MonoBehaviour
     {
         killDisplays();
         TableCon.Table();
+        GameState = 0;
     }
 
     // Update is called once per frame
@@ -147,6 +165,31 @@ public class ConAnagram : MonoBehaviour
 
         CheckMouseClicks();
         CheckHoverOver();
+        SetLineRenderer();
+        if (animTimer !=0)
+        {
+            animTimer -= Time.deltaTime;
+            if (animTimer <=0)
+            {
+                animTimer = 0;
+                animating = false;
+            }
+        }
+    }
+
+    void SetLineRenderer()
+    {
+        if (!Selecting) LR.enabled = false;
+        else
+        {
+            LR.enabled = true;
+            LR.positionCount = selected.Count;
+            for (int i = 0; i < selected.Count; i++)
+            {
+                LR.SetPosition(i, TileSpots[selected[i]]);
+            }
+        }
+
     }
 
     void GiveHint ()
@@ -169,7 +212,7 @@ public class ConAnagram : MonoBehaviour
 
     void CheckMouseClicks()
     {
-        if (GameState == 2) // game running
+        if (GameState == 2 && !animating) // game running
         {
             if (!Selecting) // not currently selecting anything
             {
@@ -184,6 +227,10 @@ public class ConAnagram : MonoBehaviour
                     else if (gc.NewHoverOver == 6664)
                     {
                         GiveHint();
+                    }
+                    else if (gc.NewHoverOver == 6665)
+                    {
+                        ShuffleHand();
                     }
                 }
             }
