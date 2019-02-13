@@ -5,29 +5,19 @@ using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
-    public WordSearchController wordSearchController;
+    public WordSearchController wordSearchController; // Does not need to be used
     public Text clockText;
     public bool clockOn, countDown, countUp;
     public float time, totalSeconds, minutes, seconds;
     public string minutesStr;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (clockOn)
         {
-            minutes = Mathf.Floor(time / 60);
-            seconds = Mathf.RoundToInt(time % 60);
-
-            if (seconds >= 10.0f) clockText.text = minutes + ":" + seconds.ToString("0");
-            if (seconds < 9.5f) clockText.text = minutes + ":0" + seconds.ToString("0");
-
+            SetTime();
             if (countDown)
             {
                 time -= Time.deltaTime;
@@ -41,6 +31,23 @@ public class Clock : MonoBehaviour
         }
     }
 
+    // NEW METHOD .. call this from Wherever to update the displayed time from any controller type thing
+    public void SetTime(float secs)
+    {
+        time = secs;
+        SetTime();
+    }
+
+    public void SetTime()
+    {
+        minutes = Mathf.Floor(time / 60);
+        seconds = Mathf.RoundToInt(time % 60);
+
+        if (seconds >= 10.0f) clockText.text = minutes + ":" + seconds.ToString("0");
+        if (seconds < 9.5f) clockText.text = minutes + ":0" + seconds.ToString("0");
+    }
+
+
     public void StartClock(int startTime, int endTime)
     {
 
@@ -50,12 +57,12 @@ public class Clock : MonoBehaviour
         totalSeconds = endTime;
         time = startTime;
         clockOn = true;
-        wordSearchController.timeUp = false;
+        if (wordSearchController != null) wordSearchController.timeUp = false;
     }
 
     public void StopClock()
     {
         clockOn = false;
-        wordSearchController.timeUp = true;
+        if (wordSearchController != null) wordSearchController.timeUp = true;
     }
 }

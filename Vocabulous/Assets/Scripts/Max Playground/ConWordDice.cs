@@ -17,6 +17,7 @@ public class ConWordDice : MonoBehaviour
     public Found_List_Display foundListDisplay;
     public int gameState = 0; // 0 - initialising, 1 = Starting, 2 = running, 3 = scoring (awaiting restart/quit)
     public double Timer;
+    public Clock clock;
     public ShowList showList;
     [SerializeField]
     private int GameTime = 30;
@@ -93,6 +94,11 @@ public class ConWordDice : MonoBehaviour
                 Timer = 0;
                 TimesUp();
             }
+            else
+            {
+                clock.SetTime((float)Timer);
+            }
+
         }
 
         // Just for Inspector debug purposes
@@ -137,6 +143,7 @@ public class ConWordDice : MonoBehaviour
         Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
         Debug.Log("Asking gc.player for desired GameTime .. got:"+ gc.player.WordDiceGameLength.ToString());
         Timer = GameTime;
+        clock.SetTime((float)Timer);
         CurrScore = 0;
         gameState = 2;
         myMenu.GameRunning();
@@ -323,6 +330,7 @@ public class ConWordDice : MonoBehaviour
 
     void TimesUp()
     {
+        clock.SetTime(0f);
         gameState = 3;
         endGameScore();
         Selecting = false;

@@ -18,6 +18,7 @@ public class ConTableWordDice : MonoBehaviour
     public GameObject Restart;
     public GameObject Back;
     public GameObject Box;
+    public GameObject Clock;
     private GC gc;
     private bool highlighted;
     private bool restarthighlight;
@@ -38,7 +39,6 @@ public class ConTableWordDice : MonoBehaviour
     private ConDice[] start;
     private ConDice[] timeup;
     private ConDice[] restart;
-    //private ConDice[] back;
 
     void Awake()
     {
@@ -75,10 +75,6 @@ public class ConTableWordDice : MonoBehaviour
         {
             ConDice.killOverlayTile();
         }
-        //foreach (var ConDice in back)
-        //{
-        //    ConDice.killOverlayTile();
-        //}
         setToNormal();
 
     }
@@ -116,23 +112,6 @@ public class ConTableWordDice : MonoBehaviour
                 c.ChangeDiceColor(TitleNormalColor);
             }
         }
-        // Checking - Back GUI Tile
-        //if (gc.HoverChange && gc.NewHoverOver == 8883 && !backhighlight)
-        //{
-        //    backhighlight = true;
-        //    foreach (ConDice c in back)
-        //    {
-        //        c.ChangeDiceColor(StartSelectedColor);
-        //    }
-        //}
-        //if (backhighlight && gc.NewHoverOver != 8883)
-        //{
-        //    backhighlight = false;
-        //    foreach (ConDice c in back)
-        //    {
-        //        c.ChangeDiceColor(TitleNormalColor);
-        //    }
-        //}
     }
 
     public void OnSceneTable()
@@ -143,6 +122,7 @@ public class ConTableWordDice : MonoBehaviour
         GUIStart.SetActive(true);
         Restart.SetActive(false);
         Box.SetActive(false);
+        Clock.SetActive(false);
         //Back.SetActive(false);
     }
 
@@ -154,6 +134,7 @@ public class ConTableWordDice : MonoBehaviour
         GUIStart.SetActive(false);
         Restart.SetActive(false);
         Box.SetActive(true);
+        Clock.SetActive(true);
         //Back.SetActive(false);
     }
 
@@ -169,6 +150,7 @@ public class ConTableWordDice : MonoBehaviour
         L.Configure(Restart.transform.localPosition + new Vector3(10, 0, 0), Restart.transform.localPosition, 1f, true);
         L.Go();
         Box.SetActive(true);
+        Clock.SetActive(false);
         //Back.SetActive(true);
     }
 
