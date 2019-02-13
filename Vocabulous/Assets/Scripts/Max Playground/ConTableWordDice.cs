@@ -164,6 +164,10 @@ public class ConTableWordDice : MonoBehaviour
         StartDice.SetActive(false);
         GUIStart.SetActive(false);
         Restart.SetActive(true);
+        Restart.AddComponent<Lerp>();
+        Lerp L = Restart.GetComponent<Lerp>();
+        L.Configure(Restart.transform.localPosition + new Vector3(10, 0, 0), Restart.transform.localPosition, 1f, true);
+        L.Go();
         Box.SetActive(true);
         //Back.SetActive(true);
     }

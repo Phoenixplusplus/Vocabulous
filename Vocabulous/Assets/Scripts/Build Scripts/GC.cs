@@ -5,6 +5,8 @@ using UnityEngine;
 public class GC : MonoBehaviour
 {
     #region Variable Declaration
+    [Header("TICK THIS to Reset to Default Player on load")]
+    public bool UseDefaultPlayer = true;
     [Header("HoverOver -1 = nowt, 9999 = edgelike, 0-xxx = grid location")]
     public bool HoverChange = false; // quick "has hover changed bool" for frame to frame checking
     // a lot of messing about ... but ... https://answers.unity.com/questions/915032/make-a-public-variable-with-a-private-setter-appea.html
@@ -121,6 +123,13 @@ public class GC : MonoBehaviour
         }
     }
     private static GC instance = null;
+    //---------------------------//
+    // Finished Singelton set up //
+    // --------------------------//
+    #endregion
+
+
+    #region Unity API
     void Awake()
     {
         if (instance)
@@ -132,8 +141,8 @@ public class GC : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
-        // ESSENTIAL IF YOU ARE EDDITING PlayerStats stuff
-        playerManager.ResetToDefault();
+        // ESSENTIAL IF YOU ARE EDITING PlayerStats stuff // N.B. have an inspector toggle these days
+        if (UseDefaultPlayer) playerManager.ResetToDefault();
         player = playerManager.LoadPlayer();
         // Do stuff for a new player?  Say Hi ?
         PlayerName = player.Name;
@@ -149,14 +158,9 @@ public class GC : MonoBehaviour
         wordSearchSixLetterWordsCount = player.WordSearchSixLetterWordsCount;
         wordSearchSevenLetterWordsCount = player.WordSearchSevenLetterWordsCount;
         wordSearchEightLetterWordsCount = player.WordSearchEightLetterWordsCount;
-}
-    //---------------------------//
-    // Finished Singelton set up //
-    // --------------------------//
-    #endregion
+    }
 
 
-    #region Unity API
     // Start is called before the first frame update
     void Start()
     {

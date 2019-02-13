@@ -12,6 +12,8 @@ public class ShowList : MonoBehaviour
     public float pitch;
     public Vector3 origin;
     public bool up;
+    [SerializeField]
+    private List<float> rowoffset;
 
     void Awake()
     {
@@ -46,6 +48,25 @@ public class ShowList : MonoBehaviour
         if (!up) mod = -1;
         int count = 0;
         int row = 0;
+
+        rowoffset = new List<float>();
+        rowoffset.Add(0f);
+        for (int i = 0; i < list.Count; i++)
+        {
+            int len = list[i].Length;
+            if (count + len >= lineLength)
+            {
+                rowoffset.Add(0f);
+                row++;
+                count = 0;
+            }
+            count += len + 1;
+            rowoffset[row] = (((float)lineLength - (float)count-1) / 2f);
+        }
+
+        count = 0;
+        row = 0;
+
         foreach (string s in list)
         {
             int len = s.Length;
@@ -58,7 +79,7 @@ public class ShowList : MonoBehaviour
             {
                 count += 1;
             }
-            Vector3 pos = new Vector3(origin.x + (count * diceScale), origin.y - (diceScale / 2), origin.z + (row * pitch * mod));
+            Vector3 pos = new Vector3(origin.x + (count * diceScale) + (rowoffset[row] * diceScale), origin.y - (diceScale / 2), origin.z + (row * pitch * mod));
             GameObject dice;
             if (Qstatus == "q")
             {

@@ -145,6 +145,7 @@ public class ConWordDice : MonoBehaviour
     public void TidyUp()
     {
         ResetGame();
+        gameState = 0;
         myMenu.OnSceneTable();
     }
 

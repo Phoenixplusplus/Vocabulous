@@ -50,6 +50,13 @@ public class ConAnagram : MonoBehaviour
 
     void StartGame ()
     {
+        AnswersList.Clear();
+        ToGets.Clear();
+        letters.Clear();
+        selected.Clear();
+        playerAnswers.Clear();
+        Selecting = false;
+
         AnswersList = AL.GetAnagramLevel(gc.player.ALevel);
         //AnswersList = AL.GetAnagramLevel(20);
         Anagram = AnswersList[0];
@@ -59,7 +66,6 @@ public class ConAnagram : MonoBehaviour
             letters.Add("" + c);
         }
         shuffle(letters);
-        Debug.Log(Anagram);
         DisplayHand();
         DisplayToGets();
         GameState = 2;
@@ -107,6 +113,23 @@ public class ConAnagram : MonoBehaviour
     {
         int row = 0;
         int count = 0;
+        List<float> rowoffset = new List<float>();
+        rowoffset.Add(0f);
+        for (int i = 1; i < AnswersList.Count; i++)
+        {
+            int len = AnswersList[i].Length;
+            if (count + len >= AnswersListWidth)
+            {
+                rowoffset.Add(0f);
+                row++;
+                count = 0;
+            }
+            rowoffset[row] = (((float)AnswersListWidth - (float)count)/2f);
+            Debug.Log("Row offset " + rowoffset[row].ToString());
+            count += len + 1;
+        }
+        row = 0;
+        count = 0;
         for (int i = 1; i < AnswersList.Count; i++)
         {
             int len = AnswersList[i].Length;
@@ -118,7 +141,7 @@ public class ConAnagram : MonoBehaviour
             GameObject ToGet = gc.assets.MakeWordFromTiles(AnswersList[i], Vector3.zero, 1f, true, false, false);
             ToGet.transform.parent = AnswersDisplay.transform;
             ToGet.transform.localRotation = AnswersDisplay.transform.localRotation;
-            ToGet.transform.localPosition = AnswerListOffset + new Vector3(count, 0, row * AnswersListPitch);
+            ToGet.transform.localPosition = AnswerListOffset + new Vector3(count + rowoffset[row], 0, row * AnswersListPitch);
             ToGet.AddComponent<ConAnagramWord>();
             ToGet.GetComponent<ConAnagramWord>().myWord = AnswersList[i];
             ToGets.Add(ToGet.GetComponent<ConAnagramWord>());
@@ -146,6 +169,12 @@ public class ConAnagram : MonoBehaviour
     
     public void TidyUp()
     {
+        AnswersList.Clear();
+        ToGets.Clear();
+        letters.Clear();
+        selected.Clear();
+        playerAnswers.Clear();
+        Selecting = false;
         killDisplays();
         TableCon.Table();
         GameState = 0;

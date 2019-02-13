@@ -9,15 +9,20 @@ public class ATableCon : MonoBehaviour
     public GameObject InGame;
     public GameObject Restart;
     public GameObject Shuffle;
+    public GameObject TableTiles;
     private Con_Tile2[] nextTiles;
     private Con_Tile2[] hintTiles;
     private Con_Tile2[] shuffleTiles;
+    private Con_Tile2[] tableTiles;
+    private TileLerper[] lerpers;
+    public Color NormalColor;
     public Color BaseTileColor;
     public Color HighLightTileColor;
 
     public void Table()
     {
         Main.SetActive(true);
+        ResetMainTable();
         InGame.SetActive(false);
         Shuffle.SetActive(false);
         Restart.SetActive(false);
@@ -25,6 +30,8 @@ public class ATableCon : MonoBehaviour
 
     public void GameStart()
     {
+        Debug.Log("Calling Game Start in Table Controller");
+        //if (Main.active) ResetMainTable();
         Main.SetActive(false);
         InGame.SetActive(true);
         Shuffle.SetActive(true);
@@ -33,6 +40,7 @@ public class ATableCon : MonoBehaviour
 
     public void EndGame()
     {
+        //if (Main.active) ResetMainTable();
         Main.SetActive(false);
         InGame.SetActive(false);
         Shuffle.SetActive(false);
@@ -50,6 +58,9 @@ public class ATableCon : MonoBehaviour
         ChangeHintColor(BaseTileColor);
         shuffleTiles = Shuffle.GetComponentsInChildren<Con_Tile2>();
         ChangeShuffleColor(BaseTileColor);
+        tableTiles = TableTiles.GetComponentsInChildren<Con_Tile2>();
+        ChangeTableColor(HighLightTileColor);
+        lerpers = TableTiles.GetComponentsInChildren<TileLerper>();
     }
 
     // Update is called once per frame
@@ -57,7 +68,16 @@ public class ATableCon : MonoBehaviour
     {
         if (gc.HoverChange)
         {
-            if (gc.NewHoverOver == 6662)
+            if (gc.NewHoverOver == 6661 && Main.active) // MainTable Display
+            {
+                AnimateMain();
+            }
+            else if (gc.OldHoverOver == 6661 && Main.active)
+            {
+                StopAnimateMain();
+            }
+
+            if (gc.NewHoverOver == 6662) // Restart / "Next"
             {
                 ChangeNextColor(HighLightTileColor);
             }
@@ -66,7 +86,7 @@ public class ATableCon : MonoBehaviour
                 ChangeNextColor(BaseTileColor);
             }
 
-            if (gc.NewHoverOver == 6664)
+            if (gc.NewHoverOver == 6664) // Hint
             {
                 ChangeHintColor(HighLightTileColor);
             }
@@ -75,7 +95,7 @@ public class ATableCon : MonoBehaviour
                 ChangeHintColor(BaseTileColor);
             }
 
-            if (gc.NewHoverOver == 6665)
+            if (gc.NewHoverOver == 6665) // Shuffle
             {
                 ChangeShuffleColor(HighLightTileColor);
             }
@@ -84,6 +104,45 @@ public class ATableCon : MonoBehaviour
                 ChangeShuffleColor(BaseTileColor);
             }
 
+        }
+    }
+
+    void AnimateMain()
+    {
+        ChangeTableColor(HighLightTileColor);
+        foreach (Con_Tile2 tile in tableTiles)
+        {
+            tile.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+        }
+        foreach (TileLerper t in lerpers)
+        {
+            t.LerpForward();
+        }
+    }
+
+    void StopAnimateMain()
+    {
+        ChangeTableColor(NormalColor);
+        foreach (Con_Tile2 tile in tableTiles)
+        {
+            tile.transform.localScale = new Vector3(1, 1, 1);
+        }
+        foreach (TileLerper t in lerpers)
+        {
+            t.LerpBackwards();
+        }
+    }
+
+    void ResetMainTable()
+    {
+        ChangeTableColor(NormalColor);
+        foreach (Con_Tile2 tile in tableTiles)
+        {
+            tile.transform.localScale = new Vector3(1, 1, 1);
+        }
+        foreach (TileLerper t in lerpers)
+        {
+            t.SetToFinish();
         }
     }
 
@@ -110,5 +169,14 @@ public class ATableCon : MonoBehaviour
             tile.ChangeTileColor(color);
         }
     }
+
+    void ChangeTableColor (Color color)
+    {
+        foreach (Con_Tile2 tile in tableTiles)
+        {
+            tile.ChangeTileColor(color);
+        }
+    }
+
 
 }
