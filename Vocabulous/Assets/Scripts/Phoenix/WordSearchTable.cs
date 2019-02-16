@@ -32,7 +32,10 @@ public class WordSearchTable : MonoBehaviour
 
         for (int i = 0; i < tableDice.Length; i++)
         {
-            diceStartPos[i] = tableDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
+            // MAX EDIT trying to convert positions from Global to Local
+            // diceStartPos[i] = tableDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
+            // diceStartPos[i] = tableDice[i].gameObject.transform.localPosition + new Vector3(0, 0.5f, 0);
+            diceStartPos[i] = tableDice[i].gameObject.transform.localPosition;
             diceStartRot[i] = tableDice[i].gameObject.transform.rotation;
             tableDice[i].killOverlayTile();
         }
@@ -57,12 +60,14 @@ public class WordSearchTable : MonoBehaviour
         {
             onStartHoverOver = true;
             SetHoverColourOnStartDice();
+            StopAllCoroutines();
             StartCoroutine(ShiftDiceToReadyPosition(3f));
         }
         if (onStartHoverOver && gameController.NewHoverOver != 4441)
         {
             onStartHoverOver = false;
             SetNormalColourOnStartDice();
+            StopAllCoroutines();
             StartCoroutine(ShiftDiceToStartPosition(3f));
         }
 
@@ -171,7 +176,8 @@ public class WordSearchTable : MonoBehaviour
         {
             foreach (ConDice dice in tableDice)
             {
-                dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
+                //dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
+                dice.transform.localPosition = Vector3.Lerp(dice.transform.localPosition, Vector3.zero, t / finishTime);
                 dice.transform.rotation = Quaternion.Lerp(dice.transform.rotation, dice.transform.parent.transform.rotation, t / finishTime);
             }
             t += Time.deltaTime;
@@ -188,7 +194,9 @@ public class WordSearchTable : MonoBehaviour
         {
             for (int i = 0; i < tableDice.Length; i++)
             {
-                tableDice[i].transform.position = Vector3.Lerp(tableDice[i].transform.position, diceStartPos[i], t / finishTime);
+                // Max Edit
+                // tableDice[i].transform.position = Vector3.Lerp(tableDice[i].transform.position, diceStartPos[i], t / finishTime);
+                tableDice[i].transform.localPosition = Vector3.Lerp(tableDice[i].transform.localPosition, diceStartPos[i], t / finishTime);
                 tableDice[i].transform.rotation = Quaternion.Lerp(tableDice[i].transform.rotation, diceStartRot[i], t / finishTime);
             }
             t += Time.deltaTime;
