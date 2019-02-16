@@ -122,15 +122,17 @@ public class CameraController : MonoBehaviour
 
         // for UIC to display play game button
         // for angles that are positive, do not + 360
-        if (currentAngle.y > (gameController.RotTranWordDice.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordDice.y + 360) + 20f && !inPlay) onWordDice = true;
+        if (currentAngle.y > 72 - 36f && currentAngle.y <= 72 + 36f && !inPlay) onWordDice = true;
         else onWordDice = false;
-        if (currentAngle.y > (gameController.RotWordSearch.y + 360) - 20f && currentAngle.y < (gameController.RotWordSearch.y + 360) + 20f && !inPlay) onWordSearch = true;
+        if (currentAngle.y > 360 - 36f && currentAngle.y <= 360 && !inPlay) onWordSearch = true; /// Word serach is @ 0 .. so need to check 2 bits
         else onWordSearch = false;
-        if (currentAngle.y > (gameController.RotTranAnagram.y + 360) - 20f && currentAngle.y < (gameController.RotTranAnagram.y + 360) + 20f && !inPlay) onAnagram = true;
+        if (currentAngle.y > 0f && currentAngle.y <= 0 + 36f && !inPlay) onWordSearch = true;
+        else onWordSearch = false;
+        if (currentAngle.y > 144 - 36f && currentAngle.y <= 144 + 36f && !inPlay) onAnagram = true;
         else onAnagram = false;
-        if (currentAngle.y > (gameController.RotTranWordrop.y + 360) - 20f && currentAngle.y < (gameController.RotTranWordrop.y + 360) + 20f && !inPlay) onWordDrop = true;
+        if (currentAngle.y > 216 - 36f && currentAngle.y <= 216 + 36f && !inPlay) onWordDrop = true;
         else onWordDrop = false;
-        if (currentAngle.y > (gameController.RotTranSolver.y) - 20f && currentAngle.y < (gameController.RotTranSolver.y) + 20f && !inPlay) onSolver = true;
+        if (currentAngle.y > 288 - 36f && currentAngle.y <= 360 && !inPlay) onSolver = true;
         else onSolver = false;
 
         // transitioning into game area
