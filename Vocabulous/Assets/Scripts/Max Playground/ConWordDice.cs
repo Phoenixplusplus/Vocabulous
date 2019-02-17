@@ -59,6 +59,9 @@ public class ConWordDice : MonoBehaviour
     [SerializeField] private int F7;
     [SerializeField] private int F8;
 
+    public FlashTemplate FGood;
+    public FlashTemplate FWarning;
+
     #endregion
 
     #region UNITY API
@@ -80,6 +83,16 @@ public class ConWordDice : MonoBehaviour
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
         //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
+
+        FGood = new FlashTemplate();
+        FGood.StartPos = new Vector2(0.5f, 0.7f);
+        FGood.FinishPos = new Vector2(0.5f, 0.7f);
+        FGood.StartWidth = 0.2f;
+        FGood.FinishWidth = 0.4f;
+        FGood.myMessage = "Hello";
+        FGood.TextColor = Color.green;
+        FGood.AnimTime = 1f;
+
     }
 
     // Update is called once per frame
@@ -127,7 +140,7 @@ public class ConWordDice : MonoBehaviour
     {
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
-        gc.player.WordDiceGameLength = 15;
+        gc.player.WordDiceGameLength = 180;
         gc.SaveStats();
 
         LoadStats();
@@ -274,11 +287,13 @@ public class ConWordDice : MonoBehaviour
                             {
                                 // ANIMATE
                                 Debug.Log("You already got that one!");
+                                gc.FM.Flash(Flashes.AlreadyGot);
                             }
                             else
                             {
                                 // ANIMATE
                                 Debug.Log("You got " + res);
+                                gc.FM.CustomFlash(FGood, "You got " + res);
                                 midGameScore(res);
                                 FoundWords.Add(res);
                                 foundListDisplay.addWord(res, "qu");

@@ -109,7 +109,7 @@ public class GC : MonoBehaviour
     public ConAnagram anagramController;
 
     [Header("Gui Managers")]
-    public FlashManager FM;
+    public FlashPanelManager FM;
      #endregion
 
 
