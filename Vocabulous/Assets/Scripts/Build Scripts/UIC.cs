@@ -16,6 +16,10 @@ public class UIC : MonoBehaviour
 
         TogglePlayButton(false);
         ToggleQuitButton(false);
+
+        // When editting, it's a pain not to have the GUI displayed ... so will "unfold" the GUI animation on start
+        //OptionsAnimation.SetBool("OptionsClicked", true);
+        //ToggleOptionsInOut();
     }
 
     void Update()

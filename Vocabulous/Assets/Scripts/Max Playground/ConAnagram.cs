@@ -363,6 +363,7 @@ public class ConAnagram : MonoBehaviour
     void EndGame()
     {
         Debug.Log("Game Over .. you got them all");
+        gc.FM.Flash("Well Done !!", 4);
         gc.player.ALevel++;
         gc.SaveStats();
         GameState = 3;

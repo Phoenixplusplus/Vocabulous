@@ -108,6 +108,8 @@ public class GC : MonoBehaviour
     public ConTypeWriter solverController;
     public ConAnagram anagramController;
 
+    [Header("Gui Managers")]
+    public FlashManager FM;
      #endregion
 
 
