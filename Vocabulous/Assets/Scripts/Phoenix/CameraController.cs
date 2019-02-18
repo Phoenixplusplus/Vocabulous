@@ -124,15 +124,13 @@ public class CameraController : MonoBehaviour
         // for angles that are positive, do not + 360
         if (currentAngle.y > 72 - 36f && currentAngle.y <= 72 + 36f && !inPlay) onWordDice = true;
         else onWordDice = false;
-        if (currentAngle.y > 360 - 36f && currentAngle.y <= 360 && !inPlay) onWordSearch = true; /// Word serach is @ 0 .. so need to check 2 bits
-        else onWordSearch = false;
-        if (currentAngle.y > 0f && currentAngle.y <= 0 + 36f && !inPlay) onWordSearch = true;
+        if (currentAngle.y <= 36 || currentAngle.y > 360 - 36f) onWordSearch = true;
         else onWordSearch = false;
         if (currentAngle.y > 144 - 36f && currentAngle.y <= 144 + 36f && !inPlay) onAnagram = true;
         else onAnagram = false;
         if (currentAngle.y > 216 - 36f && currentAngle.y <= 216 + 36f && !inPlay) onWordDrop = true;
         else onWordDrop = false;
-        if (currentAngle.y > 288 - 36f && currentAngle.y <= 360 && !inPlay) onSolver = true;
+        if (currentAngle.y > 288 - 36f && currentAngle.y <= 360 - 36f && !inPlay) onSolver = true;
         else onSolver = false;
 
         // transitioning into game area
