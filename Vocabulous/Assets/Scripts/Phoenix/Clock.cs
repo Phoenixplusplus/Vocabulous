@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class Clock : MonoBehaviour
 {
     public WordSearchController wordSearchController; // Does not need to be used
+    public FreeWordController freeWordController;
     public Text clockText;
     public bool clockOn, countDown, countUp;
     public float time, totalSeconds, minutes, seconds;
-    public string minutesStr;
 
 
     // Update is called once per frame
@@ -58,11 +58,13 @@ public class Clock : MonoBehaviour
         time = startTime;
         clockOn = true;
         if (wordSearchController != null) wordSearchController.timeUp = false;
+        if (freeWordController != null) freeWordController.timeUp = false;
     }
 
     public void StopClock()
     {
         clockOn = false;
         if (wordSearchController != null) wordSearchController.timeUp = true;
+        if (freeWordController != null) freeWordController.timeUp = true;
     }
 }

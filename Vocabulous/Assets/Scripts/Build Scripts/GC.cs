@@ -65,19 +65,19 @@ public class GC : MonoBehaviour
     public Vector3 PosWordSearch = new Vector3();
     public Vector3 PosTranWordDice = new Vector3();
     public Vector3 PosTranAnagram = new Vector3();
-    public Vector3 PosTranWordrop = new Vector3();
+    public Vector3 PosTranFreeWord = new Vector3();
     public Vector3 PosTranSolver = new Vector3();
     [Header("Game Rotations (for rotational tweaking)")]
     public Vector3 RotWordSearch = new Vector3();
     public Vector3 RotTranWordDice = new Vector3();
     public Vector3 RotTranAnagram = new Vector3();
-    public Vector3 RotTranWordrop = new Vector3();
+    public Vector3 RotTranFreeWord = new Vector3();
     public Vector3 RotTranSolver = new Vector3();
     [Header("Game Scales (for scale tweaking)")]
     public Vector3 ScaleWordSearch = new Vector3();
     public Vector3 ScaleTranWordDice = new Vector3();
     public Vector3 ScaleTranAnagram = new Vector3();
-    public Vector3 ScaleTranWordDrop = new Vector3();
+    public Vector3 ScaleTranFreeWord = new Vector3();
     public Vector3 ScaleTranSolver = new Vector3();
     [Header("Default Dice/face colours")]
     public Color ColorBase = new Color();
@@ -107,6 +107,7 @@ public class GC : MonoBehaviour
     public WordSearchController wordSearchController;
     public ConTypeWriter solverController;
     public ConAnagram anagramController;
+    public FreeWordController freeWordController;
 
     [Header("Gui Managers")]
     public FlashPanelManager FM;
@@ -195,6 +196,12 @@ public class GC : MonoBehaviour
             anagramController.transform.rotation = Quaternion.Euler(RotTranAnagram);
             anagramController.transform.localScale = ScaleTranAnagram;
         }
+        if (freeWordController != null)
+        {
+            freeWordController.transform.position = PosTranFreeWord;
+            freeWordController.transform.rotation = Quaternion.Euler(RotTranFreeWord);
+            freeWordController.transform.localScale = ScaleTranFreeWord;
+        }
     }
 
 
@@ -253,8 +260,8 @@ public class GC : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
             // Anagram
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { cameraController.RotateToGameAnagram(); }
-            // WordDrop
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { cameraController.RotateToGameWordDrop(); }
+            // FreeWord
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { cameraController.RotateToGameFreeWord(); }
             // WordSearch
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441) { cameraController.RotateToGameWordSearch(); }
         }
@@ -267,8 +274,8 @@ public class GC : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
             // Anagram
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
-            // WordDrop
-            //if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { SetGameState(34); }
+            // FreeWord
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { SetGameState(34); }
             // WordSearch
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441) { SetGameState(35); }
         }
@@ -338,7 +345,10 @@ public class GC : MonoBehaviour
             case 34:
                 {
                     // called in 'CheckClicks()'
-                    // 34 = Playing WordDrop
+                    // 34 = Playing FreeWord
+                    if (!freeWordController.isInitialised) freeWordController.Initialise();
+                    else freeWordController.Restart();
+                    DisableOtherGames(freeWordController.gameObject);
                     break;
                 }
             case 35:
@@ -358,7 +368,7 @@ public class GC : MonoBehaviour
         if (thisController != WordDice.gameObject) WordDice.gameObject.SetActive(false);
         if (thisController != wordSearchController.gameObject) wordSearchController.gameObject.SetActive(false);
         if (thisController != anagramController.gameObject) anagramController.gameObject.SetActive(false);
-        //if (thisController != wordDropController.gameObject) wordDropController.gameObject.SetActive(false);
+        if (thisController != freeWordController.gameObject) freeWordController.gameObject.SetActive(false);
         if (thisController != solverController.gameObject) solverController.gameObject.SetActive(false);
     }
 
@@ -367,7 +377,7 @@ public class GC : MonoBehaviour
         WordDice.gameObject.SetActive(true);
         wordSearchController.gameObject.SetActive(true);
         anagramController.gameObject.SetActive(true);
-        //wordDropController.gameObject.SetActive(true);
+        freeWordController.gameObject.SetActive(true);
         solverController.gameObject.SetActive(true);
     }
 
@@ -395,7 +405,8 @@ public class GC : MonoBehaviour
                 }
             case 34:
                 {
-                    // we just quit WordDrop, do something special
+                    // we just quit FreeWord, do something special
+                    freeWordController.TidyUp();
                     break;
                 }
             case 35:

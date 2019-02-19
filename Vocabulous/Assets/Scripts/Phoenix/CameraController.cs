@@ -14,12 +14,12 @@ public class CameraController : MonoBehaviour
     public float lerpSpeed = 1f;
     public bool inPlay = false;
     public bool playWordDice, playWordSearch, playAnagram, playWordDrop, playSolver,
-                onWordDice, onWordSearch, onAnagram, onWordDrop, onSolver,
-                clickedWordDice, clickedWordSearch, clickedAnagram, clickedWordDrop, clickedSolver,
+                onWordDice, onWordSearch, onAnagram, onFreeWord, onSolver,
+                clickedWordDice, clickedWordSearch, clickedAnagram, clickedFreeWord, clickedSolver,
                 quitting;
-    public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, wordDropTransform, solverTransform;
-    Vector3 wordDiceCameraTransformOrigin, wordSearchCameraTransformOrigin, anagramCameraTransformOrigin, wordDropCameraTransformOrigin, solverCameraTransformOrigin,
-            wordDiceUnrotatedForward, wordSearchUnrotatedForward, anagramUnrotatedForward, wordDropUnrotatedForward, solverUnrotatedForward;
+    public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, freeWordTransform, solverTransform;
+    Vector3 wordDiceCameraTransformOrigin, wordSearchCameraTransformOrigin, anagramCameraTransformOrigin, freeWordCameraTransformOrigin, solverCameraTransformOrigin,
+            wordDiceUnrotatedForward, wordSearchUnrotatedForward, anagramUnrotatedForward, freeWordUnrotatedForward, solverUnrotatedForward;
 
     void Start()
     {
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         wordDiceCameraTransformOrigin = wordDiceCameraTransform.position;
         wordSearchCameraTransformOrigin = wordSearchTransform.position;
         anagramCameraTransformOrigin = anagramTransform.position;
-        wordDropCameraTransformOrigin = wordDropTransform.position;
+        freeWordCameraTransformOrigin = freeWordTransform.position;
         solverCameraTransformOrigin = solverTransform.position;
 
         // set true forward direction for panning
@@ -49,10 +49,10 @@ public class CameraController : MonoBehaviour
         anagramUnrotatedForward = anagramTransform.forward;
         anagramTransform.transform.eulerAngles = at;
 
-        Vector3 wddt = wordDropTransform.transform.eulerAngles;
-        wordDropTransform.transform.eulerAngles = new Vector3(0, wordDropTransform.eulerAngles.y, wordDropTransform.eulerAngles.z);
-        wordDropUnrotatedForward = wordDropTransform.forward;
-        wordDropTransform.transform.eulerAngles = wddt;
+        Vector3 wddt = freeWordTransform.transform.eulerAngles;
+        freeWordTransform.transform.eulerAngles = new Vector3(0, freeWordTransform.eulerAngles.y, freeWordTransform.eulerAngles.z);
+        freeWordUnrotatedForward = freeWordTransform.forward;
+        freeWordTransform.transform.eulerAngles = wddt;
 
         Vector3 st = solverTransform.transform.eulerAngles;
         solverTransform.transform.eulerAngles = new Vector3(0, solverTransform.eulerAngles.y, solverTransform.eulerAngles.z);
@@ -101,8 +101,8 @@ public class CameraController : MonoBehaviour
                 }
                 if (playWordDrop)
                 {
-                    wordDropTransform.position += wordDropTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    wordDropTransform.position += wordDropUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    freeWordTransform.position += freeWordTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    freeWordTransform.position += freeWordUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
                 }
                 if (playSolver)
                 {
@@ -115,23 +115,23 @@ public class CameraController : MonoBehaviour
                 if (playWordDice) { wordDiceCameraTransform.position = wordDiceCameraTransformOrigin; }
                 if (playWordSearch) { wordSearchTransform.position = wordSearchCameraTransformOrigin; }
                 if (playAnagram) { anagramTransform.position = anagramCameraTransformOrigin; }
-                if (playWordDrop) { wordDropTransform.position = wordDropCameraTransformOrigin; }
+                if (playWordDrop) { freeWordTransform.position = freeWordCameraTransformOrigin; }
                 if (playSolver) { solverTransform.position = solverCameraTransformOrigin; }
             }
         }
 
         // for UIC to display play game button
         // for angles that are positive, do not + 360
-        if (currentAngle.y > 72 - 36f && currentAngle.y <= 72 + 36f && !inPlay) onWordDice = true;
+        if (currentAngle.y > 0 && currentAngle.y <= 90f && !inPlay) onWordDice = true;
         else onWordDice = false;
-        if (currentAngle.y <= 36 || currentAngle.y > 360 - 36f) onWordSearch = true;
+        if (currentAngle.y < 360f && currentAngle.y >= 270f) onWordSearch = true;
         else onWordSearch = false;
-        if (currentAngle.y > 144 - 36f && currentAngle.y <= 144 + 36f && !inPlay) onAnagram = true;
+        if (currentAngle.y > 90f && currentAngle.y <= 180f && !inPlay) onAnagram = true;
         else onAnagram = false;
-        if (currentAngle.y > 216 - 36f && currentAngle.y <= 216 + 36f && !inPlay) onWordDrop = true;
-        else onWordDrop = false;
-        if (currentAngle.y > 288 - 36f && currentAngle.y <= 360 - 36f && !inPlay) onSolver = true;
-        else onSolver = false;
+        if (currentAngle.y > 180f && currentAngle.y <= 270f && !inPlay) onFreeWord = true;
+        else onFreeWord = false;
+        //if (currentAngle.y > 288 - 36f && currentAngle.y <= 360 - 36f && !inPlay) onSolver = true;
+        //else onSolver = false;
 
         // transitioning into game area
         if (playWordDice)
@@ -151,8 +151,8 @@ public class CameraController : MonoBehaviour
         }
         if (playWordDrop)
         {
-            transform.position = Vector3.Lerp(transform.position, wordDropTransform.position, Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, wordDropTransform.rotation, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, freeWordTransform.position, Time.deltaTime);
+            transform.rotation = Quaternion.Lerp(transform.rotation, freeWordTransform.rotation, Time.deltaTime);
         }
         if (playSolver)
         {
@@ -205,14 +205,14 @@ public class CameraController : MonoBehaviour
                 }
             }
         }
-        if (clickedWordDrop)
+        if (clickedFreeWord)
         {
-            if (targetAngle == new Vector3(0, gameController.RotTranWordrop.y, 0))
+            if (targetAngle == new Vector3(0, gameController.RotTranFreeWord.y, 0))
             {
-                if (onWordDrop)
+                if (onFreeWord)
                 {
                     gameController.SetGameState(2);
-                    clickedWordDrop = false;
+                    clickedFreeWord = false;
                 }
             }
         }
@@ -246,10 +246,10 @@ public class CameraController : MonoBehaviour
         clickedAnagram = true;
         targetAngle = new Vector3(0, gameController.RotTranAnagram.y, 0);
     }
-    public void RotateToGameWordDrop()
+    public void RotateToGameFreeWord()
     {
-        clickedWordDrop = true;
-        targetAngle = new Vector3(0, gameController.RotTranWordrop.y, 0);
+        clickedFreeWord = true;
+        targetAngle = new Vector3(0, gameController.RotTranFreeWord.y, 0);
     }
     public void RotateToSolver()
     {
@@ -263,7 +263,7 @@ public class CameraController : MonoBehaviour
         if (onWordDice) playWordDice = true;
         if (onWordSearch) playWordSearch = true;
         if (onAnagram) playAnagram = true;
-        if (onWordDrop) playWordDrop = true;
+        if (onFreeWord) playWordDrop = true;
         if (onSolver) playSolver = true;
     }
 
@@ -279,7 +279,7 @@ public class CameraController : MonoBehaviour
         onWordDice = false;
         onWordSearch = false;
         onAnagram = false;
-        onWordDrop = false;
+        onFreeWord = false;
         onSolver = false;
     }
 }

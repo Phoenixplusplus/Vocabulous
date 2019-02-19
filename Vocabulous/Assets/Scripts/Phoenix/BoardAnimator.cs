@@ -15,10 +15,6 @@ public class BoardAnimator : MonoBehaviour
     void Start()
     {
         thisText = gameObject.GetComponent<Text>();
-        scrubOriginPos = scrubber.transform.position;
-        scrubOriginRot = scrubber.transform.rotation;
-        chalkOriginPos = chalk.transform.position;
-        chalkOriginRot = chalk.transform.rotation;
     }
 
     public void WriteWord(string str, float totalTime) { StartCoroutine(WriteWordIE(str, totalTime)); }
@@ -41,8 +37,10 @@ public class BoardAnimator : MonoBehaviour
 
     IEnumerator UseChalkIE(float initialLerpTime)
     {
+        chalkOriginPos = chalk.transform.position;
+        chalkOriginRot = chalk.transform.rotation;
         chalk.GetComponent<Scrubber>().shaking = true;
-        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.forward);
+        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.up);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -55,7 +53,7 @@ public class BoardAnimator : MonoBehaviour
         chalk.GetComponent<Scrubber>().shaking = false;
         while (t < initialLerpTime)
         {
-            chalk.transform.position = Vector3.Lerp(chalk.transform.position, chalkOriginPos + new Vector3(0, .5f, 0), t / initialLerpTime);
+            chalk.transform.position = Vector3.Lerp(chalk.transform.position, chalkOriginPos, t / initialLerpTime);
             chalk.transform.rotation = Quaternion.Lerp(chalk.transform.rotation, chalkOriginRot, t / initialLerpTime);
             t += Time.deltaTime;
             yield return null;
@@ -76,8 +74,10 @@ public class BoardAnimator : MonoBehaviour
 
     IEnumerator UseScrubberIE(float initialLerpTime)
     {
+        scrubOriginPos = scrubber.transform.position;
+        scrubOriginRot = scrubber.transform.rotation;
         scrubber.GetComponent<Scrubber>().shaking = true;
-        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.forward);
+        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.up);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -90,7 +90,7 @@ public class BoardAnimator : MonoBehaviour
         scrubber.GetComponent<Scrubber>().shaking = false;
         while (t < initialLerpTime)
         {
-            scrubber.transform.position = Vector3.Lerp(scrubber.transform.position, scrubOriginPos + new Vector3(0, .5f, 0), t / initialLerpTime);
+            scrubber.transform.position = Vector3.Lerp(scrubber.transform.position, scrubOriginPos, t / initialLerpTime);
             scrubber.transform.rotation = Quaternion.Lerp(scrubber.transform.rotation, scrubOriginRot, t / initialLerpTime);
             t += Time.deltaTime;
             yield return null;

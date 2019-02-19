@@ -12,9 +12,7 @@ public class WordSearchTable : MonoBehaviour
 
     ConDice[] tableDice, restartDice;
     Vector3[] diceStartPos = new Vector3[9];
-    Vector3[] restartDiceStartPos = new Vector3[8];
     Quaternion[] diceStartRot = new Quaternion[9];
-    Quaternion[] restartDiceStartRot = new Quaternion[8];
     public BoardAnimator[] unfoundWordObjects = new BoardAnimator[9];
     public BoardAnimator[] foundWordObjects = new BoardAnimator[9];
 
@@ -41,8 +39,6 @@ public class WordSearchTable : MonoBehaviour
         }
         for (int i = 0; i < restartDice.Length; i++)
         {
-            restartDiceStartPos[i] = restartDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
-            restartDiceStartRot[i] = restartDice[i].gameObject.transform.rotation;
             restartDice[i].killOverlayTile();
         }
 
@@ -50,6 +46,8 @@ public class WordSearchTable : MonoBehaviour
 
         unfoundWordObjects = boards.transform.GetChild(1).GetComponentsInChildren<BoardAnimator>();
         foundWordObjects = boards.transform.GetChild(0).GetComponentsInChildren<BoardAnimator>();
+
+
     }
 
     // Update is called once per frame
@@ -95,7 +93,6 @@ public class WordSearchTable : MonoBehaviour
         ToggleScrubberChalk(false);
         ToggleClock(false);
         ToggleRestartObjects(false);
-        ResetRestartDiceOrientation();
     }
 
     public void StartSetup()
@@ -105,7 +102,6 @@ public class WordSearchTable : MonoBehaviour
         ToggleScrubberChalk(false);
         ToggleClock(false);
         ToggleRestartObjects(false);
-        ResetRestartDiceOrientation();
     }
 
     public void IngameSetup()
@@ -115,7 +111,6 @@ public class WordSearchTable : MonoBehaviour
         ToggleScrubberChalk(true);
         ToggleClock(true);
         ToggleRestartObjects(false);
-        ResetRestartDiceOrientation();
     }
 
     public void RestartSetup()
@@ -124,17 +119,7 @@ public class WordSearchTable : MonoBehaviour
         ToggleBoards(true);
         ToggleClock(true);
         ToggleScrubberChalk(true);
-        ResetRestartDiceOrientation();
         StartCoroutine(ShiftDiceToRestartPosition(3f));
-    }
-
-    public void ResetRestartDiceOrientation()
-    {
-        for (int i = 0; i < restartDice.Length; i++)
-        {
-            restartDice[i].transform.position = restartDiceStartPos[i];
-            restartDice[i].transform.rotation = restartDiceStartRot[i];
-        }
     }
 
     public void SetHoverColourOnStartDice()
@@ -213,7 +198,7 @@ public class WordSearchTable : MonoBehaviour
         {
             foreach (ConDice dice in restartDice)
             {
-                dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
+                dice.transform.localPosition = Vector3.Lerp(dice.transform.localPosition, Vector3.zero, t / finishTime);
                 dice.transform.rotation = Quaternion.Lerp(dice.transform.rotation, dice.transform.parent.transform.rotation, t / finishTime);
             }
             t += Time.deltaTime;

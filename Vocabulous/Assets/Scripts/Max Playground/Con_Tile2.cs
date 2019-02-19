@@ -15,7 +15,7 @@ public class Con_Tile2 : MonoBehaviour
     public GameObject Internal; // holds the guts of the tile, rotate this to change orientation
     public Collider collider;
     private Material Text_Material;
-    private Material Body_Material;
+    public Material Body_Material;
     public GameGrid myGrid; // should we need it sometime
     private GC gc;
     public bool vertical = true;
@@ -28,6 +28,7 @@ public class Con_Tile2 : MonoBehaviour
     private Vector3 VB = new Vector3(0, -180, 0);
     private Vector3 HF = new Vector3(90, 0, 0);
     private Vector3 HB = new Vector3(-90, -180, 0);
+    public bool isFreeWord;
 
     void Awake()
     {
@@ -42,23 +43,43 @@ public class Con_Tile2 : MonoBehaviour
     // Start is called before the first frame update
     //void Start()
     //{
-        
+
     //    // TESTING
     //    // Roll(1f);
     //    //SetID(54, 77);
     //}
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-    //    // TESTING
-    //    //if (oldforw != forward || oldVert != vertical)
-    //    //{
-    //    //    FlipTo(vertical, forward);
-    //    //    oldforw = forward;
-    //    //    oldVert = vertical;
-    //    //}
-    //}
+    // Update is called once per frame
+    void Update()
+    {
+        // TESTING
+        //if (oldforw != forward || oldVert != vertical)
+        //{
+        //    FlipTo(vertical, forward);
+        //    oldforw = forward;
+        //    oldVert = vertical;
+        //}
+
+        if (myGrid != null && isFreeWord)
+        {
+            if (myGrid.legals.Contains(TC_front.ID))
+            {
+                Text_Material.color = gc.ColorLegal;
+            }
+            else if (myGrid.path.Contains(TC_front.ID))
+            {
+                Text_Material.color = gc.ColorSelected;
+            }
+            else if (!myGrid.highlights.Contains(TC_front.ID))
+            {
+                Text_Material.color = gc.ColorBase;
+            }
+            else
+            {
+                Text_Material.color = gc.ColorHighlight;
+            }
+        }
+    }
 
     void OnDestroy()
     {
@@ -135,5 +156,10 @@ public class Con_Tile2 : MonoBehaviour
         TC_back.SetBothID(backID);
     }
 
-
+    public void killOverlayTile()
+    {
+        Destroy(TC_front);
+        Destroy(TC_back);
+        Destroy(GetComponent("OverlayTile"));
+    }
 }

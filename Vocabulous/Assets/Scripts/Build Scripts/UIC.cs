@@ -26,7 +26,7 @@ public class UIC : MonoBehaviour
     {
         if (!cameraController.inPlay)
         {
-            if (cameraController.onWordDice || cameraController.onWordSearch || cameraController.onAnagram || cameraController.onWordDrop || cameraController.onSolver) TogglePlayButton(true);
+            if (cameraController.onWordDice || cameraController.onWordSearch || cameraController.onAnagram || cameraController.onFreeWord || cameraController.onSolver) TogglePlayButton(true);
             else TogglePlayButton(false);
         }
     }
