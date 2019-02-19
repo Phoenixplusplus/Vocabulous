@@ -6,7 +6,9 @@ public class Flash_Tester : MonoBehaviour
 {
     public bool TESTME;
     public FlashPanelManager FM;
-
+    [SerializeField]
+    Vector2 MouseCoords = new Vector2();
+    [Header("Flash Template Creator")]
     public bool SingleLerp;
 
     public Vector2 StartPos;
@@ -36,6 +38,9 @@ public class Flash_Tester : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MouseCoords.x = Input.mousePosition.x / Screen.width;
+        MouseCoords.y = Input.mousePosition.y / Screen.height;
+
         if (TESTME)
         {
             FlashTemplate FT = new FlashTemplate();
