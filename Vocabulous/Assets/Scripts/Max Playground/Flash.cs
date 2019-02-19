@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // thanks to http://www.gizma.com/easing/ (Feb 2019)
-public enum Tween { LinearUp, LinearDown, ParametricUp, ParametricDown, QuadUp, QuadDown, QuinUp, QuinDown, SineUp, SineDown,BounceUp, BounceDown, SinePop};
+public enum Tween { LinearUp, LinearDown, ParametricUp, ParametricDown, QuadUp, QuadDown, QuinUp, QuinDown, SineUp, SineDown,BounceUp, BounceDown, SinePop, BouncePop};
 
 public class FlashTemplate
 {
+    public bool SingleLerp;
+
     public Vector2 StartPos;
     public Vector2 MiddlePos;
     public Vector2 FinishPos;
@@ -31,6 +33,35 @@ public class FlashTemplate
 
     public float AnimTime;
     public float MiddleTimeRatio;
+
+    public FlashTemplate() // default constructor
+    {
+        SingleLerp = true;
+
+        StartPos = new Vector2(0.5f,0.5f);
+        MiddlePos = new Vector2(0.5f, 0.5f);
+        FinishPos = new Vector2(0.5f, 0.5f);
+
+        StartAlpha = 1f;
+        MiddleAlpha = 1f;
+        FinishAlpha = 1f;
+
+        StartHeight = 0.05f;
+        MiddleHeight = 0.05f;
+        FinishHeight = 0.05f;
+
+        myMessage1 = "Default Message 1";
+        myMessage2 = "Default Message 2";
+
+        TextColor1 = Color.red;
+        TextColor2 = Color.green;
+
+        tween1 = Tween.LinearUp;
+        tween2 = Tween.LinearUp;
+
+        AnimTime = 2f;
+        MiddleTimeRatio = 1f;
+    }
 }
 
 public class Flash : MonoBehaviour
@@ -39,18 +70,22 @@ public class Flash : MonoBehaviour
     public Text myText;
     public FlashTemplate FT;
 
-    private bool doubleLerp;
     private bool firstLerp = true;
     private float _time = 0;
     private float X1;
     private float Y1;
     private float X2;
     private float Y2;
+    private bool moving;
     private float HS;
     private float HMod;
+    private bool scaling;
     private float AS;
     private float AMod;
+    private bool Alphachange;
     private float TimeMod;
+    private Color CurrCol;
+    private Tween currTween;
 
     public void ConfigureAndGoGo (FlashTemplate myTemplate)
     {
@@ -77,20 +112,18 @@ public class Flash : MonoBehaviour
 
     void SetMeUp()
     {
-        if (FT.MiddlePos != null)
-        {
-            doubleLerp = true;
-        }
         if (firstLerp)
         {
-            if (doubleLerp)
+            CurrCol = FT.TextColor1;
+            if (!FT.SingleLerp) // A Double Lerp, middle values should be populated
             {
                 X1 = Screen.width * FT.StartPos.x;
                 Y1 = Screen.height * FT.StartPos.y;
                 X2 = Screen.width * FT.MiddlePos.x;
                 Y2 = Screen.height * FT.MiddlePos.y;
+
                 myText.text = FT.myMessage1;
-                if (FT.StartHeight < 0)
+                if (FT.StartHeight < 1)
                 {
                     HS = Screen.height * FT.StartHeight;
                     HMod = Screen.height * (FT.MiddleHeight - FT.StartHeight);
@@ -103,31 +136,66 @@ public class Flash : MonoBehaviour
                 AS = FT.StartAlpha;
                 AMod = FT.MiddleAlpha - FT.StartAlpha;
                 _time = 0;
-                TimeMod = FT.AnimTime * FT.MiddleTimeRatio;
+                TimeMod = 1f / (FT.AnimTime * FT.MiddleTimeRatio);
+
+
             }
-            else
+            else // single lerp
             {
-                X1 = Screen.width * FT.MiddlePos.x;
-                Y1 = Screen.height * FT.MiddlePos.y;
+                X1 = Screen.width * FT.StartPos.x;
+                Y1 = Screen.height * FT.StartPos.y;
                 X2 = Screen.width * FT.FinishPos.x;
                 Y2 = Screen.height * FT.FinishPos.y;
-                myText.text = FT.myMessage2;
-                if (FT.MiddleHeight < 0)
+                myText.text = FT.myMessage1;
+                if (FT.StartHeight < 1)
                 {
-                    HS = Screen.height * FT.MiddleHeight;
-                    HMod = Screen.height * (FT.FinishHeight - FT.MiddleHeight);
+                    HS = Screen.height * FT.StartHeight;
+                    HMod = Screen.height * (FT.FinishHeight - FT.StartHeight);
                 }
                 else
                 {
-                    HS = FT.MiddleHeight;
-                    HMod = FT.FinishHeight - FT.MiddleHeight;
+                    HS = FT.StartHeight;
+                    HMod = FT.FinishHeight - FT.StartHeight;
                 }
-                AS = FT.MiddleAlpha;
-                AMod = FT.FinishAlpha - FT.MiddleAlpha;
+                AS = FT.StartAlpha;
+                AMod = FT.FinishAlpha - FT.StartAlpha;
                 _time = 0;
-                TimeMod = FT.AnimTime * (1f - FT.MiddleTimeRatio);
+                TimeMod = 1 / FT.AnimTime;
             }
+            currTween = FT.tween1;
         }
+        else // Only get here if NOT first Lerp .. so second by default
+        {
+            CurrCol = FT.TextColor2;
+            currTween = FT.tween2;
+            myText.text = FT.myMessage2;
+            X1 = Screen.width * FT.MiddlePos.x;
+            Y1 = Screen.height * FT.MiddlePos.y;
+            X2 = Screen.width * FT.FinishPos.x;
+            Y2 = Screen.height * FT.FinishPos.y;
+            if (FT.MiddleHeight < 1)
+            {
+                HS = Screen.height * FT.MiddleHeight;
+                HMod = Screen.height * (FT.FinishHeight - FT.MiddleHeight);
+            }
+            else
+            {
+                HS = FT.MiddleHeight;
+                HMod = FT.FinishHeight - FT.MiddleHeight;
+            }
+            AS = FT.MiddleAlpha;
+            AMod = FT.FinishAlpha - FT.MiddleAlpha;
+            _time = 0;
+            TimeMod = 1f / (FT.AnimTime * (1f - FT.MiddleTimeRatio));
+
+            
+        }
+        moving = (X1 != X2 || Y1 != Y2);
+        scaling = (HMod != 0);
+        Alphachange = (AMod != 0);
+
+        InitialSet();
+
     }
 
 
@@ -135,12 +203,74 @@ public class Flash : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-    //    Vector3 Pos = Vector3.Lerp(new Vector3(SX, SY, 0), new Vector3(FX, FY, 0), _time);
-    //    myRect.SetPositionAndRotation(Pos, Quaternion.identity);
-    //    myRect.sizeDelta = new Vector2((SW + (SMod * _time)), myRect.sizeDelta.y);
-    ////    _time += Time.deltaTime / AnimTime;
-    //    if (_time >= 1) Destroy(gameObject);
+        setTo(_time, currTween);
+        _time += Time.deltaTime * TimeMod;
+        if (_time >= 1)
+        {
+            if (firstLerp && !FT.SingleLerp)
+            {
+                firstLerp = false;
+                SetMeUp();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
     }
+
+    void InitialSet()
+    {
+        myRect.SetPositionAndRotation(new Vector3(X1, Y1, 0), Quaternion.identity);
+        myText.fontSize = (int)HS;
+        Color nCol = CurrCol;
+        nCol.a = AS;
+        myText.color = nCol;
+    }
+
+    void setTo(float t, Tween tween)
+    {
+        float tmod = DoTween(tween,t);
+        if (moving)
+        {
+            Vector3 Pos = Vector3.Lerp(new Vector3(X1, Y1, 0), new Vector3(X2, Y2, 0), tmod);
+            myRect.SetPositionAndRotation(Pos, Quaternion.identity);
+        }
+        if (scaling)
+        {
+            myText.fontSize = (int)(HS + (HMod * tmod));
+        }
+        if (Alphachange)
+        {
+            Color nCol = myText.color;
+            nCol.a = (AS + (AMod * tmod));
+            myText.color = nCol;
+        }
+    }
+
+    private float DoTween (Tween tween,float t)
+    {
+        // LinearUp, LinearDown, ParametricUp, ParametricDown, QuadUp, QuadDown, QuinUp, QuinDown, SineUp, SineDown,BounceUp, BounceDown, SinePop
+        switch (tween)
+        {
+            case Tween.LinearUp: return LinearUp(t);
+            case Tween.LinearDown: return LinearDown(t);
+            case Tween.ParametricUp: return ParametricUp(t);
+            case Tween.ParametricDown: return ParametricDown(t);
+            case Tween.QuadUp: return QuadUp(t);
+            case Tween.QuadDown: return QuadDown(t);
+            case Tween.QuinUp: return QuinUp(t);
+            case Tween.QuinDown: return QuinDown(t);
+            case Tween.SineUp: return SineUp(t);
+            case Tween.SineDown: return SineDown(t);
+            case Tween.SinePop: return SinePop(t);
+            case Tween.BounceUp: return BounceUp(t);
+            case Tween.BounceDown: return BounceDown(t);
+            case Tween.BouncePop: return BouncePop(t);
+            default: return t;      
+        }
+    }
+
 
     // TWEENING FUNCTIONS
     private float LinearUp(float t)

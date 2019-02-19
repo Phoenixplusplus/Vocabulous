@@ -70,14 +70,14 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 1ec1fd61486139e47aaa62375772ff93, type: 3}
     m_FontSize: 150
     m_FontStyle: 0
-    m_BestFit: 1
+    m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
     m_LineSpacing: 5000
   m_Text: Hello
 --- !u!114 &9168682740665905846
@@ -92,12 +92,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419711764502fa34c92e554c9e58e8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartPos: {x: 0.5, y: 0.5}
-  FinishPos: {x: 0.7, y: 0.7}
-  StartWidth: 0.1
-  FinishWidth: 0.3
-  myText: {fileID: 6694875642890039818}
   myRect: {fileID: 6694875642890039819}
-  myMessage: TBA
-  TextColor: {r: 1, g: 0.99416506, b: 0, a: 1}
-  AnimTime: 1
+  myText: {fileID: 6694875642890039818}

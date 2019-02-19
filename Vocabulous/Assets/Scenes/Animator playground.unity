@@ -445,27 +445,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TESTME: 0
-  FM: {fileID: 0}
-  StartPos: {x: 0, y: 0}
-  MiddlePos: {x: 0, y: 0}
-  FinishPos: {x: 0, y: 0}
-  StartWidth: 0
-  MiddleWidth: 0
-  FinishWidth: 0
-  StartAlpha: 0
-  MiddleAlpha: 0
-  FinishAlpha: 0
-  MiddleHeight: 0
-  StartHeight: 0
-  FinishHeight: 0
-  myMessage1: 
-  myMessage2: 
-  TextColor1: {r: 0, g: 0, b: 0, a: 0}
-  TextColor2: {r: 0, g: 0, b: 0, a: 0}
-  tween1: 0
-  tween2: 0
-  AnimTime: 0
-  MiddleRatio: 0
+  FM: {fileID: 1114920811}
+  SingleLerp: 0
+  StartPos: {x: 0.2, y: 0.2}
+  MiddlePos: {x: 0.5, y: 0.7}
+  FinishPos: {x: 0.8, y: 0.5}
+  StartAlpha: 0.25
+  MiddleAlpha: 1
+  FinishAlpha: 0.5
+  StartHeight: 25
+  MiddleHeight: 95
+  FinishHeight: 30
+  myMessage1: UP
+  myMessage2: DOWN
+  TextColor1: {r: 0, g: 1, b: 0.16215563, a: 1}
+  TextColor2: {r: 1, g: 0.058096163, b: 0, a: 1}
+  tween1: 10
+  tween2: 10
+  AnimTime: 4
+  MiddleTimeRatio: 0.5
 --- !u!4 &1616470256
 Transform:
   m_ObjectHideFlags: 0

@@ -7,6 +7,8 @@ public class Flash_Tester : MonoBehaviour
     public bool TESTME;
     public FlashPanelManager FM;
 
+    public bool SingleLerp;
+
     public Vector2 StartPos;
     public Vector2 MiddlePos;
     public Vector2 FinishPos;
@@ -15,8 +17,8 @@ public class Flash_Tester : MonoBehaviour
     public float MiddleAlpha;
     public float FinishAlpha;
 
-    public float MiddleHeight;
     public float StartHeight;
+    public float MiddleHeight;
     public float FinishHeight;
 
     public string myMessage1;
@@ -38,7 +40,31 @@ public class Flash_Tester : MonoBehaviour
         {
             FlashTemplate FT = new FlashTemplate();
             {
+                FT.SingleLerp = SingleLerp;
 
+                FT.StartPos = StartPos;
+                FT.MiddlePos = MiddlePos;
+                FT.FinishPos = FinishPos;
+
+                FT.StartAlpha = StartAlpha;
+                FT.MiddleAlpha = MiddleAlpha;
+                FT.FinishAlpha = FinishAlpha;
+
+                FT.StartHeight = StartHeight;
+                FT.MiddleHeight = MiddleHeight;
+                FT.FinishHeight = FinishHeight;
+
+                FT.myMessage1 = myMessage1;
+                FT.myMessage2 = myMessage2;
+
+                FT.TextColor1 = TextColor1;
+                FT.TextColor2 = TextColor2;
+
+                FT.tween1 = tween1;
+                FT.tween2 = tween2;
+
+                FT.AnimTime = AnimTime;
+                FT.MiddleTimeRatio = MiddleTimeRatio;
             }
             FM.CustomFlash(FT);
             TESTME = false;
