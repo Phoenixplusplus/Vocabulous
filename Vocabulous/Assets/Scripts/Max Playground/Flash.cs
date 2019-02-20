@@ -62,6 +62,31 @@ public class FlashTemplate
         AnimTime = 2f;
         MiddleTimeRatio = 1f;
     }
+
+    public FlashTemplate Copy ()
+    {
+        FlashTemplate Ret = new FlashTemplate();
+        Ret.SingleLerp = SingleLerp;
+        Ret.StartPos = StartPos;
+        Ret.MiddlePos = MiddlePos;
+        Ret.FinishPos = FinishPos;
+        Ret.StartAlpha = StartAlpha;
+        Ret.MiddleAlpha = MiddleAlpha;
+        Ret.FinishAlpha = FinishAlpha;
+        Ret.StartHeight = StartHeight;
+        Ret.MiddleHeight = MiddleHeight;
+        Ret.FinishHeight = FinishHeight;
+        Ret.myMessage1 = myMessage1;
+        Ret.myMessage2 = myMessage2;
+        Ret.TextColor1 = TextColor1;
+        Ret.TextColor2 = TextColor2;
+        Ret.tween1 = tween1;
+        Ret.tween2 = tween2;
+        Ret.AnimTime = AnimTime;
+        Ret.MiddleTimeRatio = MiddleTimeRatio;
+        return Ret;
+    }
+
 }
 
 public class Flash : MonoBehaviour
@@ -97,17 +122,17 @@ public class Flash : MonoBehaviour
     public void ConfigureAndGoGo(FlashTemplate myTemplate, string message1)
     {
         FT = myTemplate;
+        FT.myMessage1 = message1;
         firstLerp = true;
         SetMeUp();
-        FT.myMessage1 = message1;
     }
     public void ConfigureAndGoGo(FlashTemplate myTemplate, string message1, string message2)
     {
         FT = myTemplate;
-        firstLerp = true;
-        SetMeUp();
         FT.myMessage1 = message1;
         FT.myMessage2 = message2;
+        firstLerp = true;
+        SetMeUp();
     }
 
     void SetMeUp()

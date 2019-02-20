@@ -306,7 +306,7 @@ public class ConAnagram : MonoBehaviour
                         {
                             // ANIMATE - You've already got that one
                             Debug.Log("Already have that one");
-                            gc.FM.Flash(Flashes.AlreadyGot);
+                           // gc.FM.Flash(Flashes.AlreadyGot);
                         }
                     }
                     else

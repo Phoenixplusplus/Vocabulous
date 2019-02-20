@@ -59,8 +59,11 @@ public class ConWordDice : MonoBehaviour
     [SerializeField] private int F7;
     [SerializeField] private int F8;
 
-    public FlashTemplate FGood;
-    public FlashTemplate FWarning;
+    public FlashTemplate FindGood;
+    public FlashTemplate FindBad;
+    public FlashTemplate FindSame;
+    public FlashTemplate Reward;
+    public FlashTemplate NewGame;
 
     #endregion
 
@@ -84,14 +87,67 @@ public class ConWordDice : MonoBehaviour
         //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
 
-        //FGood = new FlashTemplate();
-        //FGood.StartPos = new Vector2(0.5f, 0.7f);
-        //FGood.FinishPos = new Vector2(0.5f, 0.7f);
-        //FGood.StartWidth = 0.2f;
-        //FGood.FinishWidth = 0.4f;
-        //FGood.myMessage = "Hello";
-        //FGood.TextColor = Color.green;
-        //FGood.AnimTime = 1f;
+        // Configure on-screen Flashes
+        FindGood = new FlashTemplate();
+        FindGood.SingleLerp = false;
+
+        FindGood.StartPos = new Vector2(0.46f, 0.75f);
+        FindGood.MiddlePos = new Vector2(0.66f, 0.9f);
+        FindGood.FinishPos = new Vector2(0.98f, 0.98f);
+
+        FindGood.StartAlpha = 1f;
+        FindGood.MiddleAlpha = 0.5f;
+        FindGood.FinishAlpha = 1f;
+
+        FindGood.StartHeight = 0.1f;
+        FindGood.MiddleHeight = 0.05f;
+        FindGood.FinishHeight = 0.05f;
+
+        FindGood.myMessage1 = "You Found XXX";
+        FindGood.myMessage2 = "+1 Pt";
+
+        FindGood.TextColor1 = Color.red;
+        FindGood.TextColor2 = Color.green;
+
+        FindGood.tween1 = Tween.BounceUp;
+        FindGood.tween2 = Tween.LinearUp;
+
+        FindGood.AnimTime = 3f;
+        FindGood.MiddleTimeRatio = 0.66f;
+
+        FindBad = FindGood.Copy();
+        FindBad.SingleLerp = true;
+        FindBad.FinishPos = new Vector2(0.2f, 0.95f);
+        FindBad.TextColor1 = Color.red;
+        FindBad.FinishAlpha = 0.1f;
+        FindBad.tween1 = Tween.LinearUp;
+        FindBad.AnimTime = 1.5f;
+
+        FindSame = FindBad.Copy();
+        FindSame.FinishPos = new Vector2(0.5f, 0.95f);
+        FindSame.TextColor1 = Color.yellow;
+
+        Reward = FindSame.Copy();
+        Reward.SingleLerp = false;
+        Reward.StartPos = new Vector2(0.4f, 0.4f);
+        Reward.FinishPos = Reward.MiddlePos = new Vector2(0.65f, 0.2f);
+        Reward.TextColor1 = Color.green;
+        Reward.StartHeight = 0.06f;
+        Reward.FinishHeight = Reward.MiddleHeight = 0.09f;
+        Reward.StartAlpha = Reward.MiddleAlpha = Reward.FinishAlpha = 1f;
+        Reward.AnimTime = 3.5f;
+        Reward.MiddleTimeRatio = 6f / 7f;
+        Reward.tween1 = Tween.ParametricUp;
+
+        NewGame = Reward.Copy();
+        NewGame.SingleLerp = true;
+        NewGame.StartPos = Reward.FinishPos;
+        NewGame.FinishPos = new Vector2(0.8f, 0.66f);
+        NewGame.myMessage1 = "New Game ?";
+        NewGame.tween1 = Tween.LinearUp;
+        NewGame.StartHeight = NewGame.FinishHeight = 0.09f;
+
+
 
     }
 
@@ -140,7 +196,7 @@ public class ConWordDice : MonoBehaviour
     {
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
-        gc.player.WordDiceGameLength = 180;
+        gc.player.WordDiceGameLength = 15;
         gc.SaveStats();
 
         LoadStats();
@@ -287,25 +343,23 @@ public class ConWordDice : MonoBehaviour
                             {
                                 // ANIMATE
                                 Debug.Log("You already got that one!");
-                                //gc.FM.Flash(Flashes.AlreadyGot);
+                                gc.FM.CustomFlash(FindSame, "Already found " + res);
                             }
                             else
                             {
                                 // ANIMATE
                                 Debug.Log("You got " + res);
-                                //gc.FM.CustomFlash(FGood, "You got " + res);
+                                string score = GetWordScore(res).ToString();
+                                gc.FM.CustomFlash(FindGood, "Found " + res, "+" + score + " Pt");
                                 midGameScore(res);
                                 FoundWords.Add(res);
                                 foundListDisplay.addWord(res, "qu");
-                                //GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
-                                //FoundList.transform.localRotation = Quaternion.identity;
-                                //newWord.transform.parent = FoundList.transform;
-                                //FoundList.transform.localRotation = transform.localRotation; // phoenix edi
                             }
                         }
                         else
                         {
                             // ANIMATE
+                            gc.FM.CustomFlash(FindBad, "Don't know " + res);
                             Debug.Log("Sorry, " + res + " is not in our Dictionary");
                         }
                     }
@@ -385,74 +439,71 @@ public class ConWordDice : MonoBehaviour
 
     private void midGameScore(string word)
     {
+        int score = GetWordScore(word);
+        CurrScore++;
+
+        int len = word.Length;
+        if (word.Contains("qu")) len--;
+        if (len > Longest)
+        {
+            // ANIMATE New Longest Word
+            Debug.Log("New Longest Word : "+len.ToString());
+            gc.FM.CustomFlash(Reward, "New Longest Word !!");
+            Longest = len;
+        }
+    }
+
+    private int GetWordScore(string word)
+    {
         word = word.ToLower();
         int len = word.Length;
         if (word.Contains("qu")) len--;
         switch (len)
         {
             case 3:
-                CurrScore++;
-                F3++;
-                Debug.Log("+1 Score");
-                // ANIMATE +1 score
-                break;
+                return 1;
             case 4:
-                CurrScore++;
-                F4++;
-                Debug.Log("+1 Score");
-                // ANIMATE +1 score
-                break;
+                return 1;
             case 5:
-                CurrScore += 2;
-                F5++;
-                Debug.Log("+2 Score");
-                // ANIMATE +2 Score
-                break;
+                return 2;
             case 6:
-                CurrScore += 3;
-                F6++;
-                Debug.Log("+3 Score");
-                // ANIMATE +3 Score
-                break;
+                return 3;
             case 7:
-                CurrScore += 5;
-                F7++;
-                Debug.Log("+5 Score");
-                // ANIMATE +5 Score
-                break;
+                return 5;
             default:
-                F8++;
-                CurrScore += 10;
-                Debug.Log("+10 Score");
-                // ANIMATE +10 Score
-                break;
-        }
-        if (len > Longest)
-        {
-            // ANIMATE New Longest Word
-            Debug.Log("New Longest Word : "+len.ToString());
-            Longest = len;
+                return 9;
         }
     }
 
     private void endGameScore()
     {
+        int count = 0;
+        gc.FM.CustomFlash(Reward, "Time Up", "Time Up");
+        count++;
+
         if (FoundWords.Count > AverageWords)
         {
             // ANIMATE .. Average words found improved
             Debug.Log("Average Words Improved : "+ AverageWords.ToString()+" -> "+FoundWords.Count.ToString());
+            gc.FM.CustomFlash(Reward, "Average Words Improved !", "Average Words Improved !", count * 2.5f);
+            count++;
         }
         if (CurrScore > AverageScore)
         {
             // ANIMATE .. Average Score Improved
             Debug.Log("Average Score Improved : "+ AverageScore.ToString()+" -> "+CurrScore.ToString());
+            gc.FM.CustomFlash(Reward, "Average Score Improved !", "Average Score Improved !", count * 2.5f);
+            count++;
         }
         if (CurrScore > HighScore)
         {
             // ANIMATE .. New High Score
             Debug.Log("New High Score : " + CurrScore.ToString());
+            gc.FM.CustomFlash(Reward, "New High Score !", "New High Score !", count * 2.5f);
+            count++;
             HighScore = CurrScore;
         }
+        gc.FM.CustomFlash(NewGame, count * 2.5f);
         AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / (GamesPlayed + 1);
         AverageScore = ((AverageScore * GamesPlayed) + CurrScore) / (GamesPlayed + 1);
         GamesPlayed++;
