@@ -84,14 +84,14 @@ public class ConWordDice : MonoBehaviour
         //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
 
-        FGood = new FlashTemplate();
-        FGood.StartPos = new Vector2(0.5f, 0.7f);
-        FGood.FinishPos = new Vector2(0.5f, 0.7f);
-        FGood.StartWidth = 0.2f;
-        FGood.FinishWidth = 0.4f;
-        FGood.myMessage = "Hello";
-        FGood.TextColor = Color.green;
-        FGood.AnimTime = 1f;
+        //FGood = new FlashTemplate();
+        //FGood.StartPos = new Vector2(0.5f, 0.7f);
+        //FGood.FinishPos = new Vector2(0.5f, 0.7f);
+        //FGood.StartWidth = 0.2f;
+        //FGood.FinishWidth = 0.4f;
+        //FGood.myMessage = "Hello";
+        //FGood.TextColor = Color.green;
+        //FGood.AnimTime = 1f;
 
     }
 
@@ -287,13 +287,13 @@ public class ConWordDice : MonoBehaviour
                             {
                                 // ANIMATE
                                 Debug.Log("You already got that one!");
-                                gc.FM.Flash(Flashes.AlreadyGot);
+                                //gc.FM.Flash(Flashes.AlreadyGot);
                             }
                             else
                             {
                                 // ANIMATE
                                 Debug.Log("You got " + res);
-                                gc.FM.CustomFlash(FGood, "You got " + res);
+                                //gc.FM.CustomFlash(FGood, "You got " + res);
                                 midGameScore(res);
                                 FoundWords.Add(res);
                                 foundListDisplay.addWord(res, "qu");
