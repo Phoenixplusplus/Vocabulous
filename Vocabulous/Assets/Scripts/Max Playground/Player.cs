@@ -12,11 +12,12 @@ public struct PlayerStats
 
     public int WordDiceSize;       // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
     public int WordDiceGameLength; // 30,60,120,180 seconds
-    public int WDPlays;
-    public int WDHighscore;
-    public int WDLongest;
-    public float WDAverageScore;
-    public float WDAverageWords;
+    public int WDPlays;             // STATS
+    public int WDHighscore;         // GUI & STATS
+    public int WDLongest;           // GUI & STATS
+    public float WDAverageScore;    // GUI & STATS
+    public int WDMostWords;         // GUI & STATS
+    public float WDAverageWords;    // GUI & STATS
 
     public int WordSearchSize;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20
     public int WordSearchGameLength;
@@ -59,6 +60,7 @@ public class PlayerManager
             ret.WDHighscore = PlayerPrefs.GetInt("WDHighscore");
             ret.WDLongest = PlayerPrefs.GetInt("WDLongest");
             ret.WDAverageScore = PlayerPrefs.GetFloat("WDAverageScore");
+            ret.WDMostWords = PlayerPrefs.GetInt("WDMostWords");
             ret.WDAverageWords = PlayerPrefs.GetFloat("WDAverageWords");
 
             ret.WordSearchSize = PlayerPrefs.GetInt("WordSearchSize");
@@ -92,6 +94,7 @@ public class PlayerManager
         PlayerPrefs.SetInt("WDHighscore", player.WDHighscore);
         PlayerPrefs.SetInt("WDLongest", player.WDLongest);
         PlayerPrefs.SetFloat("WDAverageScore", player.WDAverageScore);
+        PlayerPrefs.SetInt("WDMostWords", player.WDMostWords);
         PlayerPrefs.SetFloat("WDAverageWords", player.WDAverageWords);
 
         PlayerPrefs.SetInt("WordSearchSize", player.WordSearchSize);
@@ -125,6 +128,7 @@ public class PlayerManager
         ret.WDHighscore = 0;
         ret.WDLongest = 0;
         ret.WDAverageScore = 0.0f;
+        ret.WDMostWords = 0;
         ret.WDAverageWords = 0.0f;
 
         ret.WordSearchSize = 10;     // 10 = 10x10, 15 = 15x15 (default), 20 = 20x20

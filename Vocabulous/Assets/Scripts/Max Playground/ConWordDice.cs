@@ -45,19 +45,15 @@ public class ConWordDice : MonoBehaviour
         "L","R","Y","V","E","D",
         "S","T","Y","D","I","T",
         "P","S","K","F","F","A" };
+    public bool ShortGame = false;
     [Header("Player Stats & Score")]
     [SerializeField] private int CurrScore;
     [SerializeField] private int GamesPlayed;
     [SerializeField] private int HighScore;
     [SerializeField] private float AverageScore;
+    [SerializeField] private int MostWords;
     [SerializeField] private float AverageWords;
     [SerializeField] private int Longest;
-    [SerializeField] private int F3;
-    [SerializeField] private int F4;
-    [SerializeField] private int F5;
-    [SerializeField] private int F6;
-    [SerializeField] private int F7;
-    [SerializeField] private int F8;
 
     public FlashTemplate FindGood;
     public FlashTemplate FindBad;
@@ -88,33 +84,29 @@ public class ConWordDice : MonoBehaviour
         myMenu.OnSceneTable();
 
         // Configure on-screen Flashes
-        FindGood = new FlashTemplate();
+        // 2 Part Lerp ... "You Got WORD" followed by Score Addition
+        // goes mid screen -> mid right upper -> top right
+        FindGood = new FlashTemplate(); 
         FindGood.SingleLerp = false;
-
         FindGood.StartPos = new Vector2(0.46f, 0.75f);
         FindGood.MiddlePos = new Vector2(0.66f, 0.9f);
         FindGood.FinishPos = new Vector2(0.98f, 0.98f);
-
         FindGood.StartAlpha = 1f;
         FindGood.MiddleAlpha = 0.5f;
         FindGood.FinishAlpha = 1f;
-
         FindGood.StartHeight = 0.1f;
         FindGood.MiddleHeight = 0.05f;
         FindGood.FinishHeight = 0.05f;
-
         FindGood.myMessage1 = "You Found XXX";
         FindGood.myMessage2 = "+1 Pt";
-
         FindGood.TextColor1 = Color.red;
         FindGood.TextColor2 = Color.green;
-
         FindGood.tween1 = Tween.BounceUp;
         FindGood.tween2 = Tween.LinearUp;
-
         FindGood.AnimTime = 3f;
         FindGood.MiddleTimeRatio = 0.66f;
 
+        // Un recognised word .. mid screen -> top left (and fade out) in Red
         FindBad = FindGood.Copy();
         FindBad.SingleLerp = true;
         FindBad.FinishPos = new Vector2(0.2f, 0.95f);
@@ -123,10 +115,13 @@ public class ConWordDice : MonoBehaviour
         FindBad.tween1 = Tween.LinearUp;
         FindBad.AnimTime = 1.5f;
 
+        // Same word (twice) .. mid screen -> mid top in Yellow
         FindSame = FindBad.Copy();
         FindSame.FinishPos = new Vector2(0.5f, 0.95f);
         FindSame.TextColor1 = Color.yellow;
 
+        // Reward (and End Game) Flash ... mid left -> mid bottom right in Green
+        // fires for 3.5 seconds, stationary for the last 0.5 seconds
         Reward = FindSame.Copy();
         Reward.SingleLerp = false;
         Reward.StartPos = new Vector2(0.4f, 0.4f);
@@ -139,15 +134,21 @@ public class ConWordDice : MonoBehaviour
         Reward.MiddleTimeRatio = 6f / 7f;
         Reward.tween1 = Tween.ParametricUp;
 
+        // New Game .. from end of "Reward" to screenposition of "New" game dice
+        // 4 seconds with the last 1 being a stationary fadeout
         NewGame = Reward.Copy();
-        NewGame.SingleLerp = true;
+        NewGame.SingleLerp = false;
         NewGame.StartPos = Reward.FinishPos;
-        NewGame.FinishPos = new Vector2(0.8f, 0.66f);
-        NewGame.myMessage1 = "New Game ?";
-        NewGame.tween1 = Tween.LinearUp;
-        NewGame.StartHeight = NewGame.FinishHeight = 0.09f;
-
-
+        NewGame.FinishPos = NewGame.MiddlePos = new Vector2(0.8f, 0.66f);
+        NewGame.myMessage1 = NewGame.myMessage2 = "New Game ?";
+        NewGame.tween1 = Tween.BounceUp;
+        NewGame.tween2 = Tween.LinearUp;
+        NewGame.StartHeight = 0.03f;
+        NewGame.FinishHeight = NewGame.MiddleHeight = 0.09f;
+        NewGame.StartAlpha = NewGame.MiddleAlpha = 1f;
+        NewGame.FinishAlpha = 0f;
+        NewGame.AnimTime = 4f;
+        NewGame.MiddleTimeRatio = 0.75f;
 
     }
 
@@ -196,7 +197,14 @@ public class ConWordDice : MonoBehaviour
     {
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
-        gc.player.WordDiceGameLength = 15;
+        if (ShortGame)
+        {
+            gc.player.WordDiceGameLength = 15;
+        }
+        else
+        {
+            gc.player.WordDiceGameLength = 180;
+        }
         gc.SaveStats();
 
         LoadStats();
@@ -422,6 +430,7 @@ public class ConWordDice : MonoBehaviour
         GamesPlayed = gc.player.WDPlays;
         HighScore = gc.player.WDHighscore;
         AverageScore = gc.player.WDHighscore;
+        MostWords = gc.player.WDMostWords;
         AverageWords = gc.WordDice.AverageWords;
         Longest = gc.player.WDLongest;
     }
@@ -431,6 +440,7 @@ public class ConWordDice : MonoBehaviour
         gc.player.WDPlays = GamesPlayed;
         gc.player.WDHighscore = HighScore;
         gc.player.WDAverageScore = AverageScore;
+        gc.player.WDMostWords = MostWords;
         gc.player.WDAverageWords = AverageWords;
         gc.player.WDLongest = Longest;
 
@@ -487,6 +497,12 @@ public class ConWordDice : MonoBehaviour
             Debug.Log("Average Words Improved : "+ AverageWords.ToString()+" -> "+FoundWords.Count.ToString());
             gc.FM.CustomFlash(Reward, "Average Words Improved !", "Average Words Improved !", count * 2.5f);
             count++;
+        }
+        if (FoundWords.Count > MostWords)
+        {
+            gc.FM.CustomFlash(Reward, "Record Word Count !", "Record Word Count !", count * 2.5f);
+            count++;
+            MostWords = FoundWords.Count;
         }
         if (CurrScore > AverageScore)
         {

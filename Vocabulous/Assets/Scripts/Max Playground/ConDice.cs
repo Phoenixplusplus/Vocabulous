@@ -32,8 +32,26 @@ public class ConDice : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tc.setID(ID);
-        tc.SetVisible(false);
+        if (tc != null)
+        {
+            tc.setID(ID);
+            tc.SetVisible(false);
+        }
+        // reset shadow stuff
+        Renderer MR;
+        MR = FaceTop.GetComponent<Renderer>();
+        MR.receiveShadows = false;
+        MR.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        MR = Faceside1.GetComponent<Renderer>();
+        MR.receiveShadows = false;
+        MR.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        MR = Faceside2.GetComponent<Renderer>();
+        MR.receiveShadows = false;
+        MR.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        MR = DiceBody.GetComponent<Renderer>();
+        MR.receiveShadows = false;
+        MR.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+
     }
 
     // Update is called once per frame
