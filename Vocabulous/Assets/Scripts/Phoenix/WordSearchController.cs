@@ -14,18 +14,22 @@ public class WordSearchController : MonoBehaviour
     public GameObject OverlayPrefab;
     public WordSearchTable wordSearchTable;
     public TrieTest trie;
-    int numberOfWords = 15;
-    // set by player prefs from GC
-    int gridXLength;
-    int gridYLength;
-    int minimumLengthWord;
-    int maximumLengthWord;
-    int fourLetterWordsCount;
-    int fiveLetterWordsCount;
-    int sixLetterWordsCount;
-    int sevenLetterWordsCount;
-    int eightLetterWordsCount;
-    int gameTime;
+    // set by player preferences (setup and stats)
+    [SerializeField] int gridXLength;
+    [SerializeField] int gridYLength;
+    [SerializeField] int minimumLengthWord;
+    [SerializeField] int maximumLengthWord;
+    [SerializeField] int fourLetterWordsCount;
+    [SerializeField] int fiveLetterWordsCount;
+    [SerializeField] int sixLetterWordsCount;
+    [SerializeField] int sevenLetterWordsCount;
+    [SerializeField] int eightLetterWordsCount;
+    [SerializeField] int gameTime;
+    [SerializeField] int bestTime;
+    [SerializeField] int averageTime;
+    [SerializeField] int worstTime;
+    [SerializeField] int timesCompleted;
+    [SerializeField] int timesQuit;
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
@@ -47,29 +51,30 @@ public class WordSearchController : MonoBehaviour
     public bool timeUp;
     bool showingRestart;
 
+    // animated GUIs
+    public FlashProTemplate f_foundWord;
+    public FlashProTemplate f_foundSame;
+    public FlashProTemplate f_timeNotification;
+    public FlashProTemplate f_endNotification;
 
 
     #region StartUp
     /* main initialise function, will call subsequent StartUp functions */
     public void Initialise()
     {
-        /* gamecontroller and initialising variables */
+        // gamecontroller and initialising variables
         gameController = GC.Instance;
         trie = gameController.phoenixTrie;
-        gridXLength = gameController.player.WordSearchSize;
-        gridYLength = gameController.player.WordSearchSize;
-        minimumLengthWord = gameController.player.WordSearchMinimumLengthWord;
-        maximumLengthWord = gameController.player.WordSearchMaximumLengthWord;
-        fourLetterWordsCount = gameController.player.WordSearchFourLetterWordsCount;
-        fiveLetterWordsCount = gameController.player.WordSearchFiveLetterWordsCount;
-        sixLetterWordsCount = gameController.player.WordSearchSixLetterWordsCount;
-        sevenLetterWordsCount = gameController.player.WordSearchSevenLetterWordsCount;
-        eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
-        gameTime = gameController.player.WordSearchGameLength;
+
+        // configure flash animations
+        ConfigureFlashes();
+
+        // set variables based on player preferences
+        LoadPlayerPreferences();
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -333,6 +338,68 @@ public class WordSearchController : MonoBehaviour
         }
         diceHolder.transform.localRotation = transform.localRotation;
     }
+
+    // set variables to what's in the player preferences
+    void LoadPlayerPreferences()
+    {
+        gridXLength = gameController.player.WordSearchSize;
+        gridYLength = gameController.player.WordSearchSize;
+        minimumLengthWord = gameController.player.WordSearchMinimumLengthWord;
+        maximumLengthWord = gameController.player.WordSearchMaximumLengthWord;
+        fourLetterWordsCount = gameController.player.WordSearchFourLetterWordsCount;
+        fiveLetterWordsCount = gameController.player.WordSearchFiveLetterWordsCount;
+        sixLetterWordsCount = gameController.player.WordSearchSixLetterWordsCount;
+        sevenLetterWordsCount = gameController.player.WordSearchSevenLetterWordsCount;
+        eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
+        gameTime = gameController.player.WordSearchGameLength;
+        bestTime = gameController.player.WordSearchBestTime;
+        averageTime = gameController.player.WordSearchAverageTime;
+        worstTime = gameController.player.WordSearchWorstTime;
+        timesCompleted = gameController.player.WordSearchTimesCompleted;
+        timesQuit = gameController.player.WordSearchTimesQuit;
+    }
+
+    // configure flashes
+    void ConfigureFlashes()
+    {
+        // found word flash
+        f_foundWord = new FlashProTemplate();
+        f_foundWord.SingleLerp = false;
+        f_foundWord.StartPos = new Vector2(0.85f, 0.2f);
+        f_foundWord.MiddlePos = new Vector2(0.85f, 0.4f);
+        f_foundWord.FinishPos = new Vector2(0.85f, 1.0f);
+        f_foundWord.StartWidth = 0.1f;
+        f_foundWord.MiddleWidth = 0.15f;
+        f_foundWord.FinishWidth = 0.1f;
+        f_foundWord.StartAlpha = 0.8f;
+        f_foundWord.MiddleAlpha = 1f;
+        f_foundWord.FinishAlpha = 0;
+        f_foundWord.myMessage1 = "Found a word!";
+        f_foundWord.myMessage2 = "Good/Great/Excellent!";
+        f_foundWord.TextColor1 = Color.cyan;
+        f_foundWord.TextColor2 = Color.green;
+        f_foundWord.Xtween1 = Tween.LinearUp;
+        f_foundWord.Xtween2 = Tween.QuinUp;
+        f_foundWord.AnimTime = 2.5f;
+        f_foundWord.MiddleTimeRatio = .3f;
+
+        // same word flash
+        f_foundSame = new FlashProTemplate();
+        f_foundSame.SingleLerp = true;
+        f_foundSame.StartPos = new Vector2(0.85f, 0.8f);
+        f_foundSame.FinishPos = new Vector2(0.85f, 0.1f);
+        f_foundSame.StartWidth = 0.3f;
+        f_foundSame.FinishWidth = 0.1f;
+        f_foundSame.StartAlpha = 1f;
+        f_foundSame.FinishAlpha = 0.2f;
+        f_foundSame.myMessage1 = "Already found!";
+        f_foundSame.myMessage2 = "Already found!";
+        f_foundSame.TextColor1 = Color.red;
+        f_foundSame.TextColor2 = Color.red;
+        f_foundSame.Xtween1 = Tween.LinearUp;
+        f_foundSame.AnimTime = 2f;
+    }
+
     #endregion
 
 
@@ -390,6 +457,13 @@ public class WordSearchController : MonoBehaviour
                 {
                     if (trie.SearchString(res, false, true, false, 0, false))
                     {
+                        if (foundWords.Count > 0)
+                        {
+                            if (foundWords.Contains(res))
+                            {
+                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res, "Already found " + res);
+                            }
+                        }
                         /* do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching */
                         for (int i = 0; i < unfoundWords.Count; i++)
                         {
@@ -404,6 +478,27 @@ public class WordSearchController : MonoBehaviour
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
                                 grid.HighlightCurrentPath();
+                                switch (res.Length)
+                                {
+                                    case 4:
+                                        {
+                                            f_foundWord.TextColor2 = Color.green;
+                                            gameController.FM.CustomFlash(f_foundWord, "4 letter word", "Good!");
+                                            break;
+                                        }
+                                    case 5:
+                                        {
+                                            f_foundWord.TextColor2 = Color.yellow;
+                                            gameController.FM.CustomFlash(f_foundWord, "5 letter word", "Great!");
+                                            break;
+                                        }
+                                    case 6:
+                                        {
+                                            f_foundWord.TextColor2 = Color.red;
+                                            gameController.FM.CustomFlash(f_foundWord, "6 letter word", "Excellent!");
+                                            break;
+                                        }
+                                }
                                 break;
                             }
                         }
@@ -416,6 +511,7 @@ public class WordSearchController : MonoBehaviour
                         grid.FinishPath();
                     }
                 }
+                else grid.FinishPath();
             }
         }
     }
@@ -444,7 +540,7 @@ public class WordSearchController : MonoBehaviour
         wordSearchTable.IngameSetup();
         grid.init();
         ClearCubesAndBoard();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
