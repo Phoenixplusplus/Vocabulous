@@ -18,7 +18,7 @@ public class FlashProManager : MonoBehaviour
     {
         GameObject GUI = Instantiate(freeGUI, Vector3.zero, Quaternion.identity);
         GUI.transform.parent = transform.parent.transform;
-        GUI.GetComponent<RectTransform>().SetPositionAndRotation(new Vector3(x, y, 0), Quaternion.identity);
+        GUI.GetComponent<RectTransform>().SetPositionAndRotation(new Vector3(x*Screen.width, y* Screen.height, 0), Quaternion.identity);
         GUI.GetComponent<RectTransform>().sizeDelta = new Vector2(width * Screen.width, 0);
         GUI.GetComponent<TextMeshProUGUI>().text = text;
         GUI.GetComponent<TextMeshProUGUI>().color = color;

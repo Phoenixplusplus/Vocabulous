@@ -195,6 +195,7 @@ public class ConWordDice : MonoBehaviour
         {
             CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
             CheckMouseClicks(); // Defines what happens if the user clicks the mouse
+            SetGUI();
         }
     }
 
@@ -249,20 +250,30 @@ public class ConWordDice : MonoBehaviour
 
     public void KickOff() // to be called by GameController
     {
+        gc.FM.KillStaticGUIs();
         SetupGUI();
         StartGame();
 
     }
 
+    // Because I'm a complete and utter masocist
     void SetupGUI()
     {
-        GameObject gScore = gc.FM.AddGUIItem("Score: 0", 0.55f, 0.95f, 0.2f, Color.white);
+        GameObject gScore = gc.FM.AddGUIItem("Score: 0", 0.45f, 0.95f, 0.2f, Color.white);
         GUIScore = gScore.GetComponent<TextMeshProUGUI>();
-        GameObject gHighMean = gc.FM.AddGUIItem("High: 0"+"  "+"Mean: 0", 0.80f, 0.95f, 0.30f, Color.white);
+        GameObject gHighMean = gc.FM.AddGUIItem("High: 0"+"  "+"Mean: 0", 0.80f, 0.95f, 0.30f, Color.yellow);
         GUIHighMeanScore = gHighMean.GetComponent<TextMeshProUGUI>();
-    //GUIWords;
+        GameObject gWords = gc.FM.AddGUIItem("WORDS: Longest: 0 Mean: 0 Most: 0", 0.8f, 0.85f, 0.4f, Color.yellow);
+        GUIWords = gWords.GetComponent<TextMeshProUGUI>();
     //GUIMostMeanScore;
-}
+    }
+
+    void SetGUI ()
+    {
+        GUIScore.text = "Score: " + CurrScore;
+        GUIHighMeanScore.text = "High: " + HighScore.ToString() + " Mean: " + AverageScore.ToString("#.00");
+        GUIWords.text = "WORDS: Longest: "+Longest.ToString()+" Mean: "+AverageWords.ToString("#.00") +" Most: "+MostWords.ToString("#.00");
+    }
 
     void SetGrid()
     {
