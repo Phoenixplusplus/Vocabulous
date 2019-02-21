@@ -110,7 +110,7 @@ public class GC : MonoBehaviour
     public FreeWordController freeWordController;
 
     [Header("Gui Managers")]
-    public FlashPanelManager FM;
+    public FlashProManager FM;
      #endregion
 
 

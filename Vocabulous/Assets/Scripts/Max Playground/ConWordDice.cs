@@ -55,11 +55,11 @@ public class ConWordDice : MonoBehaviour
     [SerializeField] private float AverageWords;
     [SerializeField] private int Longest;
 
-    public FlashTemplate FindGood;
-    public FlashTemplate FindBad;
-    public FlashTemplate FindSame;
-    public FlashTemplate Reward;
-    public FlashTemplate NewGame;
+    public FlashProTemplate FindGood;
+    public FlashProTemplate FindBad;
+    public FlashProTemplate FindSame;
+    public FlashProTemplate Reward;
+    public FlashProTemplate NewGame;
 
     #endregion
 
@@ -86,7 +86,7 @@ public class ConWordDice : MonoBehaviour
         // Configure on-screen Flashes
         // 2 Part Lerp ... "You Got WORD" followed by Score Addition
         // goes mid screen -> mid right upper -> top right
-        FindGood = new FlashTemplate(); 
+        FindGood = new FlashProTemplate(); 
         FindGood.SingleLerp = false;
         FindGood.StartPos = new Vector2(0.46f, 0.75f);
         FindGood.MiddlePos = new Vector2(0.66f, 0.9f);
@@ -94,15 +94,16 @@ public class ConWordDice : MonoBehaviour
         FindGood.StartAlpha = 1f;
         FindGood.MiddleAlpha = 0.5f;
         FindGood.FinishAlpha = 1f;
-        FindGood.StartHeight = 0.1f;
-        FindGood.MiddleHeight = 0.05f;
-        FindGood.FinishHeight = 0.05f;
+        FindGood.StartWidth = 0.4f;
+        FindGood.MiddleWidth = 0.2f;
+        FindGood.FinishWidth = 0.1f;
         FindGood.myMessage1 = "You Found XXX";
         FindGood.myMessage2 = "+1 Pt";
         FindGood.TextColor1 = Color.red;
         FindGood.TextColor2 = Color.green;
-        FindGood.tween1 = Tween.BounceUp;
-        FindGood.tween2 = Tween.LinearUp;
+        FindGood.UseXLerpOnly = true;
+        FindGood.Xtween1 = Tween.BounceUp;
+        FindGood.Xtween2 = Tween.LinearUp;
         FindGood.AnimTime = 3f;
         FindGood.MiddleTimeRatio = 0.66f;
 
@@ -112,7 +113,7 @@ public class ConWordDice : MonoBehaviour
         FindBad.FinishPos = new Vector2(0.2f, 0.95f);
         FindBad.TextColor1 = Color.red;
         FindBad.FinishAlpha = 0.1f;
-        FindBad.tween1 = Tween.LinearUp;
+        FindBad.Xtween1 = Tween.LinearUp;
         FindBad.AnimTime = 1.5f;
 
         // Same word (twice) .. mid screen -> mid top in Yellow
@@ -127,12 +128,12 @@ public class ConWordDice : MonoBehaviour
         Reward.StartPos = new Vector2(0.4f, 0.4f);
         Reward.FinishPos = Reward.MiddlePos = new Vector2(0.65f, 0.2f);
         Reward.TextColor1 = Color.green;
-        Reward.StartHeight = 0.06f;
-        Reward.FinishHeight = Reward.MiddleHeight = 0.09f;
+        Reward.StartWidth = 0.3f;
+        Reward.FinishWidth = Reward.MiddleWidth = 0.3f;
         Reward.StartAlpha = Reward.MiddleAlpha = Reward.FinishAlpha = 1f;
         Reward.AnimTime = 3.5f;
         Reward.MiddleTimeRatio = 6f / 7f;
-        Reward.tween1 = Tween.ParametricUp;
+        Reward.Xtween1 = Tween.ParametricUp;
 
         // New Game .. from end of "Reward" to screenposition of "New" game dice
         // 4 seconds with the last 1 being a stationary fadeout
@@ -141,10 +142,10 @@ public class ConWordDice : MonoBehaviour
         NewGame.StartPos = Reward.FinishPos;
         NewGame.FinishPos = NewGame.MiddlePos = new Vector2(0.8f, 0.66f);
         NewGame.myMessage1 = NewGame.myMessage2 = "New Game ?";
-        NewGame.tween1 = Tween.BounceUp;
-        NewGame.tween2 = Tween.LinearUp;
-        NewGame.StartHeight = 0.03f;
-        NewGame.FinishHeight = NewGame.MiddleHeight = 0.09f;
+        NewGame.Xtween1 = Tween.BounceUp;
+        NewGame.Xtween2 = Tween.LinearUp;
+        NewGame.StartWidth = 0.3f;
+        NewGame.FinishWidth = NewGame.MiddleWidth = 0.1f;
         NewGame.StartAlpha = NewGame.MiddleAlpha = 1f;
         NewGame.FinishAlpha = 0f;
         NewGame.AnimTime = 4f;

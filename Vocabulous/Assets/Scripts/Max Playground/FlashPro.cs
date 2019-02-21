@@ -16,6 +16,8 @@ public class FlashPro : MonoBehaviour
     private float Y1;
     private float X2;
     private float Y2;
+    private float Xmod;
+    private float YMod;
     private bool moving;
     private float WS;
     private float WMod;
@@ -25,7 +27,8 @@ public class FlashPro : MonoBehaviour
     private bool Alphachange;
     private float TimeMod;
     private Color CurrCol;
-    private Tween currTween;
+    private Tween currXTween;
+    private Tween currYTween;
 
     public void ConfigureAndGoGo(FlashProTemplate myTemplate)
     {
@@ -61,12 +64,13 @@ public class FlashPro : MonoBehaviour
                 Y1 = Screen.height * FT.StartPos.y;
                 X2 = Screen.width * FT.MiddlePos.x;
                 Y2 = Screen.height * FT.MiddlePos.y;
-
+                Xmod = X2 - X1;
+                YMod = Y2 - Y1;
                 myText.text = FT.myMessage1;
                 if (FT.StartWidth < 1)
                 {
-                    WS = Screen.height * FT.StartWidth;
-                    WMod = Screen.height * (FT.MiddleWidth - FT.StartWidth);
+                    WS = Screen.width * FT.StartWidth;
+                    WMod = Screen.width * (FT.MiddleWidth - FT.StartWidth);
                 }
                 else
                 {
@@ -86,11 +90,13 @@ public class FlashPro : MonoBehaviour
                 Y1 = Screen.height * FT.StartPos.y;
                 X2 = Screen.width * FT.FinishPos.x;
                 Y2 = Screen.height * FT.FinishPos.y;
+                Xmod = X2 - X1;
+                YMod = Y2 - Y1;
                 myText.text = FT.myMessage1;
                 if (FT.StartWidth < 1)
                 {
-                    WS = Screen.height * FT.StartWidth;
-                    WMod = Screen.height * (FT.FinishWidth - FT.StartWidth);
+                    WS = Screen.width * FT.StartWidth;
+                    WMod = Screen.width * (FT.FinishWidth - FT.StartWidth);
                 }
                 else
                 {
@@ -102,21 +108,25 @@ public class FlashPro : MonoBehaviour
                 _time = 0;
                 TimeMod = 1 / FT.AnimTime;
             }
-            currTween = FT.tween1;
+            currXTween = FT.Xtween1;
+            currYTween = FT.Ytween1;
         }
         else // Only get here if NOT first Lerp .. so second by default
         {
             CurrCol = FT.TextColor2;
-            currTween = FT.tween2;
+            currXTween = FT.Xtween2;
+            currYTween = FT.Ytween2;
             myText.text = FT.myMessage2;
             X1 = Screen.width * FT.MiddlePos.x;
             Y1 = Screen.height * FT.MiddlePos.y;
             X2 = Screen.width * FT.FinishPos.x;
             Y2 = Screen.height * FT.FinishPos.y;
+            Xmod = X2 - X1;
+            YMod = Y2 - Y1;
             if (FT.MiddleWidth < 1)
             {
-                WS = Screen.height * FT.MiddleWidth;
-                WMod = Screen.height * (FT.FinishWidth - FT.MiddleWidth);
+                WS = Screen.width * FT.MiddleWidth;
+                WMod = Screen.width * (FT.FinishWidth - FT.MiddleWidth);
             }
             else
             {
@@ -143,7 +153,7 @@ public class FlashPro : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        setTo(_time, currTween);
+        setTo(_time, currXTween, currYTween);
         _time += Time.deltaTime * TimeMod;
         if (_time >= 1)
         {
@@ -168,13 +178,22 @@ public class FlashPro : MonoBehaviour
         myText.color = nCol;
     }
 
-    void setTo(float t, Tween tween)
+    void setTo(float t, Tween Xtween, Tween Ytween)
     {
-        float tmod = DoTween(tween, t);
+        float tmod = DoTween(Xtween, t);
+        float dx = DoTween(Xtween, t);
+        float dy = DoTween(Ytween, t);
         if (moving)
         {
-            Vector3 Pos = Vector3.Lerp(new Vector3(X1, Y1, 0), new Vector3(X2, Y2, 0), tmod);
-            myRect.SetPositionAndRotation(Pos, Quaternion.identity);
+            if (FT.UseXLerpOnly)
+            {
+                Vector3 Pos = Vector3.Lerp(new Vector3(X1, Y1, 0), new Vector3(X2, Y2, 0), tmod);
+                myRect.SetPositionAndRotation(Pos, Quaternion.identity);
+            }
+            else
+            {
+                myRect.SetPositionAndRotation(new Vector3(X1 + (Xmod * dx), Y1 + (YMod * dy), 0), Quaternion.identity);
+            }
         }
         if (scaling)
         {

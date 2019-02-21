@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class FlashProTemplate
 {
     public bool SingleLerp;
+    public bool UseXLerpOnly;
 
     public Vector2 StartPos;
     public Vector2 MiddlePos;
@@ -25,8 +26,10 @@ public class FlashProTemplate
     public Color TextColor1;
     public Color TextColor2;
 
-    public Tween tween1;
-    public Tween tween2;
+    public Tween Xtween1;
+    public Tween Xtween2;
+    public Tween Ytween1;
+    public Tween Ytween2;
 
     public float AnimTime;
     public float MiddleTimeRatio;
@@ -34,6 +37,7 @@ public class FlashProTemplate
     public FlashProTemplate() // default constructor
     {
         SingleLerp = true;
+        UseXLerpOnly = true;
 
         StartPos = new Vector2(0.5f, 0.5f);
         MiddlePos = new Vector2(0.5f, 0.5f);
@@ -53,8 +57,10 @@ public class FlashProTemplate
         TextColor1 = Color.red;
         TextColor2 = Color.green;
 
-        tween1 = Tween.LinearUp;
-        tween2 = Tween.LinearUp;
+        Xtween1 = Tween.LinearUp;
+        Xtween2 = Tween.LinearUp;
+        Ytween1 = Tween.LinearUp;
+        Ytween2 = Tween.LinearUp;
 
         AnimTime = 2f;
         MiddleTimeRatio = 1f;
@@ -64,6 +70,7 @@ public class FlashProTemplate
     {
         FlashProTemplate Ret = new FlashProTemplate();
             Ret.SingleLerp = SingleLerp;
+            Ret.UseXLerpOnly = UseXLerpOnly;
             Ret.StartPos = StartPos;
             Ret.MiddlePos = MiddlePos;
             Ret.FinishPos = FinishPos;
@@ -77,8 +84,10 @@ public class FlashProTemplate
             Ret.myMessage2 = myMessage2;
             Ret.TextColor1 = TextColor1;
             Ret.TextColor2 = TextColor2;
-            Ret.tween1 = tween1;
-            Ret.tween2 = tween2;
+            Ret.Xtween1 = Xtween1;
+            Ret.Xtween2 = Xtween2;
+            Ret.Ytween1 = Ytween1;
+            Ret.Ytween2 = Ytween2;
             Ret.AnimTime = AnimTime;
             Ret.MiddleTimeRatio = MiddleTimeRatio;
         return Ret;
