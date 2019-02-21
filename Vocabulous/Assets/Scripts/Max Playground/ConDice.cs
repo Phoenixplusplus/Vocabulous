@@ -101,8 +101,7 @@ public class ConDice : MonoBehaviour
 
     public void killOverlayTile()
     {
-        Destroy(tc);
-        Destroy(GetComponent("OverlayTile"));
+        Destroy(tc.gameObject);
     }
 
 

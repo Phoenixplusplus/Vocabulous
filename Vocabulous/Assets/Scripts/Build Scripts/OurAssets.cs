@@ -107,6 +107,7 @@ public class OurAssets : MonoBehaviour
         for (var i = 0; i < word.Length; i++)
         {
             GameObject letter = SpawnDice(""+word[i], new Vector3(Position.x + i, Position.y, Position.z));
+            letter.GetComponent<ConDice>().killOverlayTile();
             letter.transform.parent = myWord.transform;
         }
         myWord.transform.localScale = new Vector3(Scale, Scale, Scale);
@@ -131,6 +132,7 @@ public class OurAssets : MonoBehaviour
             {
                 letter = SpawnDice("" + word[i], new Vector3(Position.x + q, Position.y, Position.z));
             }
+            letter.GetComponent<ConDice>().killOverlayTile();
            letter.transform.parent = myWord.transform;
             q++;
         }

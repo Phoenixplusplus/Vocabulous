@@ -450,7 +450,7 @@ public class ConWordDice : MonoBehaviour
     private void midGameScore(string word)
     {
         int score = GetWordScore(word);
-        CurrScore++;
+        CurrScore += score;
 
         int len = word.Length;
         if (word.Contains("qu")) len--;

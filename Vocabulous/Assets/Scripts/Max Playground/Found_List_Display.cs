@@ -22,7 +22,7 @@ public class Found_List_Display : MonoBehaviour
         lines.Clear();
         lines.Add(0);
         transform.localRotation = Quaternion.identity;
-        GameObject Found = gc.assets.MakeWordFromDiceQU(Title, Offset + transform.position, 1f);
+        GameObject Found = gc.assets.MakeWordFromDiceQU(Title, Offset + transform.position + new Vector3(0,0.25f,0), 1f);
         Found.transform.parent = transform;
         transform.localRotation = transform.parent.localRotation;
     }
