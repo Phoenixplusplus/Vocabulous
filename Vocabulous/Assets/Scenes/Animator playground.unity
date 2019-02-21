@@ -422,11 +422,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1119233473}
+  - component: {fileID: 1119233474}
+  - component: {fileID: 1119233479}
   - component: {fileID: 1119233476}
   - component: {fileID: 1119233475}
-  - component: {fileID: 1119233474}
   - component: {fileID: 1119233478}
-  - component: {fileID: 1119233477}
   m_Layer: 5
   m_Name: TextProPanel
   m_TagString: Untagged
@@ -450,8 +450,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -23, y: 3}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1119233474
 MonoBehaviour:
@@ -466,10 +466,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RT: {fileID: 1119233473}
-  StartPos: {x: 0, y: 0}
-  FinishPos: {x: 500, y: 500}
-  StartSize: {x: 0, y: 0}
-  FinishScale: 5
+  StartPos: {x: 0.2, y: 0.2}
+  FinishPos: {x: 0.7, y: 0.7}
+  StartWidth: 0.1
+  FinishWidth: 0.25
   time: 5
 --- !u!114 &1119233475
 MonoBehaviour:
@@ -595,23 +595,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119233472}
   m_CullTransparentMesh: 0
---- !u!1818360610 &1119233477
-ScaleConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1119233472}
-  m_Enabled: 1
-  m_Weight: 1
-  m_ScaleAtRest: {x: 1, y: 1, z: 1}
-  m_ScaleOffset: {x: 1, y: 1, z: 1}
-  m_AffectScalingX: 1
-  m_AffectScalingY: 1
-  m_AffectScalingZ: 1
-  m_IsContraintActive: 0
-  m_IsLocked: 0
-  m_Sources: []
 --- !u!223 &1119233478
 Canvas:
   m_ObjectHideFlags: 0
@@ -633,6 +616,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1119233479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119233472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AspectMode: 1
+  m_AspectRatio: 1
 --- !u!1 &1563339228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,5 +1045,10 @@ PrefabInstance:
       propertyPath: FM
       value: 
       objectReference: {fileID: 1114920811}
+    - target: {fileID: 8393130111431497157, guid: 5842e37a3fd07bc43a56980b6ad7a980,
+        type: 3}
+      propertyPath: TESTME
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5842e37a3fd07bc43a56980b6ad7a980, type: 3}
