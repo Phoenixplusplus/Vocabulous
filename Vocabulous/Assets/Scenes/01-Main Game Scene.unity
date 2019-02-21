@@ -1759,7 +1759,7 @@ PrefabInstance:
     - target: {fileID: 3163394478467823432, guid: 843690a056172484992ef144c19f4e81,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3163394478467823432, guid: 843690a056172484992ef144c19f4e81,
         type: 3}
@@ -1826,6 +1826,12 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3163394478467823435, guid: 843690a056172484992ef144c19f4e81,
+        type: 3}
+      propertyPath: freeGUI
+      value: 
+      objectReference: {fileID: 1347377799962715412, guid: b2079fae465656e4e90c40eff1a57203,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 843690a056172484992ef144c19f4e81, type: 3}
 --- !u!114 &560383403 stripped

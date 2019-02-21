@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ConWordDice : MonoBehaviour
 {
@@ -60,6 +61,13 @@ public class ConWordDice : MonoBehaviour
     public FlashProTemplate FindSame;
     public FlashProTemplate Reward;
     public FlashProTemplate NewGame;
+
+    private TextMeshProUGUI GUIScore;
+    private TextMeshProUGUI GUIHighMeanScore;
+    private TextMeshProUGUI GUIWords;
+    private TextMeshProUGUI GUIMostMeanScore;
+
+
 
     #endregion
 
@@ -241,9 +249,20 @@ public class ConWordDice : MonoBehaviour
 
     public void KickOff() // to be called by GameController
     {
+        SetupGUI();
         StartGame();
+
     }
 
+    void SetupGUI()
+    {
+        GameObject gScore = gc.FM.AddGUIItem("Score: 0", 0.55f, 0.95f, 0.2f, Color.white);
+        GUIScore = gScore.GetComponent<TextMeshProUGUI>();
+        GameObject gHighMean = gc.FM.AddGUIItem("High: 0"+"  "+"Mean: 0", 0.80f, 0.95f, 0.30f, Color.white);
+        GUIHighMeanScore = gHighMean.GetComponent<TextMeshProUGUI>();
+    //GUIWords;
+    //GUIMostMeanScore;
+}
 
     void SetGrid()
     {
