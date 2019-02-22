@@ -35,6 +35,17 @@ public class FlashProManager : MonoBehaviour
         myGUIitems.Clear();
     }
 
+    public void KillAllFlashes ()
+    {
+        StopAllCoroutines(); // kills the ones requested on delay
+        GameObject[] flashes = GameObject.FindGameObjectsWithTag("GUIFlash");
+        foreach (GameObject flash in flashes)
+        {
+            Destroy(flash);
+        }
+
+    }
+
     public void CustomFlash(FlashProTemplate myTemplate)
     {
         GameObject f = Instantiate(prefabFlash, Vector3.zero, Quaternion.identity);

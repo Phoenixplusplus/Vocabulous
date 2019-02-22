@@ -50,3 +50,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabFlash: {fileID: 5729421321808775197, guid: 525f7cec483a4e24f9577c72cdf4e6d1,
     type: 3}
+  freeGUI: {fileID: 1347377799962715412, guid: b2079fae465656e4e90c40eff1a57203, type: 3}
