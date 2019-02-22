@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ConWordDice : MonoBehaviour
 {
@@ -61,15 +62,13 @@ public class ConWordDice : MonoBehaviour
     public FlashProTemplate Reward;
     public FlashProTemplate NewGame;
 
+    private TextMeshProUGUI GUIScore;
+    private TextMeshProUGUI GUIHighMeanScore;
+    private TextMeshProUGUI GUIWords;
+
     #endregion
 
     #region UNITY API
-
-    // Called before anything else ... lets connect to the world
-    void Awake()
-    {
-
-    }
 
 
     // Start is called before the first frame update
@@ -80,7 +79,6 @@ public class ConWordDice : MonoBehaviour
         if (gc != null) Debug.Log("ConWordDice:Awake() - connected to Game Controller");
         trie = gc.maxTrie;
         if (trie == null) Debug.Log("ConWordDice:Awake() - CANNOT connect to gc.maxTrie");
-        //transform.position = gc.PosTranWordDice;
         myMenu.OnSceneTable();
 
         // Configure on-screen Flashes
@@ -89,8 +87,8 @@ public class ConWordDice : MonoBehaviour
         FindGood = new FlashProTemplate(); 
         FindGood.SingleLerp = false;
         FindGood.StartPos = new Vector2(0.46f, 0.75f);
-        FindGood.MiddlePos = new Vector2(0.66f, 0.9f);
-        FindGood.FinishPos = new Vector2(0.98f, 0.98f);
+        FindGood.MiddlePos = new Vector2(0.65f, 0.8f);
+        FindGood.FinishPos = new Vector2(0.52f, 0.92f);
         FindGood.StartAlpha = 1f;
         FindGood.MiddleAlpha = 0.5f;
         FindGood.FinishAlpha = 1f;
@@ -125,11 +123,11 @@ public class ConWordDice : MonoBehaviour
         // fires for 3.5 seconds, stationary for the last 0.5 seconds
         Reward = FindSame.Copy();
         Reward.SingleLerp = false;
-        Reward.StartPos = new Vector2(0.4f, 0.4f);
+        Reward.StartPos = new Vector2(0.21f, 0.26f);
         Reward.FinishPos = Reward.MiddlePos = new Vector2(0.65f, 0.2f);
         Reward.TextColor1 = Color.green;
-        Reward.StartWidth = 0.3f;
-        Reward.FinishWidth = Reward.MiddleWidth = 0.3f;
+        Reward.StartWidth = 0.25f;
+        Reward.FinishWidth = Reward.MiddleWidth = 0.4f;
         Reward.StartAlpha = Reward.MiddleAlpha = Reward.FinishAlpha = 1f;
         Reward.AnimTime = 3.5f;
         Reward.MiddleTimeRatio = 6f / 7f;
@@ -187,6 +185,7 @@ public class ConWordDice : MonoBehaviour
         {
             CheckHoverOver();   // Checks for change to HoverOver (and defines behaviour)
             CheckMouseClicks(); // Defines what happens if the user clicks the mouse
+            SetGUI();
         }
     }
 
@@ -198,28 +197,27 @@ public class ConWordDice : MonoBehaviour
     {
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
+        LoadStats();
+        // DEBUG
         if (ShortGame)
         {
-            gc.player.WordDiceGameLength = 15;
+            GameTime = 15;
         }
         else
         {
+            GameTime = 180;
             gc.player.WordDiceGameLength = 180;
         }
         gc.SaveStats();
-
-        LoadStats();
-        GameTime = gc.player.WordDiceGameLength;
         StartTime = Time.realtimeSinceStartup;
         SetGrid();
         PopulateGrid();
         BoggleWords = grid.AllWordStrings; // will be empty as each game has a new grid (since size may vary)
         BoggleWords = gc.assets.SortList(BoggleWords);
         SpawnDice();
-        //MakeFoundList();
         foundListDisplay.init();
-        Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
-        Debug.Log("Asking gc.player for desired GameTime .. got:"+ gc.player.WordDiceGameLength.ToString());
+        //Debug.Log("ConWordDice:: Started - (" + BoggleWords.Count.ToString() + " answers found): " + (Time.realtimeSinceStartup - StartTime).ToString() + " seconds");
+        //Debug.Log("Asking gc.player for desired GameTime .. got:"+ gc.player.WordDiceGameLength.ToString());
         Timer = GameTime;
         clock.SetTime((float)Timer);
         CurrScore = 0;
@@ -231,6 +229,7 @@ public class ConWordDice : MonoBehaviour
     {
         ResetGame();
         gameState = 0;
+        gc.FM.KillStaticGUIs();
         myMenu.OnSceneTable();
     }
 
@@ -241,9 +240,34 @@ public class ConWordDice : MonoBehaviour
 
     public void KickOff() // to be called by GameController
     {
+        gc.FM.KillStaticGUIs();
+        SetupGUI();
         StartGame();
     }
 
+    // Because I'm a complete and utter masocist
+    void SetupGUI()
+    {
+        GameObject gScore = gc.FM.AddGUIItem("Score: 0", 0.45f, 0.95f, 0.2f, Color.white);
+        GUIScore = gScore.GetComponent<TextMeshProUGUI>();
+        GameObject gHighMean = gc.FM.AddGUIItem("High: 0"+"  "+"Mean: 0", 0.75f, 0.95f, 0.30f, Color.yellow);
+        GUIHighMeanScore = gHighMean.GetComponent<TextMeshProUGUI>();
+        GameObject gWords = gc.FM.AddGUIItem("WORDS: Longest: 0 Most: 0 Mean: 0", 0.65f, 0.85f, 0.5f, Color.yellow);
+        GUIWords = gWords.GetComponent<TextMeshProUGUI>();
+    }
+
+    void SetGUI ()
+    {
+        GUIScore.text = "Score: " + CurrScore;
+        GUIHighMeanScore.text = "High: " + HighScore.ToString() + " Mean: " + AverageScore.ToString("#.00");
+        GUIWords.text = "WORDS: Longest: "+Longest.ToString()+" Most: "+MostWords.ToString()+" Mean: "+AverageWords.ToString("#.00") ;
+    }
+    void SetGUIToRed ()
+    {
+        GUIScore.color = Color.red;
+        GUIHighMeanScore.color = Color.red;
+        GUIWords.color = Color.red;
+    }
 
     void SetGrid()
     {
@@ -320,6 +344,7 @@ public class ConWordDice : MonoBehaviour
         }
         FoundWords.Clear();
         BoggleWords.Clear();
+        gc.FM.KillAllFlashes();
     }
 
     #endregion
@@ -381,13 +406,13 @@ public class ConWordDice : MonoBehaviour
             {
                 if (gc.NewHoverOver == 8882) // restart game
                 {
-                    Debug.Log("Attempting restart");
+                    //Debug.Log("Attempting restart");
                     ResetGame();
                     KickOff();
                 }
                 if (gc.NewHoverOver == 8883) // back to menu
                 {
-                    Debug.Log("Want to Return to main table ... but not connected yet");
+                    //Debug.Log("Want to Return to main table ... but not connected yet");
                 }
             }
         }
@@ -408,6 +433,7 @@ public class ConWordDice : MonoBehaviour
 
     void TimesUp()
     {
+        SetGUIToRed();
         clock.SetTime(0f);
         gameState = 3;
         endGameScore();
@@ -417,10 +443,6 @@ public class ConWordDice : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         showList.Print(BoggleWords,"qu");
         transform.localRotation = Quaternion.Euler(gc.RotTranWordDice);
-        // TO DO
-        // Scoring
-        // Update / Save Player stats
-        // Activate GUI for Times's up, Restart, back or see what could have had
     }
 
     #endregion
@@ -430,7 +452,7 @@ public class ConWordDice : MonoBehaviour
     {
         GamesPlayed = gc.player.WDPlays;
         HighScore = gc.player.WDHighscore;
-        AverageScore = gc.player.WDHighscore;
+        AverageScore = gc.player.WDAverageScore;
         MostWords = gc.player.WDMostWords;
         AverageWords = gc.WordDice.AverageWords;
         Longest = gc.player.WDLongest;
@@ -459,30 +481,8 @@ public class ConWordDice : MonoBehaviour
         {
             // ANIMATE New Longest Word
             Debug.Log("New Longest Word : "+len.ToString());
-            gc.FM.CustomFlash(Reward, "New Longest Word !!");
+            gc.FM.CustomFlash(Reward, "New Longest Word !!", "New Longest Word !!");
             Longest = len;
-        }
-    }
-
-    private int GetWordScore(string word)
-    {
-        word = word.ToLower();
-        int len = word.Length;
-        if (word.Contains("qu")) len--;
-        switch (len)
-        {
-            case 3:
-                return 1;
-            case 4:
-                return 1;
-            case 5:
-                return 2;
-            case 6:
-                return 3;
-            case 7:
-                return 5;
-            default:
-                return 9;
         }
     }
 
@@ -508,23 +508,45 @@ public class ConWordDice : MonoBehaviour
         if (CurrScore > AverageScore)
         {
             // ANIMATE .. Average Score Improved
-            Debug.Log("Average Score Improved : "+ AverageScore.ToString()+" -> "+CurrScore.ToString());
+            //Debug.Log("Average Score Improved : "+ AverageScore.ToString()+" -> "+CurrScore.ToString());
             gc.FM.CustomFlash(Reward, "Average Score Improved !", "Average Score Improved !", count * 2.5f);
             count++;
         }
         if (CurrScore > HighScore)
         {
             // ANIMATE .. New High Score
-            Debug.Log("New High Score : " + CurrScore.ToString());
+            //Debug.Log("New High Score : " + CurrScore.ToString());
             gc.FM.CustomFlash(Reward, "New High Score !", "New High Score !", count * 2.5f);
             count++;
             HighScore = CurrScore;
         }
         gc.FM.CustomFlash(NewGame, count * 2.5f);
-        AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / (GamesPlayed + 1);
-        AverageScore = ((AverageScore * GamesPlayed) + CurrScore) / (GamesPlayed + 1);
+        AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / ((float)GamesPlayed + 1);
+        AverageScore = ((AverageScore * GamesPlayed) + CurrScore) / ((float)GamesPlayed + 1);
         GamesPlayed++;
         SaveStats();
+    }
+
+    private int GetWordScore(string word)
+    {
+        word = word.ToLower();
+        int len = word.Length;
+        if (word.Contains("qu")) len--;
+        switch (len)
+        {
+            case 3:
+                return 1;
+            case 4:
+                return 1;
+            case 5:
+                return 2;
+            case 6:
+                return 3;
+            case 7:
+                return 5;
+            default:
+                return 9;
+        }
     }
 
 

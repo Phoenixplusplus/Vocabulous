@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5729421321808775197
+--- !u!1 &1347377799962715412
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,26 +8,25 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5729421321808775196}
-  - component: {fileID: 5729421321808775194}
-  - component: {fileID: 5729421321808775193}
-  - component: {fileID: 5729421321808775198}
-  - component: {fileID: 5729421321808775195}
-  - component: {fileID: 1119233474}
+  - component: {fileID: 1347377799962715413}
+  - component: {fileID: 1347377799962715411}
+  - component: {fileID: 1347377799962715408}
+  - component: {fileID: 1347377799962715415}
+  - component: {fileID: 1347377799962715410}
   m_Layer: 5
-  m_Name: TextProPanel
-  m_TagString: GUIFlash
+  m_Name: FreeGUI
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5729421321808775196
+--- !u!224 &1347377799962715413
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
+  m_GameObject: {fileID: 1347377799962715412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,13 +39,13 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &5729421321808775194
+--- !u!114 &1347377799962715411
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
+  m_GameObject: {fileID: 1347377799962715412}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -1254083943, guid: f70555f144d8491a825f0804e09c671c, type: 3}
@@ -54,21 +53,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
---- !u!222 &5729421321808775193
+--- !u!222 &1347377799962715408
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
+  m_GameObject: {fileID: 1347377799962715412}
   m_CullTransparentMesh: 0
---- !u!114 &5729421321808775198
+--- !u!114 &1347377799962715415
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
+  m_GameObject: {fileID: 1347377799962715412}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -82,7 +81,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: Hello World
+  m_text: Free GUI Example
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 528a68d23a1edf741b8040936f8b8745, type: 2}
   m_sharedMaterial: {fileID: 21634609858305698, guid: 528a68d23a1edf741b8040936f8b8745,
@@ -111,7 +110,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 40.15
+  m_fontSize: 25.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -152,10 +151,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 0}
-    characterCount: 11
+    characterCount: 16
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -178,13 +177,13 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!223 &5729421321808775195
+--- !u!223 &1347377799962715410
 Canvas:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
+  m_GameObject: {fileID: 1347377799962715412}
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
@@ -199,17 +198,3 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &1119233474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5729421321808775197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53a7f90ec373d574e8723767092ac251, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myRect: {fileID: 5729421321808775196}
-  myText: {fileID: 5729421321808775198}

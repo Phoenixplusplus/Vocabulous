@@ -7,7 +7,9 @@ public class FlashPro_Tester : MonoBehaviour
     public FlashProManager FM;
 
     public bool TEST_ME = false;
-
+    [SerializeField]
+    private Vector2 CurrentMouse = new Vector2();
+    [Header("FlashProTemplate")]
     public bool SingleLerp;
     public bool UseXLerpOnly;
 
@@ -40,6 +42,9 @@ public class FlashPro_Tester : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CurrentMouse.x = Input.mousePosition.x / Screen.width;
+        CurrentMouse.y = Input.mousePosition.y / Screen.height;
+
         if (TEST_ME)
         {
             FlashProTemplate ret = new FlashProTemplate();

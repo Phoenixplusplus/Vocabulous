@@ -807,6 +807,16 @@ PrefabInstance:
       propertyPath: FM
       value: 
       objectReference: {fileID: 897544450}
+    - target: {fileID: 4446702119035875156, guid: 80f6429aeb9d5c24dad77831dcf6a3a2,
+        type: 3}
+      propertyPath: SingleLerp
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4446702119035875156, guid: 80f6429aeb9d5c24dad77831dcf6a3a2,
+        type: 3}
+      propertyPath: TEST_ME
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80f6429aeb9d5c24dad77831dcf6a3a2, type: 3}
 --- !u!1001 &8393130113047934250
