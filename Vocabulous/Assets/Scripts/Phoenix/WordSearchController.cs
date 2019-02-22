@@ -14,18 +14,22 @@ public class WordSearchController : MonoBehaviour
     public GameObject OverlayPrefab;
     public WordSearchTable wordSearchTable;
     public TrieTest trie;
-    int numberOfWords = 15;
-    // set by player prefs from GC
-    int gridXLength;
-    int gridYLength;
-    int minimumLengthWord;
-    int maximumLengthWord;
-    int fourLetterWordsCount;
-    int fiveLetterWordsCount;
-    int sixLetterWordsCount;
-    int sevenLetterWordsCount;
-    int eightLetterWordsCount;
-    int gameTime;
+    // set by player preferences (setup and stats)
+    [SerializeField] int gridXLength;
+    [SerializeField] int gridYLength;
+    [SerializeField] int minimumLengthWord;
+    [SerializeField] int maximumLengthWord;
+    [SerializeField] int fourLetterWordsCount;
+    [SerializeField] int fiveLetterWordsCount;
+    [SerializeField] int sixLetterWordsCount;
+    [SerializeField] int sevenLetterWordsCount;
+    [SerializeField] int eightLetterWordsCount;
+    [SerializeField] int gameTime;
+    [SerializeField] int bestTime;
+    [SerializeField] int averageTime;
+    [SerializeField] int worstTime;
+    [SerializeField] int timesCompleted;
+    [SerializeField] int timesQuit;
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
@@ -46,30 +50,32 @@ public class WordSearchController : MonoBehaviour
     int debugPlacedWords = 0;
     public bool timeUp;
     bool showingRestart;
+    string clockString;
 
+    // animated GUIs
+    public FlashProTemplate f_foundWord;
+    public FlashProTemplate f_foundSame;
+    public FlashProTemplate f_timeNotification;
+    public FlashProTemplate f_endNotification;
 
 
     #region StartUp
     /* main initialise function, will call subsequent StartUp functions */
     public void Initialise()
     {
-        /* gamecontroller and initialising variables */
+        // gamecontroller and initialising variables
         gameController = GC.Instance;
         trie = gameController.phoenixTrie;
-        gridXLength = gameController.player.WordSearchSize;
-        gridYLength = gameController.player.WordSearchSize;
-        minimumLengthWord = gameController.player.WordSearchMinimumLengthWord;
-        maximumLengthWord = gameController.player.WordSearchMaximumLengthWord;
-        fourLetterWordsCount = gameController.player.WordSearchFourLetterWordsCount;
-        fiveLetterWordsCount = gameController.player.WordSearchFiveLetterWordsCount;
-        sixLetterWordsCount = gameController.player.WordSearchSixLetterWordsCount;
-        sevenLetterWordsCount = gameController.player.WordSearchSevenLetterWordsCount;
-        eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
-        gameTime = gameController.player.WordSearchGameLength;
+
+        // configure flash animations
+        ConfigureFlashes();
+
+        // set variables based on player preferences
+        LoadPlayerPreferences();
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -333,6 +339,110 @@ public class WordSearchController : MonoBehaviour
         }
         diceHolder.transform.localRotation = transform.localRotation;
     }
+
+    // set variables to what's in the player preferences
+    void LoadPlayerPreferences()
+    {
+        gridXLength = gameController.player.WordSearchSize;
+        gridYLength = gameController.player.WordSearchSize;
+        minimumLengthWord = gameController.player.WordSearchMinimumLengthWord;
+        maximumLengthWord = gameController.player.WordSearchMaximumLengthWord;
+        fourLetterWordsCount = gameController.player.WordSearchFourLetterWordsCount;
+        fiveLetterWordsCount = gameController.player.WordSearchFiveLetterWordsCount;
+        sixLetterWordsCount = gameController.player.WordSearchSixLetterWordsCount;
+        sevenLetterWordsCount = gameController.player.WordSearchSevenLetterWordsCount;
+        eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
+        gameTime = gameController.player.WordSearchGameLength;
+        bestTime = gameController.player.WordSearchBestTime;
+        averageTime = gameController.player.WordSearchAverageTime;
+        worstTime = gameController.player.WordSearchWorstTime;
+        timesCompleted = gameController.player.WordSearchTimesCompleted;
+        timesQuit = gameController.player.WordSearchTimesQuit;
+    }
+
+    // configure flashes
+    void ConfigureFlashes()
+    {
+        // found word flash
+        f_foundWord = new FlashProTemplate();
+        f_foundWord.SingleLerp = false;
+        f_foundWord.StartPos = new Vector2(0.85f, 0.2f);
+        f_foundWord.MiddlePos = new Vector2(0.85f, 0.4f);
+        f_foundWord.FinishPos = new Vector2(0.85f, 1.0f);
+        f_foundWord.StartWidth = 0.1f;
+        f_foundWord.MiddleWidth = 0.15f;
+        f_foundWord.FinishWidth = 0.1f;
+        f_foundWord.StartAlpha = 0.8f;
+        f_foundWord.MiddleAlpha = 1f;
+        f_foundWord.FinishAlpha = 0;
+        f_foundWord.myMessage1 = "Found a word!";
+        f_foundWord.myMessage2 = "Good/Great/Excellent!";
+        f_foundWord.TextColor1 = Color.cyan;
+        f_foundWord.TextColor2 = Color.green;
+        f_foundWord.Xtween1 = Tween.LinearUp;
+        f_foundWord.Xtween2 = Tween.QuinUp;
+        f_foundWord.AnimTime = 2.5f;
+        f_foundWord.MiddleTimeRatio = .3f;
+
+        // same word flash
+        f_foundSame = new FlashProTemplate();
+        f_foundSame.SingleLerp = true;
+        f_foundSame.StartPos = new Vector2(0.85f, 0.8f);
+        f_foundSame.FinishPos = new Vector2(0.85f, 0.1f);
+        f_foundSame.StartWidth = 0.3f;
+        f_foundSame.FinishWidth = 0.1f;
+        f_foundSame.StartAlpha = 1f;
+        f_foundSame.FinishAlpha = 0.2f;
+        f_foundSame.myMessage1 = "Already found!";
+        f_foundSame.myMessage2 = "Already found!";
+        f_foundSame.TextColor1 = Color.red;
+        f_foundSame.TextColor2 = Color.red;
+        f_foundSame.Xtween1 = Tween.LinearUp;
+        f_foundSame.AnimTime = 2f;
+
+        // time notification flash
+        f_timeNotification = new FlashProTemplate();
+        f_timeNotification.SingleLerp = false;
+        f_timeNotification.StartPos = new Vector2(0.5f, 0.9f);
+        f_timeNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+        f_timeNotification.FinishPos = new Vector2(0.5f, 0.1f);
+        f_timeNotification.StartWidth = 0.1f;
+        f_timeNotification.MiddleWidth = 0.15f;
+        f_timeNotification.FinishWidth = 0.1f;
+        f_timeNotification.StartAlpha = 0.8f;
+        f_timeNotification.MiddleAlpha = 1f;
+        f_timeNotification.FinishAlpha = 0;
+        f_timeNotification.myMessage1 = "Found a word!";
+        f_timeNotification.myMessage2 = "Good/Great/Excellent!";
+        f_timeNotification.TextColor1 = Color.green;
+        f_timeNotification.TextColor2 = Color.red;
+        f_timeNotification.Xtween1 = Tween.LinearUp;
+        f_timeNotification.Xtween2 = Tween.QuinUp;
+        f_timeNotification.AnimTime = 2.5f;
+        f_timeNotification.MiddleTimeRatio = .3f;
+
+        // end notification
+        f_endNotification = new FlashProTemplate();
+        f_endNotification.SingleLerp = false;
+        f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
+        f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+        f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
+        f_endNotification.StartWidth = 0.2f;
+        f_endNotification.MiddleWidth = 0.3f;
+        f_endNotification.FinishWidth = 0.1f;
+        f_endNotification.StartAlpha = 0.8f;
+        f_endNotification.MiddleAlpha = 1f;
+        f_endNotification.FinishAlpha = 0;
+        f_endNotification.myMessage1 = "Found a word!";
+        f_endNotification.myMessage2 = "Good/Great/Excellent!";
+        f_endNotification.TextColor1 = Color.yellow;
+        f_endNotification.TextColor2 = Color.red;
+        f_endNotification.Xtween1 = Tween.LinearUp;
+        f_endNotification.Xtween2 = Tween.QuinUp;
+        f_endNotification.AnimTime = 2.5f;
+        f_endNotification.MiddleTimeRatio = .5f;
+    }
+
     #endregion
 
 
@@ -357,6 +467,7 @@ public class WordSearchController : MonoBehaviour
             {
                 wordSearchTable.RestartSetup();
                 ClearCubesAndBoard();
+                RunEndFlashesAndSaveStats();
                 showingRestart = true;
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
@@ -390,7 +501,14 @@ public class WordSearchController : MonoBehaviour
                 {
                     if (trie.SearchString(res, false, true, false, 0, false))
                     {
-                        /* do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching */
+                        if (foundWords.Count > 0)
+                        {
+                            if (foundWords.Contains(res))
+                            {
+                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
+                            }
+                        }
+                        // do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching
                         for (int i = 0; i < unfoundWords.Count; i++)
                         {
                             if (unfoundWords[i] == res)
@@ -404,6 +522,32 @@ public class WordSearchController : MonoBehaviour
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
                                 grid.HighlightCurrentPath();
+                                switch (res.Length)
+                                {
+                                    case 4:
+                                        {
+                                            f_foundWord.TextColor2 = Color.green;
+                                            gameController.FM.CustomFlash(f_foundWord, "4 letter word", "Good!");
+                                            break;
+                                        }
+                                    case 5:
+                                        {
+                                            f_foundWord.TextColor2 = Color.yellow;
+                                            gameController.FM.CustomFlash(f_foundWord, "5 letter word", "Great!");
+                                            break;
+                                        }
+                                    case 6:
+                                        {
+                                            f_foundWord.TextColor2 = Color.red;
+                                            gameController.FM.CustomFlash(f_foundWord, "6 letter word", "Excellent!");
+                                            break;
+                                        }
+                                }
+                                if (foundWords.Count == 5)
+                                {
+                                    if ((averageTime / 2) > wordSearchTable.clock.GetComponent<Clock>().time)
+                                    gameController.FM.CustomFlash(f_timeNotification, "Doing good!", "Beating average time!");
+                                }
                                 break;
                             }
                         }
@@ -416,6 +560,7 @@ public class WordSearchController : MonoBehaviour
                         grid.FinishPath();
                     }
                 }
+                else grid.FinishPath();
             }
         }
     }
@@ -437,14 +582,14 @@ public class WordSearchController : MonoBehaviour
 
 
 
-    #region Restart and TidyUp
+    #region Restart / TidyUp / SaveStats
     /* restarting fresh / initialising functions*/
     public void Restart()
     {
         wordSearchTable.IngameSetup();
         grid.init();
         ClearCubesAndBoard();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, 599);
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
@@ -483,6 +628,43 @@ public class WordSearchController : MonoBehaviour
             wordSearchTable.foundWordObjects[i].GetComponent<Text>().text = unfoundWords[i];
             wordSearchTable.foundWordObjects[i].ScrubWord(2f);
         }
+    }
+
+    void SaveStats()
+    {
+        gameController.player.WordSearchBestTime = bestTime;
+        gameController.player.WordSearchAverageTime = averageTime;
+        gameController.player.WordSearchWorstTime = worstTime;
+        gameController.player.WordSearchTimesCompleted = timesCompleted;
+        gameController.player.WordSearchTimesQuit = timesQuit;
+        gameController.SaveStats();
+    }
+
+    void RunEndFlashesAndSaveStats()
+    {
+        float flashDelay = 0;
+        float endtime = wordSearchTable.clock.GetComponent<Clock>().time;
+        string timeStr = wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(endtime);
+
+        if ((int)endtime < bestTime)
+        {
+            bestTime = (int)endtime;
+            flashDelay++;
+            gameController.FM.CustomFlash(f_endNotification, "New Best Time!", timeStr, flashDelay);
+        }
+
+        averageTime = ((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1);
+        if (endtime < averageTime)
+        {
+            flashDelay++;
+            f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
+            f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay);
+        }
+
+        timesCompleted++;
+        SaveStats();
     }
     #endregion
 }

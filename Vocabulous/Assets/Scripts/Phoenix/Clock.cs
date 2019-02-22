@@ -47,6 +47,15 @@ public class Clock : MonoBehaviour
         if (seconds < 9.5f) clockText.text = minutes + ":0" + seconds.ToString("0");
     }
 
+    public string ConvertTimeToString(float time)
+    {
+        minutes = Mathf.Floor(time / 60);
+        seconds = Mathf.RoundToInt(time % 60);
+
+        if (seconds >= 10.0f) return clockText.text = minutes + ":" + seconds.ToString("0");
+        if (seconds < 9.5f) return clockText.text = minutes + ":0" + seconds.ToString("0");
+        return clockText.text = minutes + ":" + seconds.ToString("0");
+    }
 
     public void StartClock(int startTime, int endTime)
     {

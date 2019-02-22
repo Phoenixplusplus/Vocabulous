@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
+  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3553,6 +3553,11 @@ PrefabInstance:
       propertyPath: UseXLerpOnly
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4446702119035875156, guid: 80f6429aeb9d5c24dad77831dcf6a3a2,
+        type: 3}
+      propertyPath: TEST_ME
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80f6429aeb9d5c24dad77831dcf6a3a2, type: 3}
 --- !u!1 &1228290527
@@ -6154,7 +6159,7 @@ PrefabInstance:
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: UseDefaultPlayer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}

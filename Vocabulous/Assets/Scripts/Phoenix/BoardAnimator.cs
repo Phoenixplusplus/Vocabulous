@@ -40,7 +40,7 @@ public class BoardAnimator : MonoBehaviour
         chalkOriginPos = chalk.transform.position;
         chalkOriginRot = chalk.transform.rotation;
         chalk.GetComponent<Scrubber>().shaking = true;
-        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.up);
+        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, scrubRot.up);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -77,7 +77,7 @@ public class BoardAnimator : MonoBehaviour
         scrubOriginPos = scrubber.transform.position;
         scrubOriginRot = scrubber.transform.rotation;
         scrubber.GetComponent<Scrubber>().shaking = true;
-        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, transform.up);
+        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, scrubRot.right);
         float t = 0;
         while (t < initialLerpTime)
         {
