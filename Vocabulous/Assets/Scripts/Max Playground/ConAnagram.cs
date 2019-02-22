@@ -6,6 +6,8 @@ using TMPro;
 public class ConAnagram : MonoBehaviour
 {
     private GC gc;
+    public bool Testing;
+    public int TestLevel;
     public string Anagram;
     [SerializeField]
     private string CurrWord;
@@ -31,16 +33,26 @@ public class ConAnagram : MonoBehaviour
     public float radius;
     private bool animating = false;
     private float animTimer = 0;
+    private int Playerextras;
+    private int Playerhints;
+    private bool HintDelay = false;
 
     [SerializeField]
     private int GameState = 0; // 0 = on Big Table, 1 = starting, 2 = playing, 3 = ended, awaiting restart
     private int ToFind = 0;
 
     private TextMeshProUGUI GUILevel;
+    private TextMeshProUGUI GUIHints;
+
     private FlashProTemplate Warning;
-    private FlashProTemplate Reward1;
-    private FlashProTemplate RewardandHint;
+    private FlashProTemplate NoHint;
+    private FlashProTemplate Reward;
+    private FlashProTemplate Extra;
+    private FlashProTemplate PlusExtra;
+    private FlashProTemplate PlusHint;
     private FlashProTemplate GameOver;
+
+    private string[] rewardString = new string[] { "Super", "Brill", "Great", "Magic", "Bravo", "Sweet" };
 
     // Start is called before the first frame update
     void Start()
@@ -55,14 +67,61 @@ public class ConAnagram : MonoBehaviour
         TableCon.Table();
 
         // Configure Flashes
-        Warning = new FlashProTemplate();
+        Warning = new FlashProTemplate(); // LHS mid to top (scale down)
         Warning.SingleLerp = true;
-        Warning.StartPos = new Vector2(0.32f, 0.65f);
-        Warning.FinishPos = new Vector2(0.87f, 0.9f);
-        Warning.StartWidth = 0.2f;
-        Warning.FinishWidth = 0.3f;
+        Warning.StartPos = new Vector2(0.16f, 0.6f);
+        Warning.FinishPos = new Vector2(0.11f, 0.8f);
+        Warning.StartWidth = 0.3f;
+        Warning.FinishWidth = 0.2f;
+        Warning.StartAlpha = 1f;
+        Warning.FinishAlpha = 0.5f;
         Warning.TextColor1 = Color.yellow;
 
+        Extra = Warning.Copy();
+        Extra.TextColor1 = Color.green;
+        Extra.FinishPos = new Vector2(0.25f, 0.8f);
+        Extra.FinishWidth = 0.49f;
+
+        NoHint = new FlashProTemplate(); // Above "HINT" to top right 
+        NoHint.SingleLerp = true;
+        NoHint.StartPos = new Vector2(0.65f, 0.38f);
+        NoHint.FinishPos = new Vector2(0.83f, 0.9f);
+        NoHint.StartWidth = 0.2f;
+        NoHint.FinishWidth = 0.3f;
+        NoHint.TextColor1 = Color.red;
+        NoHint.myMessage1 = "No hints available";
+
+        Reward = new FlashProTemplate(); // Below Shuffle ... tootles then zooms off right
+        Reward.SingleLerp = false;
+        Reward.StartPos = new Vector2(0.6f, 0.1f);
+        Reward.MiddlePos = new Vector2(0.8f, 0.1f);
+        Reward.FinishPos = new Vector2(1.2f, 0.1f);
+        Reward.StartWidth = 0.10f;
+        Reward.MiddleWidth = 0.25f;
+        Reward.FinishWidth = 0.25f;
+        Reward.TextColor1 = Reward.TextColor2 = Color.green;
+        Reward.AnimTime = 1.3f;
+        Reward.MiddleTimeRatio = 0.75f;
+
+        PlusExtra = new FlashProTemplate();
+        PlusExtra.StartPos = new Vector2(0.62f, 0.83f);
+        PlusExtra.FinishPos = PlusExtra.StartPos + new Vector2(0.1f, 0.1f);
+        PlusExtra.TextColor1 = Color.green;
+        PlusExtra.myMessage1 = "+1";
+        PlusExtra.Xtween1 = PlusExtra.Ytween1 = Tween.BounceUp;
+
+        PlusHint = PlusExtra.Copy();
+        PlusHint.StartPos = new Vector2(0.77f, 0.83f);
+        PlusHint.FinishPos = PlusHint.StartPos + new Vector2(0.1f, 0.1f);
+
+        GameOver = Reward.Copy();
+        GameOver.myMessage1 = "Well Done !";
+        GameOver.myMessage2 = "New Game?";
+        GameOver.FinishPos = new Vector2(0.65f, 0.4f);
+        GameOver.FinishWidth = 0.2f;
+        GameOver.FinishAlpha = 0.2f;
+        GameOver.AnimTime = 2f;
+        GameOver.MiddleTimeRatio = 0.5f;
     }
 
     void StartGame ()
@@ -73,9 +132,17 @@ public class ConAnagram : MonoBehaviour
         selected.Clear();
         playerAnswers.Clear();
         Selecting = false;
-
-        AnswersList = AL.GetAnagramLevel(gc.player.ALevel);
-        //AnswersList = AL.GetAnagramLevel(20);
+        if (Testing)
+        {
+            AnswersList = AL.GetAnagramLevel(TestLevel);
+        }
+        else
+        {
+            AnswersList = AL.GetAnagramLevel(gc.player.ALevel);
+        }
+        Playerextras = gc.player.AExtras;
+        Playerhints = gc.player.AHints;
+        UpdateGUI();
         Anagram = AnswersList[0];
         ToFind = AnswersList.Count - 1;
         foreach (char c in Anagram)
@@ -86,6 +153,7 @@ public class ConAnagram : MonoBehaviour
         DisplayHand();
         DisplayToGets();
         GameState = 2;
+        HintDelay = false;
     }
 
     void DisplayHand ()
@@ -188,6 +256,7 @@ public class ConAnagram : MonoBehaviour
     public void TidyUp()
     {
         gc.FM.KillStaticGUIs();
+        gc.FM.KillAllFlashes();
         AnswersList.Clear();
         ToGets.Clear();
         letters.Clear();
@@ -242,21 +311,38 @@ public class ConAnagram : MonoBehaviour
 
     void GiveHint ()
     {
-        // find "unsolved words" ...
-        List<int> pos = new List<int>();
-        for (int i = 0; i < ToGets.Count; i++)
+        // Only if we have an hints available
+        if (Playerhints <= 0)
         {
-            if (ToGets[i].IsHintable()) pos.Add(i);
+            gc.FM.CustomFlash(NoHint);
         }
-        if (pos.Count == 0)
+        else if (!HintDelay)
         {
-            //Debug.Log("Sorry no hints possible !!");
-            gc.FM.CustomFlash(Warning, "No Hints Possible");
+            // find "unsolved words" ...
+            List<int> pos = new List<int>();
+            for (int i = 0; i < ToGets.Count; i++)
+            {
+                if (ToGets[i].IsHintable()) pos.Add(i);
+            }
+            if (pos.Count == 0)
+            {
+                gc.FM.CustomFlash(NoHint);
+            }
+            else
+            {
+                ToGets[pos[Random.Range(0, pos.Count)]].RevealHint();
+                Playerhints--;
+                UpdateGUI();
+                HintDelay = true;
+                StartCoroutine("HintDelayTimer");
+            }
         }
-        else
-        {
-            ToGets[pos[Random.Range(0, pos.Count)]].RevealHint();
-        }
+    }
+
+    IEnumerator HintDelayTimer ()
+    {
+        yield return new WaitForSeconds(1);
+        HintDelay = false;
     }
 
     void CheckMouseClicks()
@@ -298,9 +384,19 @@ public class ConAnagram : MonoBehaviour
                     {
                         // ANIMATE - Gratz found one !!
                         // ANIMATE reveal answer
-                        Debug.Log("You found: " + res);
+                        //Debug.Log("You found: " + res);
                         playerAnswers.Add(res);
                         ToFind--;
+                        int key = Random.Range(0, rewardString.Length);
+                        if (ToFind > 1)
+                        {
+                            gc.FM.CustomFlash(Reward, rewardString[key], rewardString[key]);
+                        }
+                        else if (ToFind == 1)
+                        {
+                            gc.FM.CustomFlash(Reward, "One Left", "One Left");
+                        }
+
                         foreach (ConAnagramWord t in ToGets)
                         {
                             if (t.myWord == res)
@@ -314,25 +410,36 @@ public class ConAnagram : MonoBehaviour
                             EndGame();
                         }
                     }
-                    else if (gc.maxTrie.CheckWord(res)) // NEW non-standard word
+                    else if (res.Length >=3 && gc.maxTrie.CheckWord(res)) // NEW non-standard word
                     {
                         if (!playerAnswers.Contains(res)) // and not already found
                         {
                             // ANIMATE GREAT WORD, new for us
                             Debug.Log("GREAT new word");
+                            gc.FM.CustomFlash(Extra, "New Word " + res);
+                            gc.FM.CustomFlash(PlusExtra);
                             playerAnswers.Add(res);
+                            Playerextras++;
+                            if (Playerextras % 5 == 0) // cash in 5 extras for a hint
+                            {
+                                Playerhints++;
+                                gc.FM.CustomFlash(PlusHint);
+                                // ANIMATE Extra HINT
+                            }
+                            UpdateGUI();
                         }
                         else
                         {
                             // ANIMATE - You've already got that one
-                            Debug.Log("Already have that one");
-                           // gc.FM.Flash(Flashes.AlreadyGot);
+                            //Debug.Log("Already have that one");
+                            gc.FM.CustomFlash(Warning, "Already got " + res);
                         }
                     }
                     else
                     {
                         // ANIMATE - sorry word not recognised
                         Debug.Log("Not a word");
+                        gc.FM.CustomFlash(Warning, "Not a word");
                     }
                 }
             }
@@ -349,7 +456,6 @@ public class ConAnagram : MonoBehaviour
                 }
                 if (gc.NewHoverOver == 6663) // back to menu
                 {
-                    Debug.Log("Want to Return to main table ... but not connected yet");
                     TidyUp();
                 }
             }
@@ -383,8 +489,10 @@ public class ConAnagram : MonoBehaviour
 
     void EndGame()
     {
-        Debug.Log("Game Over .. you got them all");
-        //gc.FM.Flash("Well Done !!", 4);
+        //Debug.Log("Game Over .. you got them all");
+        gc.FM.CustomFlash(GameOver);
+        gc.player.AExtras = Playerextras;
+        gc.player.AHints = Playerhints;
         gc.player.ALevel++;
         gc.SaveStats();
         GameState = 3;
@@ -417,8 +525,16 @@ public class ConAnagram : MonoBehaviour
 
     void SetUpGUI()
     {
-        GameObject gLevel = gc.FM.AddGUIItem("Level: "+ gc.player.ALevel, 0.45f, 0.95f, 0.2f, Color.white);
+        GameObject gLevel = gc.FM.AddGUIItem("Level: "+ gc.player.ALevel, 0.45f, 0.93f, 0.2f, Color.white);
         GUILevel = gLevel.GetComponent<TextMeshProUGUI>();
+        GameObject ghints = gc.FM.AddGUIItem("Extras: 0  Hints:  0", 0.75f, 0.93f, 0.3f, Color.yellow);
+        GUIHints = ghints.GetComponent<TextMeshProUGUI>();
+    }
+
+    void UpdateGUI()
+    {
+        GUILevel.text = "Level: " + gc.player.ALevel;
+        GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 
 

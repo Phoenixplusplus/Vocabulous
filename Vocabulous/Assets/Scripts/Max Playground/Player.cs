@@ -37,6 +37,7 @@ public struct PlayerStats
     public int AnagramMinLength;   // 4,5,6 (Default),7,8
     public int ALevel;
     public int AExtras;
+    public int AHints;
 
 }
 
@@ -86,6 +87,7 @@ public class PlayerManager
             ret.AnagramMinLength = PlayerPrefs.GetInt("AnagramMinLength");
             ret.ALevel = PlayerPrefs.GetInt("ALevel");
             ret.AExtras = PlayerPrefs.GetInt("AExtras");
+            ret.AHints = PlayerPrefs.GetInt("AHints");
 
         }
         return ret;
@@ -125,6 +127,7 @@ public class PlayerManager
         PlayerPrefs.SetInt("AnagramMinLength", player.AnagramMinLength);
         PlayerPrefs.SetInt("ALevel", player.ALevel);
         PlayerPrefs.SetInt("AExtras", player.AExtras);
+        PlayerPrefs.SetInt("AHints", player.AHints);
 
     }
 
@@ -138,7 +141,7 @@ public class PlayerManager
         ret.SFXVolume = 1.0f;      // 0 = Mute, 1 = full
 
         ret.WordDiceSize = 4;      // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6
-        ret.WordDiceGameLength = 30; // purely for testing
+        ret.WordDiceGameLength = 180; // purely for testing
         ret.WDPlays = 0;
         ret.WDHighscore = 0;
         ret.WDLongest = 0;
@@ -164,6 +167,7 @@ public class PlayerManager
         ret.AnagramMinLength = 6;
         ret.ALevel = 0;
         ret.AExtras = 0;
+        ret.AHints = 10;
 
         return ret;
     }
@@ -175,5 +179,25 @@ public class PlayerManager
     }
 
     // Will need a series of "Reset" functions here laterz
+    public void ResetAnagrams()
+    {
+        PlayerPrefs.SetInt("AnagramMinLength", 6);
+        PlayerPrefs.SetInt("ALevel", 0);
+        PlayerPrefs.SetInt("AExtras", 0);
+        PlayerPrefs.SetInt("AHints", 10);
+    }
+
+    public void ResetWordDice ()
+    {
+        PlayerPrefs.SetInt("WordDiceSize", 4);
+        PlayerPrefs.SetInt("WordDiceGameLength", 180);
+        PlayerPrefs.SetInt("WDPlays", 0);
+        PlayerPrefs.SetInt("WDHighscore", 0);
+        PlayerPrefs.SetInt("WDLongest", 0);
+        PlayerPrefs.SetFloat("WDAverageScore", 0f);
+        PlayerPrefs.SetInt("WDMostWords", 0);
+        PlayerPrefs.SetFloat("WDAverageWords", 0f);
+    }
+
 
 }
