@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ConAnagram : MonoBehaviour
 {
@@ -35,6 +36,12 @@ public class ConAnagram : MonoBehaviour
     private int GameState = 0; // 0 = on Big Table, 1 = starting, 2 = playing, 3 = ended, awaiting restart
     private int ToFind = 0;
 
+    private TextMeshProUGUI GUILevel;
+    private FlashProTemplate Warning;
+    private FlashProTemplate Reward1;
+    private FlashProTemplate RewardandHint;
+    private FlashProTemplate GameOver;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +53,16 @@ public class ConAnagram : MonoBehaviour
         selected = new List<int>();
         playerAnswers = new List<string>();
         TableCon.Table();
+
+        // Configure Flashes
+        Warning = new FlashProTemplate();
+        Warning.SingleLerp = true;
+        Warning.StartPos = new Vector2(0.32f, 0.65f);
+        Warning.FinishPos = new Vector2(0.87f, 0.9f);
+        Warning.StartWidth = 0.2f;
+        Warning.FinishWidth = 0.3f;
+        Warning.TextColor1 = Color.yellow;
+
     }
 
     void StartGame ()
@@ -163,12 +180,14 @@ public class ConAnagram : MonoBehaviour
 
     public void KickOff()
     {
+        SetUpGUI();
         TableCon.GameStart();
         StartGame();
     }
     
     public void TidyUp()
     {
+        gc.FM.KillStaticGUIs();
         AnswersList.Clear();
         ToGets.Clear();
         letters.Clear();
@@ -231,7 +250,8 @@ public class ConAnagram : MonoBehaviour
         }
         if (pos.Count == 0)
         {
-            Debug.Log("Sorry no hints possible !!");
+            //Debug.Log("Sorry no hints possible !!");
+            gc.FM.CustomFlash(Warning, "No Hints Possible");
         }
         else
         {
@@ -373,6 +393,8 @@ public class ConAnagram : MonoBehaviour
 
     void ResetGame()
     {
+        gc.FM.KillStaticGUIs();
+        gc.FM.KillAllFlashes();
         killDisplays();
         AnswersList = new List<string>();
         ToGets = new List<ConAnagramWord>();
@@ -393,7 +415,11 @@ public class ConAnagram : MonoBehaviour
         }
     }
 
-
+    void SetUpGUI()
+    {
+        GameObject gLevel = gc.FM.AddGUIItem("Level: "+ gc.player.ALevel, 0.45f, 0.95f, 0.2f, Color.white);
+        GUILevel = gLevel.GetComponent<TextMeshProUGUI>();
+    }
 
 
     // Legacy script, used to determine Anagram candidates
