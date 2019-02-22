@@ -87,7 +87,7 @@ public class PlayerManager
             ret.ALevel = PlayerPrefs.GetInt("ALevel");
             ret.AExtras = PlayerPrefs.GetInt("AExtras");
 
-}
+        }
         return ret;
     }
 
@@ -155,9 +155,9 @@ public class PlayerManager
         ret.WordSearchSixLetterWordsCount = 2;
         ret.WordSearchSevenLetterWordsCount = 0;
         ret.WordSearchEightLetterWordsCount = 0;
-        ret.WordSearchBestTime = ret.WordSearchGameLength;
+        ret.WordSearchBestTime = 599;
         ret.WordSearchAverageTime = 0;
-        ret.WordSearchWorstTime = ret.WordSearchGameLength;
+        ret.WordSearchWorstTime = 0;
         ret.WordSearchTimesCompleted = 0;
         ret.WordSearchTimesQuit = 0;
 

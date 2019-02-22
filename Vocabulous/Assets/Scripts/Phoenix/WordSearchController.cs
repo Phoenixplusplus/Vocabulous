@@ -50,6 +50,7 @@ public class WordSearchController : MonoBehaviour
     int debugPlacedWords = 0;
     public bool timeUp;
     bool showingRestart;
+    string clockString;
 
     // animated GUIs
     public FlashProTemplate f_foundWord;
@@ -398,6 +399,48 @@ public class WordSearchController : MonoBehaviour
         f_foundSame.TextColor2 = Color.red;
         f_foundSame.Xtween1 = Tween.LinearUp;
         f_foundSame.AnimTime = 2f;
+
+        // time notification flash
+        f_timeNotification = new FlashProTemplate();
+        f_timeNotification.SingleLerp = false;
+        f_timeNotification.StartPos = new Vector2(0.5f, 0.9f);
+        f_timeNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+        f_timeNotification.FinishPos = new Vector2(0.5f, 0.1f);
+        f_timeNotification.StartWidth = 0.1f;
+        f_timeNotification.MiddleWidth = 0.15f;
+        f_timeNotification.FinishWidth = 0.1f;
+        f_timeNotification.StartAlpha = 0.8f;
+        f_timeNotification.MiddleAlpha = 1f;
+        f_timeNotification.FinishAlpha = 0;
+        f_timeNotification.myMessage1 = "Found a word!";
+        f_timeNotification.myMessage2 = "Good/Great/Excellent!";
+        f_timeNotification.TextColor1 = Color.green;
+        f_timeNotification.TextColor2 = Color.red;
+        f_timeNotification.Xtween1 = Tween.LinearUp;
+        f_timeNotification.Xtween2 = Tween.QuinUp;
+        f_timeNotification.AnimTime = 2.5f;
+        f_timeNotification.MiddleTimeRatio = .3f;
+
+        // end notification
+        f_endNotification = new FlashProTemplate();
+        f_endNotification.SingleLerp = false;
+        f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
+        f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+        f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
+        f_endNotification.StartWidth = 0.2f;
+        f_endNotification.MiddleWidth = 0.3f;
+        f_endNotification.FinishWidth = 0.1f;
+        f_endNotification.StartAlpha = 0.8f;
+        f_endNotification.MiddleAlpha = 1f;
+        f_endNotification.FinishAlpha = 0;
+        f_endNotification.myMessage1 = "Found a word!";
+        f_endNotification.myMessage2 = "Good/Great/Excellent!";
+        f_endNotification.TextColor1 = Color.yellow;
+        f_endNotification.TextColor2 = Color.red;
+        f_endNotification.Xtween1 = Tween.LinearUp;
+        f_endNotification.Xtween2 = Tween.QuinUp;
+        f_endNotification.AnimTime = 2.5f;
+        f_endNotification.MiddleTimeRatio = .5f;
     }
 
     #endregion
@@ -424,6 +467,7 @@ public class WordSearchController : MonoBehaviour
             {
                 wordSearchTable.RestartSetup();
                 ClearCubesAndBoard();
+                RunEndFlashesAndSaveStats();
                 showingRestart = true;
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
@@ -461,10 +505,10 @@ public class WordSearchController : MonoBehaviour
                         {
                             if (foundWords.Contains(res))
                             {
-                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res, "Already found " + res);
+                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
                             }
                         }
-                        /* do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching */
+                        // do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching
                         for (int i = 0; i < unfoundWords.Count; i++)
                         {
                             if (unfoundWords[i] == res)
@@ -498,6 +542,11 @@ public class WordSearchController : MonoBehaviour
                                             gameController.FM.CustomFlash(f_foundWord, "6 letter word", "Excellent!");
                                             break;
                                         }
+                                }
+                                if (foundWords.Count == 5)
+                                {
+                                    if ((averageTime / 2) > wordSearchTable.clock.GetComponent<Clock>().time)
+                                    gameController.FM.CustomFlash(f_timeNotification, "Doing good!", "Beating average time!");
                                 }
                                 break;
                             }
@@ -533,7 +582,7 @@ public class WordSearchController : MonoBehaviour
 
 
 
-    #region Restart and TidyUp
+    #region Restart / TidyUp / SaveStats
     /* restarting fresh / initialising functions*/
     public void Restart()
     {
@@ -579,6 +628,43 @@ public class WordSearchController : MonoBehaviour
             wordSearchTable.foundWordObjects[i].GetComponent<Text>().text = unfoundWords[i];
             wordSearchTable.foundWordObjects[i].ScrubWord(2f);
         }
+    }
+
+    void SaveStats()
+    {
+        gameController.player.WordSearchBestTime = bestTime;
+        gameController.player.WordSearchAverageTime = averageTime;
+        gameController.player.WordSearchWorstTime = worstTime;
+        gameController.player.WordSearchTimesCompleted = timesCompleted;
+        gameController.player.WordSearchTimesQuit = timesQuit;
+        gameController.SaveStats();
+    }
+
+    void RunEndFlashesAndSaveStats()
+    {
+        float flashDelay = 0;
+        float endtime = wordSearchTable.clock.GetComponent<Clock>().time;
+        string timeStr = wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(endtime);
+
+        if ((int)endtime < bestTime)
+        {
+            bestTime = (int)endtime;
+            flashDelay++;
+            gameController.FM.CustomFlash(f_endNotification, "New Best Time!", timeStr, flashDelay);
+        }
+
+        averageTime = ((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1);
+        if (endtime < averageTime)
+        {
+            flashDelay++;
+            f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
+            f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay);
+        }
+
+        timesCompleted++;
+        SaveStats();
     }
     #endregion
 }
