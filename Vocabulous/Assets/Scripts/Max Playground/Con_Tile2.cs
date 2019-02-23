@@ -78,6 +78,10 @@ public class Con_Tile2 : MonoBehaviour
             {
                 Text_Material.color = gc.ColorHighlight;
             }
+            if (myGrid.bodyHighlights.Contains(TC_front.ID))
+            {
+                Body_Material.color = (Body_Material.color + gc.ColorBodyHighlight) / 2f;
+            }
         }
     }
 

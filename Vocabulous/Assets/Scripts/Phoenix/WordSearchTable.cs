@@ -46,8 +46,14 @@ public class WordSearchTable : MonoBehaviour
 
         unfoundWordObjects = boards.transform.GetChild(1).GetComponentsInChildren<BoardAnimator>();
         foundWordObjects = boards.transform.GetChild(0).GetComponentsInChildren<BoardAnimator>();
-
-
+        foreach (BoardAnimator item in unfoundWordObjects)
+        {
+            item.boardUpVector = boards.transform.GetChild(0).transform.up;
+        }
+        foreach (BoardAnimator item in foundWordObjects)
+        {
+            item.boardUpVector = boards.transform.GetChild(0).transform.up;
+        }
     }
 
     // Update is called once per frame

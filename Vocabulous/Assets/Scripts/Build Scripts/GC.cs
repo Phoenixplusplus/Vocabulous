@@ -84,6 +84,7 @@ public class GC : MonoBehaviour
     public Color ColorSelected = new Color();
     public Color ColorHighlight = new Color();
     public Color ColorLegal = new Color();
+    public Color ColorBodyHighlight = new Color();
 
     [Header("THE GAME STATE")]
     public int GameState = 0;

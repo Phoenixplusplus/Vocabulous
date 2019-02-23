@@ -28,6 +28,7 @@ public class GameGrid  {
     public List<int> legals = new List<int>();
     public List<int> path = new List<int>();
     public List<int> highlights = new List<int>();
+    public List<int> bodyHighlights = new List<int>();
     private string str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     public bool DEBUG = false;
     public MaxTrie trie;
@@ -44,6 +45,7 @@ public class GameGrid  {
         legals.Clear();
         path.Clear();
         highlights.Clear();
+        bodyHighlights.Clear();
         AllWordStrings.Clear();
         for (int i = 0; i < dy * dx; i++) // needs to be "full" even if with empty strings, else get reference errors
         {
@@ -299,6 +301,14 @@ public class GameGrid  {
         foreach (int i in path)
         {
             if (!highlights.Contains(i)) highlights.Add(i);
+        }
+    }
+    // adds contents of the current path to the highlights List<int>
+    public void BodyHighlightCurrentPath()
+    {
+        foreach (int i in path)
+        {
+            if (!bodyHighlights.Contains(i)) bodyHighlights.Add(i);
         }
     }
 

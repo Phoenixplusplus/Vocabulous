@@ -427,7 +427,7 @@ public class WordSearchController : MonoBehaviour
         f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
         f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
         f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
-        f_endNotification.StartWidth = 0.2f;
+        f_endNotification.StartWidth = 0.3f;
         f_endNotification.MiddleWidth = 0.3f;
         f_endNotification.FinishWidth = 0.1f;
         f_endNotification.StartAlpha = 0.8f;
@@ -439,8 +439,8 @@ public class WordSearchController : MonoBehaviour
         f_endNotification.TextColor2 = Color.red;
         f_endNotification.Xtween1 = Tween.LinearUp;
         f_endNotification.Xtween2 = Tween.QuinUp;
-        f_endNotification.AnimTime = 2.5f;
-        f_endNotification.MiddleTimeRatio = .5f;
+        f_endNotification.AnimTime = 4f;
+        f_endNotification.MiddleTimeRatio = .6f;
     }
 
     #endregion
@@ -521,7 +521,8 @@ public class WordSearchController : MonoBehaviour
                                 wordSearchTable.foundWordObjects[foundWords.Count].UseChalk(1f);
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
-                                grid.HighlightCurrentPath();
+                                //grid.HighlightCurrentPath();
+                                grid.BodyHighlightCurrentPath();
                                 switch (res.Length)
                                 {
                                     case 4:
@@ -654,13 +655,13 @@ public class WordSearchController : MonoBehaviour
         }
 
         averageTime = ((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1);
-        if (endtime < averageTime)
+        if (endtime < averageTime || (int)endtime == averageTime)
         {
             flashDelay++;
             f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
             f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay * 2);
         }
 
         timesCompleted++;

@@ -10,6 +10,7 @@ public class BoardAnimator : MonoBehaviour
     public Transform scrubRot, chalkRot;
     Vector3 scrubOriginPos, chalkOriginPos;
     Quaternion scrubOriginRot, chalkOriginRot;
+    public Vector3 boardUpVector;
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +41,7 @@ public class BoardAnimator : MonoBehaviour
         chalkOriginPos = chalk.transform.position;
         chalkOriginRot = chalk.transform.rotation;
         chalk.GetComponent<Scrubber>().shaking = true;
-        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, scrubRot.up);
+        chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, boardUpVector);
         float t = 0;
         while (t < initialLerpTime)
         {
@@ -77,7 +78,7 @@ public class BoardAnimator : MonoBehaviour
         scrubOriginPos = scrubber.transform.position;
         scrubOriginRot = scrubber.transform.rotation;
         scrubber.GetComponent<Scrubber>().shaking = true;
-        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, scrubRot.right);
+        scrubber.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, boardUpVector);
         float t = 0;
         while (t < initialLerpTime)
         {

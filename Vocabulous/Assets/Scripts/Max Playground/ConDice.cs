@@ -83,6 +83,10 @@ public class ConDice : MonoBehaviour
             {
                 top.color = gc.ColorHighlight;
             }
+            if (myGrid.bodyHighlights.Contains(ID))
+            {
+                DiceMaterial.color = (DiceMaterial.color + gc.ColorBodyHighlight) / 2f;
+            }
         }
     }
 
