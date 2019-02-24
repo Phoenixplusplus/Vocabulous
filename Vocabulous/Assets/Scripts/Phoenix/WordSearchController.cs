@@ -12,6 +12,7 @@ public class WordSearchController : MonoBehaviour
     GameGrid grid;
     public GameObject diceHolder;
     public GameObject OverlayPrefab;
+    public GameObject[] instancedDice = new GameObject[100];  
     public WordSearchTable wordSearchTable;
     public TrieTest trie;
     // set by player preferences (setup and stats)
@@ -334,6 +335,7 @@ public class WordSearchController : MonoBehaviour
                 ConDice diceCon = dice.GetComponent<ConDice>();
                 diceCon.ID = count;
                 diceCon.myGrid = grid;
+                instancedDice[count] = dice;
                 count++;
             }
         }
@@ -521,8 +523,10 @@ public class WordSearchController : MonoBehaviour
                                 wordSearchTable.foundWordObjects[foundWords.Count].UseChalk(1f);
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
-                                //grid.HighlightCurrentPath();
-                                grid.BodyHighlightCurrentPath();
+                                foreach (int ID in grid.GetCurrentPathIDs())
+                                {
+                                    instancedDice[ID].GetComponent<ConDice>().ChangeDiceColorAdditive(gameController.ColorBodyHighlight);
+                                }
                                 switch (res.Length)
                                 {
                                     case 4:

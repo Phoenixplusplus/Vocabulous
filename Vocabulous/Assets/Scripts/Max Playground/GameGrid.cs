@@ -295,6 +295,17 @@ public class GameGrid  {
             bins[bin] = value;
         }
     }
+
+    public List<int> GetCurrentPathIDs()
+    {
+        List<int> thePath = new List<int>();
+        foreach (int i in path)
+        {
+            thePath.Add(i);
+        }
+        return thePath;
+    }
+
     // adds contents of the current path to the highlights List<int>
     public void HighlightCurrentPath()
     {

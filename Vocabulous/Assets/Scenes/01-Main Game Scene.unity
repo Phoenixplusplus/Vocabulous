@@ -6304,17 +6304,17 @@ PrefabInstance:
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: ColorBodyHighlight.r
-      value: 0.5189569
+      value: 0.10622107
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: ColorBodyHighlight.g
-      value: 0.7870465
+      value: 0.5176959
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: ColorBodyHighlight.b
-      value: 0.9245283
+      value: 0.7264151
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}

@@ -95,6 +95,11 @@ public class ConDice : MonoBehaviour
         DiceMaterial.color = myColor;
     }
 
+    public void ChangeDiceColorAdditive(Color myColor)
+    {
+        DiceMaterial.color = (DiceMaterial.color + gc.ColorBodyHighlight) / 2f;
+    }
+
     public void Scale(float factor)
     {
         FaceTop.transform.localScale = FaceTop.transform.localScale * factor;
