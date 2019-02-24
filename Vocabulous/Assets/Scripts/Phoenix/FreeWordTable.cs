@@ -28,9 +28,6 @@ public class FreeWordTable : MonoBehaviour
 
         for (int i = 0; i < tableTiles.Length; i++)
         {
-            // MAX EDIT trying to convert positions from Global to Local
-            // diceStartPos[i] = tableDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
-            // diceStartPos[i] = tableDice[i].gameObject.transform.localPosition + new Vector3(0, 0.5f, 0);
             tileStartPos[i] = tableTiles[i].gameObject.transform.localPosition;
             tileStartRot[i] = tableTiles[i].gameObject.transform.rotation;
             tableTiles[i].killOverlayTile();
@@ -144,7 +141,6 @@ public class FreeWordTable : MonoBehaviour
         {
             foreach (Con_Tile2 tile in tableTiles)
             {
-                //dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
                 tile.transform.localPosition = Vector3.Lerp(tile.transform.localPosition, Vector3.zero, t / finishTime);
                 tile.transform.rotation = Quaternion.Lerp(tile.transform.rotation, tile.transform.parent.transform.rotation, t / finishTime);
             }
@@ -162,8 +158,6 @@ public class FreeWordTable : MonoBehaviour
         {
             for (int i = 0; i < tableTiles.Length; i++)
             {
-                // Max Edit
-                // tableDice[i].transform.position = Vector3.Lerp(tableDice[i].transform.position, diceStartPos[i], t / finishTime);
                 tableTiles[i].transform.localPosition = Vector3.Lerp(tableTiles[i].transform.localPosition, tileStartPos[i], t / finishTime);
                 tableTiles[i].transform.rotation = Quaternion.Lerp(tableTiles[i].transform.rotation, tileStartRot[i], t / finishTime);
             }

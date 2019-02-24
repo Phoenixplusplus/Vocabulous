@@ -39,6 +39,9 @@ public struct PlayerStats
     public int AExtras;
     public int AHints;
 
+    public int FWHighScore, FWLongestWord, FWTimesCompleted, FWGameTime;
+    public float FWAverageScore, FWAverageWord;
+
 }
 
 
@@ -89,6 +92,12 @@ public class PlayerManager
             ret.AExtras = PlayerPrefs.GetInt("AExtras");
             ret.AHints = PlayerPrefs.GetInt("AHints");
 
+            ret.FWHighScore = PlayerPrefs.GetInt("FWHighScore");
+            ret.FWLongestWord = PlayerPrefs.GetInt("FWLongestWord");
+            ret.FWTimesCompleted = PlayerPrefs.GetInt("FWTimesCompleted");
+            ret.FWAverageScore = PlayerPrefs.GetFloat("FWAverageScore");
+            ret.FWAverageWord = PlayerPrefs.GetFloat("FWAverageWord");
+            ret.FWGameTime = PlayerPrefs.GetInt("FWGameTime");
         }
         return ret;
     }
@@ -129,6 +138,12 @@ public class PlayerManager
         PlayerPrefs.SetInt("AExtras", player.AExtras);
         PlayerPrefs.SetInt("AHints", player.AHints);
 
+        PlayerPrefs.SetInt("FWHighScore", player.FWHighScore);
+        PlayerPrefs.SetInt("FWLongestWord", player.FWLongestWord);
+        PlayerPrefs.SetInt("FWTimesCompleted", player.FWTimesCompleted);
+        PlayerPrefs.SetInt("FWGameTime", player.FWGameTime);
+        PlayerPrefs.GetFloat("FWAverageScore", player.FWAverageScore);
+        PlayerPrefs.GetFloat("FWAverageWord", player.FWAverageWord);
     }
 
     public PlayerStats GetDefault()
@@ -168,6 +183,13 @@ public class PlayerManager
         ret.ALevel = 0;
         ret.AExtras = 0;
         ret.AHints = 10;
+
+        ret.FWHighScore = 0;
+        ret.FWLongestWord = 0;
+        ret.FWTimesCompleted = 0;
+        ret.FWAverageScore = 0;
+        ret.FWAverageWord = 0;
+        ret.FWGameTime = 120;
 
         return ret;
     }

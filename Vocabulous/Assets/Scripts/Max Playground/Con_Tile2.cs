@@ -138,6 +138,11 @@ public class Con_Tile2 : MonoBehaviour
         animating = false;
     }
 
+    public void ChangeTileColorAdditive(Color myColor)
+    {
+        Body_Material.color = (Body_Material.color + gc.ColorBodyHighlight) / 2f;
+    }
+
     public void ChangeTileColor (Color color)
     {
         Body_Material.color = color;

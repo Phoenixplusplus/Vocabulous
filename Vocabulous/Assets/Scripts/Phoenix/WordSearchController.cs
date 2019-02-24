@@ -53,7 +53,6 @@ public class WordSearchController : MonoBehaviour
     bool showingRestart;
     string clockString;
 
-    // animated GUIs
     public FlashProTemplate f_foundWord;
     public FlashProTemplate f_foundSame;
     public FlashProTemplate f_timeNotification;
