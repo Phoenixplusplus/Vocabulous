@@ -108,6 +108,7 @@ public class WordSearchTable : MonoBehaviour
         ToggleScrubberChalk(false);
         ToggleClock(false);
         ToggleRestartObjects(false);
+        StartCoroutine(ShiftDiceToStartPosition(3f));
     }
 
     public void IngameSetup()

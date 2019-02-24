@@ -153,7 +153,7 @@ public class FreeWordController : MonoBehaviour
             if (!showingRestart)
             {
                 freeWordTable.RestartSetup();
-                ClearTilesAndFoundList();
+                ClearTiles();
                 RunEndFlashesAndSaveStats();
                 showingRestart = true;
             }
@@ -328,7 +328,7 @@ public class FreeWordController : MonoBehaviour
         f_endNotification.TextColor2 = Color.red;
         f_endNotification.Xtween1 = Tween.LinearUp;
         f_endNotification.Xtween2 = Tween.QuinUp;
-        f_endNotification.AnimTime = 4f;
+        f_endNotification.AnimTime = 3f;
         f_endNotification.MiddleTimeRatio = .6f;
     }
     #endregion
@@ -341,7 +341,8 @@ public class FreeWordController : MonoBehaviour
         score = 0;
         freeWordTable.IngameSetup();
         grid.init();
-        ClearTilesAndFoundList();
+        ClearTiles();
+        foundWords.Clear();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
         tileHolder.transform.localRotation = Quaternion.identity;
         PlaceTilesInGrid();
@@ -365,9 +366,8 @@ public class FreeWordController : MonoBehaviour
     }
 
     // essentially same as TidyUp, though we do not change any prefabs
-    public void ClearTilesAndFoundList()
+    public void ClearTiles()
     {
-        foundWords.Clear();
         foreach (Con_Tile2 tile in tileHolder.GetComponentsInChildren<Con_Tile2>())
         {
             Destroy(tile.gameObject);
@@ -397,18 +397,19 @@ public class FreeWordController : MonoBehaviour
 
         if (score > FWHighScore)
         {
-            flashDelay++;
-            gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay * 2);
+            f_endNotification.StartPos = new Vector2(0.1f, 0.3f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.3f);
+            gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay +.5f);
             FWHighScore = score;
+            flashDelay++;
         }
 
         if (score > FWAverageScore)
         {
+            f_endNotification.StartPos = new Vector2(0.1f, 0.4f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.4f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay +.5f);
             flashDelay++;
-            f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
-            f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
-            f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay * 2);
         }
 
         foreach (string word in foundWords)
@@ -421,14 +422,19 @@ public class FreeWordController : MonoBehaviour
         }
         if (longestWordLen > FWLongestWord)
         {
+            f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .5f);
             flashDelay++;
-            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay * 2);
+            FWLongestWord = longestWordLen;
         }
 
         if (foundWords.Count > FWAverageWord)
         {
+            f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
+            f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay + .5f);
             flashDelay++;
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay * 2);
         }
 
         FWAverageWord = ((FWAverageWord * FWTimesCompleted) + foundWords.Count) / (FWTimesCompleted + 1);

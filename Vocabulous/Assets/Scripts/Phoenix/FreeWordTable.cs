@@ -86,6 +86,7 @@ public class FreeWordTable : MonoBehaviour
         ToggleStartObjects(true);
         ToggleClock(false);
         ToggleRestartObjects(false);
+        StartCoroutine(ShiftTilesToStartPosition(3f));
     }
 
     public void IngameSetup()
