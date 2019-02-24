@@ -9,7 +9,7 @@ using UnityEngine;
 
 // Placeholders only
 public enum Music { Bells,Chill,Country,Mantra,Morning,Suspense,Techno,WindOfChange,ClassPiano,ClassGuitar,ModPiano,ModGuitar }
-public enum SFX { Bang, Spring, Boom, Laser, Clang, Titter, Woohoo, Whip1, Whip2, Whoosh }
+public enum SFX { NineSecTick,Applause,Bell,Cheer,Chime,ClockChime,CoinDrop,Coins,CoinsIn, CoinsUp,CorkPop,Key1,Key2,DrumWhistleCrash,PianoSlideDown,PianoSlideUp,Signing,Whistle,Yeehaw }
 
 // PLACEHOLDER ONLY ... needs to be rebuild (with the lessons learnt from TowerL)
 // N/B Sound manager has a number of AudioSources ... held in sources[]
@@ -20,7 +20,8 @@ public class SoundMan : MonoBehaviour
 {
     private GC gc;
     public AudioClip[] MusicFiles = new AudioClip[12];
-    public AudioClip[] SFXFiles = new AudioClip[10];
+    public AudioClip LibraryAmbient;
+    public AudioClip[] SFXFiles = new AudioClip[19];
     public bool TEST_MUSIC;
     public Music Music_To_test;
     public bool TEST_SFX;
