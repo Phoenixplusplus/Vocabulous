@@ -489,12 +489,12 @@ public class ConAnagram : MonoBehaviour
 
     void EndGame()
     {
-        //Debug.Log("Game Over .. you got them all");
         gc.FM.CustomFlash(GameOver);
         gc.player.AExtras = Playerextras;
         gc.player.AHints = Playerhints;
         gc.player.ALevel++;
         gc.SaveStats();
+        if (Testing) TestLevel++;
         GameState = 3;
         TableCon.EndGame();
     }
@@ -533,7 +533,7 @@ public class ConAnagram : MonoBehaviour
 
     void UpdateGUI()
     {
-        GUILevel.text = "Level: " + gc.player.ALevel;
+        GUILevel.text = "Level: " + gc.player.ALevel + 1;
         GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 
