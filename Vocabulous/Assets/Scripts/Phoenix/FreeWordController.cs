@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class FreeWordController : MonoBehaviour
 {
@@ -36,10 +37,12 @@ public class FreeWordController : MonoBehaviour
     public bool timeUp;
     public int score = 0;
 
-    public FlashProTemplate f_foundWord, f_foundSame, f_timeNotification, f_endNotification;
+    FlashProTemplate f_foundWord, f_foundSame, f_timeNotification, f_endNotification;
+    TextMeshProUGUI g_Score, g_highScore, g_longestWord, g_averageScore, g_averageWord;
 
-    public int FWHighScore, FWLongestWord, FWTimesCompleted, FWGameTime;
+    public int FWHighScore, FWLongestWordCount, FWTimesCompleted, FWGameTime;
     public float FWAverageScore, FWAverageWord;
+    public string FWLongestWord;
 
     #region StartUp
     // main initialise function, will call subsequent StartUp functions
@@ -53,6 +56,7 @@ public class FreeWordController : MonoBehaviour
 
         LoadPlayerPreferences();
         ConfigureFlashes();
+        SetupGUI();
 
         freeWordTable.IngameSetup();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
@@ -78,6 +82,7 @@ public class FreeWordController : MonoBehaviour
         FWGameTime = gameController.player.FWGameTime;
         FWHighScore = gameController.player.FWHighScore;
         FWLongestWord = gameController.player.FWLongestWord;
+        FWLongestWordCount = gameController.player.FWLongestWordCount;
         FWTimesCompleted = gameController.player.FWTimesCompleted;
         FWAverageScore = gameController.player.FWAverageScore;
         FWAverageWord = gameController.player.FWAverageWord;
@@ -146,6 +151,7 @@ public class FreeWordController : MonoBehaviour
         {
             CheckGCHoverValue();
             InputAndSearch();
+            SetGUI();
         }
 
         if (timeUp)
@@ -230,7 +236,7 @@ public class FreeWordController : MonoBehaviour
     #endregion
 
 
-    #region Juice
+    #region Juice / GUI
     void SpawnFoundWordTiles()
     {
         List<int> foundIDs = grid.GetCurrentPathIDs();
@@ -331,6 +337,42 @@ public class FreeWordController : MonoBehaviour
         f_endNotification.AnimTime = 3f;
         f_endNotification.MiddleTimeRatio = .6f;
     }
+
+    void SetupGUI()
+    {
+        GameObject obj_Score = gameController.FM.AddGUIItem("Score: 0", 0.25f, 0.95f, 0.12f, Color.white);
+        g_Score = obj_Score.GetComponent<TextMeshProUGUI>();
+
+        GameObject obj_highScore = gameController.FM.AddGUIItem("Highscore: 0", 0.75f, 0.95f, 0.12f, Color.white);
+        g_highScore = obj_highScore.GetComponent<TextMeshProUGUI>();
+
+        GameObject obj_averageScore = gameController.FM.AddGUIItem("Avarage Score: 0", 0.50f, 0.95f, 0.12f, Color.white);
+        g_averageScore = obj_averageScore.GetComponent<TextMeshProUGUI>();
+
+        GameObject obj_longestWord = gameController.FM.AddGUIItem("Longest Word: 0", 0.25f, 0.87f, 0.12f, Color.white);
+        g_longestWord = obj_longestWord.GetComponent<TextMeshProUGUI>();
+
+        GameObject obj_averageWord = gameController.FM.AddGUIItem("Average Words: 0", 0.50f, 0.87f, 0.12f, Color.white);
+        g_averageWord = obj_averageWord.GetComponent<TextMeshProUGUI>();
+    }
+
+    void SetGUI()
+    {
+        g_Score.text = "Score: " + score;
+        g_highScore.text = "Highscore: " + FWHighScore;
+        g_averageScore.text = "Average Score: " + FWAverageScore;
+        g_longestWord.text = "Longest Word: " + FWLongestWord + ", " + FWLongestWordCount;
+        g_averageWord.text = "Average Words: " + FWAverageWord;
+    }
+
+    void SetGUIToRed()
+    {
+        g_Score.color = Color.red;
+        g_highScore.color = Color.red;
+        g_averageScore.color = Color.red;
+        g_longestWord.color = Color.red;
+        g_averageWord.color = Color.red;
+    }
     #endregion
 
 
@@ -342,6 +384,9 @@ public class FreeWordController : MonoBehaviour
         freeWordTable.IngameSetup();
         grid.init();
         ClearTiles();
+        gameController.FM.KillAllFlashes();
+        gameController.FM.KillStaticGUIs();
+        SetupGUI();
         foundWords.Clear();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
         tileHolder.transform.localRotation = Quaternion.identity;
@@ -363,6 +408,8 @@ public class FreeWordController : MonoBehaviour
         }
         instancedFoundTiles.Clear();
         freeWordTable.StartSetup();
+        gameController.FM.KillAllFlashes();
+        gameController.FM.KillStaticGUIs();
     }
 
     // essentially same as TidyUp, though we do not change any prefabs
@@ -383,6 +430,7 @@ public class FreeWordController : MonoBehaviour
     {
         gameController.player.FWHighScore = FWHighScore;
         gameController.player.FWLongestWord = FWLongestWord;
+        gameController.player.FWLongestWordCount = FWLongestWordCount;
         gameController.player.FWTimesCompleted = FWTimesCompleted;
         gameController.player.FWAverageScore = FWAverageScore;
         gameController.player.FWAverageWord = FWAverageWord;
@@ -420,13 +468,14 @@ public class FreeWordController : MonoBehaviour
                 longestWordStr = word;
             }
         }
-        if (longestWordLen > FWLongestWord)
+        if (longestWordLen > FWLongestWordCount)
         {
             f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
             gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .5f);
             flashDelay++;
-            FWLongestWord = longestWordLen;
+            FWLongestWordCount = longestWordLen;
+            FWLongestWord = longestWordStr;
         }
 
         if (foundWords.Count > FWAverageWord)

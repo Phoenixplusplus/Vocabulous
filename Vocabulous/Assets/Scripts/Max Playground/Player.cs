@@ -39,8 +39,9 @@ public struct PlayerStats
     public int AExtras;
     public int AHints;
 
-    public int FWHighScore, FWLongestWord, FWTimesCompleted, FWGameTime;
+    public int FWHighScore, FWLongestWordCount, FWTimesCompleted, FWGameTime;
     public float FWAverageScore, FWAverageWord;
+    public string FWLongestWord;
 
 }
 
@@ -93,7 +94,8 @@ public class PlayerManager
             ret.AHints = PlayerPrefs.GetInt("AHints");
 
             ret.FWHighScore = PlayerPrefs.GetInt("FWHighScore");
-            ret.FWLongestWord = PlayerPrefs.GetInt("FWLongestWord");
+            ret.FWLongestWord = PlayerPrefs.GetString("FWLongestWord");
+            ret.FWLongestWordCount = PlayerPrefs.GetInt("FWLongestWordCount");
             ret.FWTimesCompleted = PlayerPrefs.GetInt("FWTimesCompleted");
             ret.FWAverageScore = PlayerPrefs.GetFloat("FWAverageScore");
             ret.FWAverageWord = PlayerPrefs.GetFloat("FWAverageWord");
@@ -139,7 +141,8 @@ public class PlayerManager
         PlayerPrefs.SetInt("AHints", player.AHints);
 
         PlayerPrefs.SetInt("FWHighScore", player.FWHighScore);
-        PlayerPrefs.SetInt("FWLongestWord", player.FWLongestWord);
+        PlayerPrefs.SetString("FWLongestWord", player.FWLongestWord);
+        PlayerPrefs.SetInt("FWLongestWordCount", player.FWLongestWordCount);
         PlayerPrefs.SetInt("FWTimesCompleted", player.FWTimesCompleted);
         PlayerPrefs.SetInt("FWGameTime", player.FWGameTime);
         PlayerPrefs.GetFloat("FWAverageScore", player.FWAverageScore);
@@ -185,7 +188,8 @@ public class PlayerManager
         ret.AHints = 10;
 
         ret.FWHighScore = 0;
-        ret.FWLongestWord = 0;
+        ret.FWLongestWordCount = 0;
+        ret.FWLongestWord = "N/A";
         ret.FWTimesCompleted = 0;
         ret.FWAverageScore = 0;
         ret.FWAverageWord = 0;
