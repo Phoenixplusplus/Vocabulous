@@ -112,6 +112,13 @@ public class SoundMan : MonoBehaviour
         PlayMusic((Music)Random.Range(0, number));
     }
 
+    public void PlayLobbyMusic()
+    {
+        sources[0].clip = LibraryAmbient;
+        sources[0].loop = true;
+        sources[0].Play(0);
+    }
+
     public void PlayMusic(Music choice)
     {
         sources[0].clip = MusicFiles[(int)choice];
@@ -127,6 +134,18 @@ public class SoundMan : MonoBehaviour
         ToggleChannel();
     }
 
+    public void PlaySFX(SFX choice, float delay)
+    {
+        StartCoroutine(DelaySFX(choice, delay));
+    }
+
+    IEnumerator DelaySFX(SFX choice, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlaySFX(choice);
+
+    }
+
     private void ToggleChannel()
     {
         if (CurrSFXChannel == SFXChannels) { CurrSFXChannel = 1; }
@@ -138,6 +157,7 @@ public class SoundMan : MonoBehaviour
 
     public void KillSFX ()
     {
+        StopAllCoroutines(); // kills ones on delay
         for (int i = 1; i < SFXChannels; i++)
         {
             sources[i].clip = null;

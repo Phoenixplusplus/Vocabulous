@@ -57,9 +57,18 @@ public class GC : MonoBehaviour
 
     [Header("Assets")]
     public OurAssets assets;
-
-    [Header("SoundManager(sm)")]
-    public SoundMan sm;
+    [Header("SoundManager(SM)")]
+    public SoundMan SM;
+    [Header("Gui Managers")]
+    public FlashProManager FM;
+    [Header("The GAME OBJECTS")]
+    public UIC UIController;
+    public CameraController cameraController;
+    public ConWordDice WordDice;
+    public WordSearchController wordSearchController;
+    public ConTypeWriter solverController;
+    public ConAnagram anagramController;
+    public FreeWordController freeWordController;
 
     [Header("Game Positions (for positional tweaking)")] // can't have a transform (more's the pity)
     public Vector3 PosWordSearch = new Vector3();
@@ -101,17 +110,6 @@ public class GC : MonoBehaviour
     // 5 = transitioning from a game to 1 again
     // 9 = Quitting
 
-    [Header("The GAME OBJECTS")]
-    public UIC UIController;
-    public CameraController cameraController;
-    public ConWordDice WordDice;
-    public WordSearchController wordSearchController;
-    public ConTypeWriter solverController;
-    public ConAnagram anagramController;
-    public FreeWordController freeWordController;
-
-    [Header("Gui Managers")]
-    public FlashProManager FM;
      #endregion
 
 
@@ -203,6 +201,8 @@ public class GC : MonoBehaviour
             freeWordController.transform.rotation = Quaternion.Euler(RotTranFreeWord);
             freeWordController.transform.localScale = ScaleTranFreeWord;
         }
+        // Start Lobby Ambient
+        SM.PlayLobbyMusic();
     }
 
 
@@ -313,6 +313,7 @@ public class GC : MonoBehaviour
                 {
                     // called by 'Quit' Button in inspector
                     // 5 = transitioning from a game to 1 again
+                    SM.PlayLobbyMusic();
                     cameraController.QuitClicked();
                     UIController.QuitClicked();
                     ReEnableAllGames();
@@ -325,6 +326,7 @@ public class GC : MonoBehaviour
                     // 31 = Playing WordDice
                     WordDice.KickOff();
                     DisableOtherGames(WordDice.gameObject);
+                    SM.PlayRandomTrack();
                     break;
                 }
             case 32:
@@ -333,6 +335,7 @@ public class GC : MonoBehaviour
                     // 32 = Playing Solver
                     solverController.KickOff();
                     DisableOtherGames(solverController.gameObject);
+                    SM.PlayRandomTrack();
                     break;
                 }
             case 33:
@@ -341,6 +344,7 @@ public class GC : MonoBehaviour
                     // 33 = Playing Anagram
                     anagramController.KickOff();
                     DisableOtherGames(anagramController.gameObject);
+                    SM.PlayRandomTrack();
                     break;
                 }
             case 34:
@@ -350,6 +354,7 @@ public class GC : MonoBehaviour
                     if (!freeWordController.isInitialised) freeWordController.Initialise();
                     else freeWordController.Restart();
                     DisableOtherGames(freeWordController.gameObject);
+                    SM.PlayRandomTrack();
                     break;
                 }
             case 35:
@@ -359,6 +364,7 @@ public class GC : MonoBehaviour
                     if (!wordSearchController.isInitialised) wordSearchController.Initialise();
                     else wordSearchController.Restart();
                     DisableOtherGames(wordSearchController.gameObject);
+                    SM.PlayRandomTrack();
                     break;
                 }
         }
@@ -389,30 +395,35 @@ public class GC : MonoBehaviour
             case 31:
                 {
                     // we just quit WordDice, do something special
+                    SM.KillSFX();
                     WordDice.TidyUp();
                     break;
                 }
             case 32:
                 {
                     // we just quit Solver, do something special
+                    SM.KillSFX();
                     solverController.TidyUp();
                     break;
                 }
             case 33:
                 {
                     // we just quit Anagram, do something special
+                    SM.KillSFX();
                     anagramController.TidyUp();
                     break;
                 }
             case 34:
                 {
                     // we just quit FreeWord, do something special
+                    SM.KillSFX();
                     freeWordController.TidyUp();
                     break;
                 }
             case 35:
                 {
                     // we just quit WordSearch, do something special
+                    SM.KillSFX();
                     wordSearchController.TidyUp();
                     break;
                 }
@@ -428,5 +439,16 @@ public class GC : MonoBehaviour
     {
         playerManager.SavePlayer(player);
     }
+
+    public void ClearAnagramStats()
+    {
+        playerManager.ResetAnagrams();
+    }
+
+    public void ClearWordDiceStats()
+    {
+        playerManager.ResetWordDice();
+    }
+
     #endregion
 }
