@@ -314,6 +314,9 @@ public class ConWordDice : MonoBehaviour
     void SpawnDice()
     {
         myDice.transform.localRotation = Quaternion.identity;
+        Debug.Log("SpawnDice - GridSize = " + GSize.ToString());
+        Debug.Log("grid.bins.Length = " + grid.bins.Count.ToString());
+        Debug.Log("dbox.slots.Length = " + dbox.slots.Length.ToString());
         int count = 0;
         for (int z = GSize; z > 0; z--)
         {
