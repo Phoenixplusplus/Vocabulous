@@ -155,7 +155,7 @@ public class PlayerManager
 
         ret.NewPlayer = 1;          // flag RE if there is a new Player ... if 0 (or null) no Player, create a default and set to 1
         ret.Name = "NewPlayer";
-        ret.MusicVolume = 1.0f;    // 0 = Mute, 1 = full
+        ret.MusicVolume = .5f;    // 0 = Mute, 1 = full
         ret.SFXVolume = 1.0f;      // 0 = Mute, 1 = full
 
         ret.WordDiceSize = 4;      // 4 = 4x4 (default), 5 = 5x5, 6 = 6x6

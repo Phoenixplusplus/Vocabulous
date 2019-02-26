@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BoardAnimator : MonoBehaviour
 {
     Text thisText;
+    GC gameController;
     public GameObject scrubber, chalk;
     public Transform scrubRot, chalkRot;
     Vector3 scrubOriginPos, chalkOriginPos;
@@ -15,6 +16,7 @@ public class BoardAnimator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameController = GC.Instance;
         thisText = gameObject.GetComponent<Text>();
     }
 
@@ -42,6 +44,7 @@ public class BoardAnimator : MonoBehaviour
         chalkOriginRot = chalk.transform.rotation;
         chalk.GetComponent<Scrubber>().shaking = true;
         chalk.GetComponent<Scrubber>().ShakeScrubber(2, 0.1f, boardUpVector);
+        gameController.SM.PlaySFX(SFX.Chalk_Write);
         float t = 0;
         while (t < initialLerpTime)
         {

@@ -50,6 +50,7 @@ public class FreeWordTable : MonoBehaviour
             SetHoverColourOnStartTiles();
             StopAllCoroutines();
             StartCoroutine(ShiftTilesToReadyPosition(3f));
+            gameController.SM.PlayTileSFX(TileSFX.ShuffleQuick);
         }
         if (onStartHoverOver && gameController.NewHoverOver != 5551)
         {
@@ -57,6 +58,7 @@ public class FreeWordTable : MonoBehaviour
             SetNormalColourOnStartTiles();
             StopAllCoroutines();
             StartCoroutine(ShiftTilesToStartPosition(3f));
+            gameController.SM.PlayTileSFX(TileSFX.ShuffleQuick2);
         }
 
         if (gameController.HoverChange && gameController.NewHoverOver == 5552 && !onRestartHoverOver)
@@ -142,8 +144,8 @@ public class FreeWordTable : MonoBehaviour
         {
             foreach (Con_Tile2 tile in tableTiles)
             {
-                tile.transform.localPosition = Vector3.Lerp(tile.transform.localPosition, Vector3.zero, t / finishTime);
-                tile.transform.rotation = Quaternion.Lerp(tile.transform.rotation, tile.transform.parent.transform.rotation, t / finishTime);
+                tile.transform.localPosition = Vector3.Lerp(tile.transform.localPosition, Vector3.zero, (t / finishTime));
+                tile.transform.rotation = Quaternion.Lerp(tile.transform.rotation, tile.transform.parent.transform.rotation, (t / finishTime));
             }
             t += Time.deltaTime;
             if (onStartHoverOver && gameController.NewHoverOver != 5551 || gameController.GameState == 34) yield break;
@@ -159,8 +161,8 @@ public class FreeWordTable : MonoBehaviour
         {
             for (int i = 0; i < tableTiles.Length; i++)
             {
-                tableTiles[i].transform.localPosition = Vector3.Lerp(tableTiles[i].transform.localPosition, tileStartPos[i], t / finishTime);
-                tableTiles[i].transform.rotation = Quaternion.Lerp(tableTiles[i].transform.rotation, tileStartRot[i], t / finishTime);
+                tableTiles[i].transform.localPosition = Vector3.Lerp(tableTiles[i].transform.localPosition, tileStartPos[i], (t / finishTime));
+                tableTiles[i].transform.rotation = Quaternion.Lerp(tableTiles[i].transform.rotation, tileStartRot[i], (t / finishTime));
             }
             t += Time.deltaTime;
             if (gameController.HoverChange && gameController.NewHoverOver == 5551 && !onStartHoverOver || gameController.GameState == 34) yield break;

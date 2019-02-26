@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
+  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6087,22 +6087,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameController(GC)
       objectReference: {fileID: 0}
-    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
-      propertyPath: SFXFiles.Array.size
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
-      propertyPath: SFXFiles.Array.data[19]
-      value: 
-      objectReference: {fileID: 8300000, guid: e26ffcfaa044d334fa115f104ae56d05, type: 3}
-    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
-      propertyPath: SFXFiles.Array.data[20]
-      value: 
-      objectReference: {fileID: 8300000, guid: a8fcd8974f5de8d4c8f55ed22bb92ba8, type: 3}
-    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
-      propertyPath: SFXFiles.Array.data[21]
-      value: 
-      objectReference: {fileID: 8300000, guid: 81fbb8ae4439392448d3245dafc9c07a, type: 3}
     - target: {fileID: 6776935128822241971, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6158,6 +6142,162 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.size
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.size
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[19]
+      value: 
+      objectReference: {fileID: 8300000, guid: e26ffcfaa044d334fa115f104ae56d05, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[20]
+      value: 
+      objectReference: {fileID: 8300000, guid: a8fcd8974f5de8d4c8f55ed22bb92ba8, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[21]
+      value: 
+      objectReference: {fileID: 8300000, guid: 81fbb8ae4439392448d3245dafc9c07a, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: d7b8a962756d12f408f2d59611c75196, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: b14f5835a0a132945bf6d611b4891914, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 8cbc740e52e019246b174d868362a010, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6c70837d0461b814e82379ab2155bdbe, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: 2aa793d465a55dc4e84a06e1aa9e6613, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: 779427346e530f04490cb5f384d07c93, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: 3222606d81211e4439d0865ab21b103e, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 88d2dd8e30b3d55438ca2e4280af2ffe, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: c736626bbb7984b49b503279fa151d5e, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[9]
+      value: 
+      objectReference: {fileID: 8300000, guid: fcd125804e716ec4a99ce74dcf3f8426, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[10]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0ecca7cde815b084ebe9298d31b5f88d, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[11]
+      value: 
+      objectReference: {fileID: 8300000, guid: 813ca2b9c7b069b469659b9e52f043c4, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[12]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e907f57f4c084b41bf1e53a00a7d707, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 0b26704309ca75243ba9e75743ffcde7, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 975ccecdc62ba1e48a8f8aca43bf7ebb, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 938c45ae6ddfe1345a5586a9edb8d983, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: aa79969e3acc1ea4e87339a1cb05ecbc, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: b3c53a54fee922d4eaa25c2b395d4b89, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 597785ed3fe00b74885067d391675996, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: ccb0ed83c620afd46a9d1b4abf6e0cbc, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: da1e2e79f125b9a479b3554d8a22a292, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: d9eaa276914684c48a0fb62a92caed0d, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: WordSFX.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: a8402526769c76c40800dc1da681958b, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[3]
+      value: 
+      objectReference: {fileID: 8300000, guid: 542bafb9262dc634dab7cc901c3eafc9, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[4]
+      value: 
+      objectReference: {fileID: 8300000, guid: 146bd760726c3a24c960ee2998f10019, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[5]
+      value: 
+      objectReference: {fileID: 8300000, guid: bc328a3b58251ae46aee53efaaa70944, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[6]
+      value: 
+      objectReference: {fileID: 8300000, guid: f5a105e434dd75b4f9a2c3409da93b36, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: d8a1ded91e13e9445b8a809581e9f15e, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[8]
+      value: 
+      objectReference: {fileID: 8300000, guid: d86cd67964fbb6e47907d12a13f5c4a2, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[13]
+      value: 
+      objectReference: {fileID: 8300000, guid: 91215fe388a9ebf4d9fd37813e8a70e9, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[14]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4f48e9b8f5ee6ec4790d031fd2d42acf, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: MiscSFX.Array.data[9]
+      value: 
+      objectReference: {fileID: 8300000, guid: 6f6f24317c7125f408ee130c0a4c5f41, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: TileSFX.Array.data[15]
+      value: 
+      objectReference: {fileID: 8300000, guid: 52d88557f8beeee46a709ac42046c89e, type: 3}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: UIController
@@ -6201,7 +6341,7 @@ PrefabInstance:
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: UseDefaultPlayer
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}

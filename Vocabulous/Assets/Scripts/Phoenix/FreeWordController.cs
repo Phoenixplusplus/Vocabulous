@@ -161,6 +161,7 @@ public class FreeWordController : MonoBehaviour
                 freeWordTable.RestartSetup();
                 ClearTiles();
                 RunEndFlashesAndSaveStats();
+                gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                 showingRestart = true;
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 5552) Restart();
@@ -198,6 +199,7 @@ public class FreeWordController : MonoBehaviour
                             Debug.Log("You got " + res);
                             foundWords.Add(res);
                             SpawnFoundWordTiles();
+                            gameController.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                             score += GetScore(res.Length);
                             DisplayPointFlash(res.Length);
                             grid.FinishPath();
@@ -206,6 +208,7 @@ public class FreeWordController : MonoBehaviour
                         {
                             Debug.Log("You already found " + res + "!");
                             gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
+                            gameController.SM.PlayWordSFX(WordSFX.SameWord);
                             grid.FinishPath();
                         }
                     }
@@ -249,9 +252,10 @@ public class FreeWordController : MonoBehaviour
             tile.transform.localScale = instancedFoundTilesScale;
             tile.GetComponent<Con_Tile2>().ChangeTileColorAdditive(gameController.ColorBodyHighlight);
 
-            tile.AddComponent<Lerp>().Configure(tile.transform.position, (instancedTiles[99].transform.position + (instancedTiles[99].transform.right * (count * instancedFoundTilesScale.x))) + (instancedTiles[99].transform.forward * (foundWords.Count - 1)), 1f, false);
+            tile.AddComponent<Lerp>().Configure(tile.transform.position, (instancedTiles[99].transform.position + (instancedTiles[99].transform.right * (count * instancedFoundTilesScale.x))) + ((instancedTiles[99].transform.forward / 1.4f) * (foundWords.Count - 1)), 1f, false);
             tile.GetComponent<Lerp>().Go();
             count++;
+            gameController.SM.PlayTileSFX((TileSFX)Random.Range(2, 6), .8f);
             instancedFoundTiles.Add(tile);
         }
     }
@@ -386,11 +390,13 @@ public class FreeWordController : MonoBehaviour
         ClearTiles();
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
+        gameController.SM.KillSFX();
         SetupGUI();
         foundWords.Clear();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
         tileHolder.transform.localRotation = Quaternion.identity;
         PlaceTilesInGrid();
+        gameController.SM.PlayTileSFX((TileSFX)Random.Range(13,15));
         showingRestart = false;
     }
 
@@ -448,6 +454,8 @@ public class FreeWordController : MonoBehaviour
             f_endNotification.StartPos = new Vector2(0.1f, 0.3f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.3f);
             gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay +.5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay +.5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay +.5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             FWHighScore = score;
             flashDelay++;
         }
@@ -457,6 +465,8 @@ public class FreeWordController : MonoBehaviour
             f_endNotification.StartPos = new Vector2(0.1f, 0.4f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.4f);
             gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay +.5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
         }
 
@@ -473,6 +483,8 @@ public class FreeWordController : MonoBehaviour
             f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
             gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
             FWLongestWordCount = longestWordLen;
             FWLongestWord = longestWordStr;
@@ -483,6 +495,8 @@ public class FreeWordController : MonoBehaviour
             f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
             gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay + .5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
         }
 

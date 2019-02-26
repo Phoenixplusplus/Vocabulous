@@ -469,6 +469,7 @@ public class WordSearchController : MonoBehaviour
                 wordSearchTable.RestartSetup();
                 ClearCubesAndBoard();
                 RunEndFlashesAndSaveStats();
+                gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                 showingRestart = true;
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
@@ -507,6 +508,7 @@ public class WordSearchController : MonoBehaviour
                             if (foundWords.Contains(res))
                             {
                                 gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
+                                gameController.SM.PlayWordSFX(WordSFX.SameWord);
                             }
                         }
                         // do not use List.Contains(), it will find 'dog' if 'padog' is searched - better to look and find exact string matching
@@ -520,6 +522,7 @@ public class WordSearchController : MonoBehaviour
                                 wordSearchTable.unfoundWordObjects[i].UseScrubber(1f);
                                 wordSearchTable.foundWordObjects[foundWords.Count].WriteWord(res, 1f);
                                 wordSearchTable.foundWordObjects[foundWords.Count].UseChalk(1f);
+                                gameController.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                                 foundWords.Add(res);
                                 unfoundWords[i] = "";
                                 foreach (int ID in grid.GetCurrentPathIDs())
@@ -550,7 +553,7 @@ public class WordSearchController : MonoBehaviour
                                 if (foundWords.Count == 5)
                                 {
                                     if ((averageTime / 2) > wordSearchTable.clock.GetComponent<Clock>().time)
-                                    gameController.FM.CustomFlash(f_timeNotification, "Doing good!", "Beating average time!");
+                                    gameController.FM.CustomFlash(f_timeNotification, "Doing good!", "Half way!");
                                 }
                                 break;
                             }
@@ -594,10 +597,13 @@ public class WordSearchController : MonoBehaviour
         grid.init();
         ClearCubesAndBoard();
         gameController.FM.KillAllFlashes();
+        gameController.FM.KillStaticGUIs();
+        gameController.SM.KillSFX();
         wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
+        gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
         showingRestart = false;
     }
 
@@ -656,7 +662,9 @@ public class WordSearchController : MonoBehaviour
         {
             bestTime = (int)endtime;
             flashDelay++;
-            gameController.FM.CustomFlash(f_endNotification, "New Best Time!", timeStr, flashDelay);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Time!", timeStr, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
         }
 
         averageTime = ((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1);
@@ -665,8 +673,9 @@ public class WordSearchController : MonoBehaviour
             flashDelay++;
             f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
             f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
-            f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay * 2);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay + .5f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
         }
 
         timesCompleted++;

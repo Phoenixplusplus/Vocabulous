@@ -10,7 +10,9 @@ using UnityEngine;
 // Placeholders only
 public enum Music { Bells,Chill,Country,Mantra,Morning,Suspense,Techno,WindOfChange,ClassPiano,ClassGuitar,ModPiano,ModGuitar }
 public enum SFX { NineSecTick,Applause,Bell,Cheer,Chime,ClockChime,CoinDrop,Coins,CoinsIn, CoinsUp,CorkPop,Key1,Key2,DrumWhistleCrash,PianoSlideDown,PianoSlideUp,Signing,Whistle,Yeehaw,Chalk_Up, Chalk_Write,Dice_Roll }
-public enum TileSFX {Collect1,Collect2,Drop1,Drop2,Drop3,Drop4,QuickMove,Shuffle1,Shuffle2,Shuffle3,Shuffle4,Simp_Down,Splerge };
+public enum TileSFX {Collect1,Collect2,Drop1,Drop2,Drop3,Drop4,QuickMove,Shuffle1,Shuffle2,Shuffle3,Shuffle4,Simp_Down,Splerge, ShuffleQuick, ShuffleQuick2, Splerge2 };
+public enum WordSFX { GetWord, GetWord2, GetWord3, GetWord4, GetWord5, GetWord6, SameWord };
+public enum MiscSFX { TimeUp, TimeUp2, TimeUp3, Pop, Pop2, Pop3, Pop4, Pop5, Pop6, SwishQuick };
 
 // PLACEHOLDER ONLY ... needs to be rebuild (with the lessons learnt from TowerL)
 // N/B Sound manager has a number of AudioSources ... held in sources[]
@@ -23,7 +25,9 @@ public class SoundMan : MonoBehaviour
     public AudioClip[] MusicFiles = new AudioClip[12];
     public AudioClip LibraryAmbient;
     public AudioClip[] SFXFiles = new AudioClip[22];
-    public AudioClip[] TileSFX = new AudioClip[13];
+    public AudioClip[] TileSFX = new AudioClip[16];
+    public AudioClip[] WordSFX = new AudioClip[7];
+    public AudioClip[] MiscSFX = new AudioClip[10];
     public bool TEST_MUSIC;
     public Music Music_To_test;
     public bool TEST_SFX;
@@ -144,12 +148,38 @@ public class SoundMan : MonoBehaviour
         ToggleChannel();
     }
 
-    public void PlayTilesSFX (TileSFX choice, float delay)
+    public void PlayWordSFX(WordSFX choice)
+    {
+        sources[CurrSFXChannel].clip = WordSFX[(int)choice];
+        sources[CurrSFXChannel].loop = false;
+        sources[CurrSFXChannel].Play(0);
+        ToggleChannel();
+    }
+
+    public void PlayMiscSFX(MiscSFX choice)
+    {
+        sources[CurrSFXChannel].clip = MiscSFX[(int)choice];
+        sources[CurrSFXChannel].loop = false;
+        sources[CurrSFXChannel].Play(0);
+        ToggleChannel();
+    }
+
+    public void PlayTileSFX (TileSFX choice, float delay)
     {
         StartCoroutine(DelaySFX(choice, delay));
     }
 
     public void PlaySFX(SFX choice, float delay)
+    {
+        StartCoroutine(DelaySFX(choice, delay));
+    }
+
+    public void PlayWordSFX(WordSFX choice, float delay)
+    {
+        StartCoroutine(DelaySFX(choice, delay));
+    }
+
+    public void PlayMiscSFX(MiscSFX choice, float delay)
     {
         StartCoroutine(DelaySFX(choice, delay));
     }
@@ -164,6 +194,18 @@ public class SoundMan : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         PlayTileSFX(choice);
+    }
+
+    IEnumerator DelaySFX(WordSFX choice, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayWordSFX(choice);
+    }
+
+    IEnumerator DelaySFX(MiscSFX choice, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayMiscSFX(choice);
     }
 
     private void ToggleChannel()

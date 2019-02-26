@@ -66,6 +66,7 @@ public class WordSearchTable : MonoBehaviour
             SetHoverColourOnStartDice();
             StopAllCoroutines();
             StartCoroutine(ShiftDiceToReadyPosition(3f));
+            gameController.SM.PlayTileSFX(TileSFX.Splerge2);
         }
         if (onStartHoverOver && gameController.NewHoverOver != 4441)
         {
@@ -73,6 +74,7 @@ public class WordSearchTable : MonoBehaviour
             SetNormalColourOnStartDice();
             StopAllCoroutines();
             StartCoroutine(ShiftDiceToStartPosition(3f));
+            gameController.SM.PlayTileSFX(TileSFX.Splerge);
         }
 
         if (gameController.HoverChange && gameController.NewHoverOver == 4442 && !onRestartHoverOver)
