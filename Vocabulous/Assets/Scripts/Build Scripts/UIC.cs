@@ -7,7 +7,7 @@ public class UIC : MonoBehaviour
 {
     GC gameController;
     public CameraController cameraController;
-    public Animator OptionsAnimation;
+    public Animator OptionsAnimation, WDOptionsAnimation;
     public Button PlayThis, QuitThis;
 
     void Start()
@@ -18,7 +18,7 @@ public class UIC : MonoBehaviour
         ToggleQuitButton(false);
 
         // When editting, it's a pain not to have the GUI displayed ... so will "unfold" the GUI animation on start
-        //OptionsAnimation.SetBool("OptionsClicked", true);
+        OptionsAnimation.SetBool("OptionsClicked", true);
         //ToggleOptionsInOut();
     }
 
@@ -36,6 +36,12 @@ public class UIC : MonoBehaviour
     {
         bool b = OptionsAnimation.GetBool("OptionsClicked");
         OptionsAnimation.SetBool("OptionsClicked", !b);
+    }
+
+    public void ToggleWDOptionsInOut()
+    {
+        bool b = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        WDOptionsAnimation.SetBool("WDOptionsClicked", !b);
     }
 
     // UI Button functions

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -77,7 +78,7 @@ public class CameraController : MonoBehaviour
         if (currentAngle.y > 360f) currentAngle.y = 0f;
 
         // out game rotation around table
-        if (!inPlay) if (Input.GetMouseButton(0)) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
+        if (!inPlay) if (Input.GetMouseButton(0)) if (!EventSystem.current.IsPointerOverGameObject()) { targetAngle.y += (Input.GetAxis("Mouse X") * mouseSensitivty); }
 
         // panning within game
         if (inPlay)

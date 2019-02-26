@@ -474,9 +474,6 @@ public class WordSearchController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
         }
-
-        // DEBUG - REMEMBER TO TAKE THIS OUT FOR BUILD
-        if (Input.GetKeyDown(KeyCode.L)) Restart();
     }
 
     /* input and trie search */
