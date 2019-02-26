@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MaxTrie : MonoBehaviour
 {
-    private string DictPath = "/Dictionaries/XLGameDictUK.txt";
+    private string DictPath = "/StreamingAssets/Game_Dictionary.txt";
     private File_Reader reader;
     public string WordToCheck = "";
     public bool Loaded = true;

@@ -18,6 +18,7 @@ public class ConAnagram : MonoBehaviour
     public Vector3 AnswerListOffset;
     public int AnswersListWidth;
     public float AnswersListPitch;
+    public float[] TileScales = new float[10];
     private AnagramLevels AL;
     public GameObject AnswersDisplay;
     public GameObject TilesDisplay;
@@ -171,6 +172,7 @@ public class ConAnagram : MonoBehaviour
             tile.transform.parent = TilesDisplay.transform;
             tile.transform.localRotation = TilesDisplay.transform.localRotation;
             tile.transform.localPosition = GridCentre;
+            tile.transform.localScale = new Vector3(TileScales[count-1], TileScales[count-1], TileScales[count-1]);
             TileSpots.Add( tile.transform.position + ( (Quaternion.AngleAxis(transform.eulerAngles.y, Vector3.up) * offset) ) );
             Con_Tile2 con = tile.GetComponent<Con_Tile2>();
             con.SetFullFaceID(i, i);
@@ -533,7 +535,7 @@ public class ConAnagram : MonoBehaviour
 
     void UpdateGUI()
     {
-        GUILevel.text = "Level: " + gc.player.ALevel + 1;
+        GUILevel.text = "Level: " + (gc.player.ALevel + 1).ToString();
         GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 

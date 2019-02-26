@@ -25,7 +25,7 @@ public class dicebox : MonoBehaviour
     private Vector3 oldPos;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         oldPos = transform.localPosition;
         PopulateSlots();
