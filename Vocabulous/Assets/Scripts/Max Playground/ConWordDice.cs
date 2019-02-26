@@ -489,7 +489,7 @@ public class ConWordDice : MonoBehaviour
     {
         int count = 0;
         gc.FM.CustomFlash(Reward, "Time Up", "Time Up");
-        gc.SM.PlaySFX(SFX.ClockChime);
+        gc.SM.PlaySFX(SFX.Bell);
         count++;
 
         if (FoundWords.Count > AverageWords)

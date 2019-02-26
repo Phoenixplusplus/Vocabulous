@@ -6163,6 +6163,22 @@ PrefabInstance:
       propertyPath: SM
       value: 
       objectReference: {fileID: 1151723402}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.size
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[19]
+      value: 
+      objectReference: {fileID: 8300000, guid: e26ffcfaa044d334fa115f104ae56d05, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[20]
+      value: 
+      objectReference: {fileID: 8300000, guid: a8fcd8974f5de8d4c8f55ed22bb92ba8, type: 3}
+    - target: {fileID: 357395251, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
+      propertyPath: SFXFiles.Array.data[21]
+      value: 
+      objectReference: {fileID: 8300000, guid: 81fbb8ae4439392448d3245dafc9c07a, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
 --- !u!1001 &5775424619593281385

@@ -9,7 +9,8 @@ using UnityEngine;
 
 // Placeholders only
 public enum Music { Bells,Chill,Country,Mantra,Morning,Suspense,Techno,WindOfChange,ClassPiano,ClassGuitar,ModPiano,ModGuitar }
-public enum SFX { NineSecTick,Applause,Bell,Cheer,Chime,ClockChime,CoinDrop,Coins,CoinsIn, CoinsUp,CorkPop,Key1,Key2,DrumWhistleCrash,PianoSlideDown,PianoSlideUp,Signing,Whistle,Yeehaw }
+public enum SFX { NineSecTick,Applause,Bell,Cheer,Chime,ClockChime,CoinDrop,Coins,CoinsIn, CoinsUp,CorkPop,Key1,Key2,DrumWhistleCrash,PianoSlideDown,PianoSlideUp,Signing,Whistle,Yeehaw,Chalk_Up, Chalk_Write,Dice_Roll }
+public enum TileSFX {Collect1,Collect2,Drop1,Drop2,Drop3,Drop4,QuickMove,Shuffle1,Shuffle2,Shuffle3,Shuffle4,Simp_Down,Splerge };
 
 // PLACEHOLDER ONLY ... needs to be rebuild (with the lessons learnt from TowerL)
 // N/B Sound manager has a number of AudioSources ... held in sources[]
@@ -21,7 +22,8 @@ public class SoundMan : MonoBehaviour
     private GC gc;
     public AudioClip[] MusicFiles = new AudioClip[12];
     public AudioClip LibraryAmbient;
-    public AudioClip[] SFXFiles = new AudioClip[19];
+    public AudioClip[] SFXFiles = new AudioClip[22];
+    public AudioClip[] TileSFX = new AudioClip[13];
     public bool TEST_MUSIC;
     public Music Music_To_test;
     public bool TEST_SFX;
@@ -134,6 +136,19 @@ public class SoundMan : MonoBehaviour
         ToggleChannel();
     }
 
+    public void PlayTileSFX(TileSFX choice)
+    {
+        sources[CurrSFXChannel].clip = TileSFX[(int)choice];
+        sources[CurrSFXChannel].loop = false;
+        sources[CurrSFXChannel].Play(0);
+        ToggleChannel();
+    }
+
+    public void PlayTilesSFX (TileSFX choice, float delay)
+    {
+        StartCoroutine(DelaySFX(choice, delay));
+    }
+
     public void PlaySFX(SFX choice, float delay)
     {
         StartCoroutine(DelaySFX(choice, delay));
@@ -143,7 +158,12 @@ public class SoundMan : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         PlaySFX(choice);
+    }
 
+    IEnumerator DelaySFX(TileSFX choice, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        PlayTileSFX(choice);
     }
 
     private void ToggleChannel()
