@@ -593,6 +593,7 @@ public class WordSearchController : MonoBehaviour
         wordSearchTable.IngameSetup();
         grid.init();
         ClearCubesAndBoard();
+        gameController.FM.KillAllFlashes();
         wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
@@ -605,6 +606,7 @@ public class WordSearchController : MonoBehaviour
     {
         foundWords.Clear();
         unfoundWords.Clear();
+        gameController.FM.KillAllFlashes();
         foreach (ConDice dice in diceHolder.GetComponentsInChildren<ConDice>())
         {
             Destroy(dice.gameObject);
