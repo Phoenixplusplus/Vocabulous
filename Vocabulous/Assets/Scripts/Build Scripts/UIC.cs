@@ -90,10 +90,10 @@ public class UIC : MonoBehaviour
     {
         wordDiceStats[0].text = "Times Played: " + gameController.player.WDPlays;
         wordDiceStats[1].text = "Highscore: " + gameController.player.WDHighscore;
-        wordDiceStats[2].text = "Average Score: " + gameController.player.WDAverageScore;
+        wordDiceStats[2].text = "Average Score: " + gameController.player.WDAverageScore.ToString("0.0");
         wordDiceStats[3].text = "Longest Word: " + gameController.player.WDLongest;
         wordDiceStats[4].text = "Most Words: " + gameController.player.WDMostWords;
-        wordDiceStats[5].text = "Average Words: " + gameController.player.WDAverageWords;
+        wordDiceStats[5].text = "Average Words: " + gameController.player.WDAverageWords.ToString("0.0");
     }
 
     public void PopulateWordSearchStats()
@@ -114,8 +114,8 @@ public class UIC : MonoBehaviour
     {
         freeWordStats[0].text = "Times Played: " + gameController.player.FWTimesCompleted;
         freeWordStats[1].text = "Highscore: " + gameController.player.FWHighScore;
-        freeWordStats[2].text = "Average Score: " + gameController.player.FWAverageScore;
+        freeWordStats[2].text = "Average Score: " + gameController.player.FWAverageScore.ToString("0.0");
         freeWordStats[3].text = "Longest Word: " + gameController.player.FWLongestWord + ", " + gameController.player.FWLongestWordCount;
-        freeWordStats[4].text = "Average Words: " + gameController.player.FWAverageWord;
+        freeWordStats[4].text = "Average Words: " + gameController.player.FWAverageWord.ToString("0.0");
     }
 }
