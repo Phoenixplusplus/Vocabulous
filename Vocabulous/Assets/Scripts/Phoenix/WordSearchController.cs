@@ -649,6 +649,26 @@ public class WordSearchController : MonoBehaviour
         gameController.SaveStats();
     }
 
+    public void ResetStats()
+    {
+        gridXLength = 10;
+        gridYLength = 10;
+        minimumLengthWord = 4;
+        maximumLengthWord = 8;
+        fourLetterWordsCount = 4;
+        fiveLetterWordsCount = 4;
+        sixLetterWordsCount = 2;
+        sevenLetterWordsCount = 0;
+        eightLetterWordsCount = 0;
+        gameTime = 599;
+        bestTime = 0;
+        averageTime = 0;
+        worstTime = 0;
+        timesCompleted = 0;
+        timesQuit = 0;
+        SaveStats();
+    }
+
     void RunEndFlashesAndSaveStats()
     {
         float flashDelay = 0;

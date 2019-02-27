@@ -472,6 +472,17 @@ public class ConWordDice : MonoBehaviour
         gc.SaveStats();
     }
 
+    public void ResetStats()
+    {
+        GamesPlayed = 0;
+        HighScore = 0;
+        AverageScore = 0;
+        MostWords = 0;
+        AverageWords = 0;
+        Longest = 0;
+        SaveStats();
+    }
+
     private void midGameScore(string word)
     {
         int score = GetWordScore(word);

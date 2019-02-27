@@ -440,6 +440,18 @@ public class FreeWordController : MonoBehaviour
         gameController.SaveStats();
     }
 
+    public void ResetStats()
+    {
+        FWHighScore = 0;
+        FWLongestWordCount = 0;
+        FWTimesCompleted = 0;
+        FWGameTime = 120;
+        FWAverageScore = 0;
+        FWAverageWord = 0;
+        FWLongestWord = "N/A";
+        SaveStats();
+    }
+
     void RunEndFlashesAndSaveStats()
     {
         float flashDelay = 0;

@@ -603,6 +603,13 @@ public class ConAnagram : MonoBehaviour
         Debug.Log("Words examinied : " + con.ToString() + " candidates in " + (Time.realtimeSinceStartup - start).ToString() + " secs");
     }
 
-
+    public void ResetStats()
+    {
+        gc.player.AnagramMinLength = 6;
+        gc.player.ALevel = 0;
+        gc.player.AExtras = 0;
+        gc.player.AHints = 10;
+        gc.SaveStats();
+    }
 
 }

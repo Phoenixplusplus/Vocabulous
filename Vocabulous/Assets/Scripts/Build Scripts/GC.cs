@@ -442,13 +442,35 @@ public class GC : MonoBehaviour
 
     public void ClearAnagramStats()
     {
+        anagramController.ResetStats();
         playerManager.ResetAnagrams();
     }
 
     public void ClearWordDiceStats()
     {
+        WordDice.ResetStats();
         playerManager.ResetWordDice();
     }
 
+    public void ClearWordSearchStats()
+    {
+        wordSearchController.ResetStats();
+        playerManager.ResetWordSearch();
+    }
+
+    public void ClearFreeWordStats()
+    {
+        freeWordController.ResetStats();
+        playerManager.ResetFreeWord();
+    }
+
+    #endregion
+
+
+    #region GUI Functions
+    public void ResetWordDiceStats() { ClearWordDiceStats(); SaveStats(); }
+    public void ResetAnagramsStats() { ClearAnagramStats(); SaveStats(); }
+    public void ResetWordSearchStats() { ClearWordSearchStats(); SaveStats(); }
+    public void ResetFreeWordStats() { ClearFreeWordStats(); SaveStats(); }
     #endregion
 }

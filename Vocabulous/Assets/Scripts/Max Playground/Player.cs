@@ -225,5 +225,32 @@ public class PlayerManager
         PlayerPrefs.SetFloat("WDAverageWords", 0f);
     }
 
+    public void ResetWordSearch()
+    {
+        PlayerPrefs.SetInt("WordSearchSize", 10);
+        PlayerPrefs.SetInt("WordSearchGameLength", 599);
+        PlayerPrefs.SetInt("WordSearchMinimumLengthWord", 4);
+        PlayerPrefs.SetInt("WordSearchMaximumLengthWord", 8);
+        PlayerPrefs.SetInt("WordSearchFourLetterWordsCount", 4);
+        PlayerPrefs.SetInt("WordSearchFiveLetterWordsCount", 4);
+        PlayerPrefs.SetInt("WordSearchSixLetterWordsCount", 2);
+        PlayerPrefs.SetInt("WordSearchSevenLetterWordsCount", 0);
+        PlayerPrefs.SetInt("WordSearchEightLetterWordsCount", 0);
+        PlayerPrefs.SetInt("WordSearchBestTime", 599);
+        PlayerPrefs.SetInt("WordSearchAverageTime", 0);
+        PlayerPrefs.SetInt("WordSearchWorstTime", 0);
+        PlayerPrefs.SetInt("WordSearchTimesCompleted", 0);
+        PlayerPrefs.SetInt("WordSearchTimesQuit", 0);
+    }
 
+    public void ResetFreeWord()
+    {
+        PlayerPrefs.SetInt("FWHighScore", 0);
+        PlayerPrefs.SetString("FWLongestWord", "N/A");
+        PlayerPrefs.SetInt("FWLongestWordCount", 0);
+        PlayerPrefs.SetInt("FWTimesCompleted", 0);
+        PlayerPrefs.SetInt("FWGameTime", 120);
+        PlayerPrefs.GetFloat("FWAverageScore", 0);
+        PlayerPrefs.GetFloat("FWAverageWord", 0);
+    }
 }
