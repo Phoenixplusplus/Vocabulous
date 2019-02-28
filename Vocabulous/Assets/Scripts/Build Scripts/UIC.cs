@@ -13,6 +13,7 @@ public class UIC : MonoBehaviour
     public Text[] wordSearchStats = new Text[3];
     public Text[] anagramStats = new Text[3];
     public Text[] freeWordStats = new Text[5];
+    public InputField nameField;
 
     void Start()
     {
@@ -35,7 +36,53 @@ public class UIC : MonoBehaviour
         }
     }
 
-    // UI animations
+    // UI Button functions
+    // in scene
+    public void TogglePlayButton(bool state) { if (PlayThis.gameObject.activeInHierarchy == !state) PlayThis.gameObject.SetActive(state); }
+    public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
+    public void QuitClicked() { ToggleQuitButton(false); }
+    public void PlayClicked() { TogglePlayButton(false); ToggleQuitButton(true); }
+
+    // in menu
+    public void PopulateWordDiceStats()
+    {
+        wordDiceStats[0].text = "Times Played: " + gameController.player.WDPlays;
+        wordDiceStats[1].text = "Highscore: " + gameController.player.WDHighscore;
+        wordDiceStats[2].text = "Average Score: " + gameController.player.WDAverageScore.ToString("0.0");
+        wordDiceStats[3].text = "Longest Word: " + gameController.player.WDLongest;
+        wordDiceStats[4].text = "Most Words: " + gameController.player.WDMostWords;
+        wordDiceStats[5].text = "Average Words: " + gameController.player.WDAverageWords.ToString("0.0");
+    }
+
+    public void PopulateWordSearchStats()
+    {
+        wordSearchStats[0].text = "Times Played: " + gameController.player.WordSearchTimesCompleted;
+        wordSearchStats[1].text = "Best Time: " + gameController.player.WordSearchBestTime;
+        wordSearchStats[2].text = "Average Time: " + gameController.player.WordSearchAverageTime;
+    }
+
+    public void PopulateAnagramsStats()
+    {
+        anagramStats[0].text = "Level: " + gameController.player.ALevel;
+        anagramStats[1].text = "Extras: " + gameController.player.AExtras;
+        anagramStats[2].text = "Hints Left: " + gameController.player.AHints;
+    }
+
+    public void PopulateFreeWordStats()
+    {
+        freeWordStats[0].text = "Times Played: " + gameController.player.FWTimesCompleted;
+        freeWordStats[1].text = "Highscore: " + gameController.player.FWHighScore;
+        freeWordStats[2].text = "Average Score: " + gameController.player.FWAverageScore.ToString("0.0");
+        freeWordStats[3].text = "Longest Word: " + gameController.player.FWLongestWord + ", " + gameController.player.FWLongestWordCount;
+        freeWordStats[4].text = "Average Words: " + gameController.player.FWAverageWord.ToString("0.0");
+    }
+
+    public void UpdateName()
+    {
+        gameController.player.Name = nameField.text;
+        gameController.SaveStats();
+    }
+
     public void ToggleOptionsInOut()
     {
         bool b = OptionsAnimation.GetBool("OptionsClicked");
@@ -52,6 +99,8 @@ public class UIC : MonoBehaviour
 
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", !b);
+
+        if (gameController.player.Name != "NewPlayer") { nameField.text = gameController.player.Name; }
     }
 
     public void ToggleWDOptionsInOut()
@@ -112,46 +161,5 @@ public class UIC : MonoBehaviour
 
         bool Ab = AOptionsAnimation.GetBool("In");
         if (Ab) AOptionsAnimation.SetBool("In", false);
-    }
-
-    // UI Button functions
-    // in scene
-    public void TogglePlayButton(bool state) { if (PlayThis.gameObject.activeInHierarchy == !state) PlayThis.gameObject.SetActive(state); }
-    public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
-    public void QuitClicked() { ToggleQuitButton(false); }
-    public void PlayClicked() { TogglePlayButton(false); ToggleQuitButton(true); }
-
-    // in menu
-    public void PopulateWordDiceStats()
-    {
-        wordDiceStats[0].text = "Times Played: " + gameController.player.WDPlays;
-        wordDiceStats[1].text = "Highscore: " + gameController.player.WDHighscore;
-        wordDiceStats[2].text = "Average Score: " + gameController.player.WDAverageScore.ToString("0.0");
-        wordDiceStats[3].text = "Longest Word: " + gameController.player.WDLongest;
-        wordDiceStats[4].text = "Most Words: " + gameController.player.WDMostWords;
-        wordDiceStats[5].text = "Average Words: " + gameController.player.WDAverageWords.ToString("0.0");
-    }
-
-    public void PopulateWordSearchStats()
-    {
-        wordSearchStats[0].text = "Times Played: " + gameController.player.WordSearchTimesCompleted;
-        wordSearchStats[1].text = "Best Time: " + gameController.player.WordSearchBestTime;
-        wordSearchStats[2].text = "Average Time: " + gameController.player.WordSearchAverageTime;
-    }
-
-    public void PopulateAnagramsStats()
-    {
-        anagramStats[0].text = "Level: " + gameController.player.ALevel;
-        anagramStats[1].text = "Extras: " + gameController.player.AExtras;
-        anagramStats[2].text = "Hints Left: " + gameController.player.AHints;
-    }
-
-    public void PopulateFreeWordStats()
-    {
-        freeWordStats[0].text = "Times Played: " + gameController.player.FWTimesCompleted;
-        freeWordStats[1].text = "Highscore: " + gameController.player.FWHighScore;
-        freeWordStats[2].text = "Average Score: " + gameController.player.FWAverageScore.ToString("0.0");
-        freeWordStats[3].text = "Longest Word: " + gameController.player.FWLongestWord + ", " + gameController.player.FWLongestWordCount;
-        freeWordStats[4].text = "Average Words: " + gameController.player.FWAverageWord.ToString("0.0");
     }
 }
