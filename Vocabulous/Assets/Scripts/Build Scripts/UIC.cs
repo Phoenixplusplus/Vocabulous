@@ -58,24 +58,60 @@ public class UIC : MonoBehaviour
     {
         bool b = WDOptionsAnimation.GetBool("WDOptionsClicked");
         WDOptionsAnimation.SetBool("WDOptionsClicked", !b);
+
+        bool WSb = WSOptionsAnimation.GetBool("In");
+        if (WSb) WSOptionsAnimation.SetBool("In", false);
+
+        bool Ab = AOptionsAnimation.GetBool("In");
+        if (Ab) AOptionsAnimation.SetBool("In", false);
+
+        bool FWb = FWOptionsAnimation.GetBool("In");
+        if (FWb) FWOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleWSOptionsInOut()
     {
         bool b = WSOptionsAnimation.GetBool("In");
         WSOptionsAnimation.SetBool("In", !b);
+
+        bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
+
+        bool Ab = AOptionsAnimation.GetBool("In");
+        if (Ab) AOptionsAnimation.SetBool("In", false);
+
+        bool FWb = FWOptionsAnimation.GetBool("In");
+        if (FWb) FWOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleAOptionsInOut()
     {
         bool b = AOptionsAnimation.GetBool("In");
         AOptionsAnimation.SetBool("In", !b);
+
+        bool FWb = FWOptionsAnimation.GetBool("In");
+        if (FWb) FWOptionsAnimation.SetBool("In", false);
+
+        bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
+
+        bool WSb = WSOptionsAnimation.GetBool("In");
+        if (WSb) WSOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleFWOptionsInOut()
     {
         bool b = FWOptionsAnimation.GetBool("In");
         FWOptionsAnimation.SetBool("In", !b);
+
+        bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
+
+        bool WSb = WSOptionsAnimation.GetBool("In");
+        if (WSb) WSOptionsAnimation.SetBool("In", false);
+
+        bool Ab = AOptionsAnimation.GetBool("In");
+        if (Ab) AOptionsAnimation.SetBool("In", false);
     }
 
     // UI Button functions
