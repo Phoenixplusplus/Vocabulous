@@ -110,6 +110,8 @@ public class GC : MonoBehaviour
     // 5 = transitioning from a game to 1 again
     // 9 = Quitting
 
+    private FlashProTemplate Flash_Welcome, Flash_Options;
+
      #endregion
 
 
@@ -160,8 +162,32 @@ public class GC : MonoBehaviour
         wordSearchSixLetterWordsCount = player.WordSearchSixLetterWordsCount;
         wordSearchSevenLetterWordsCount = player.WordSearchSevenLetterWordsCount;
         wordSearchEightLetterWordsCount = player.WordSearchEightLetterWordsCount;
+
+        ConfigureFlashes();
     }
 
+    void ConfigureFlashes()
+    {
+        Flash_Welcome = new FlashProTemplate();
+        Flash_Welcome.myMessage1 = "Welcome ";
+        Flash_Welcome.StartPos = new Vector2(0.5f, 0.95f);
+        Flash_Welcome.FinishPos = new Vector2(0.5f, 0.4f);
+        Flash_Welcome.StartWidth = 0.05f;
+        Flash_Welcome.FinishWidth = 0.6f;
+        Flash_Welcome.TextColor1 = Color.yellow;
+        Flash_Welcome.AnimTime = 2.5f;
+        Flash_Welcome.Xtween1 = Flash_Welcome.Ytween1 = Tween.QuadUp;
+
+        Flash_Options = new FlashProTemplate();
+        Flash_Options.myMessage1 = "Options?";
+        Flash_Options.StartPos = Flash_Welcome.FinishPos;
+        Flash_Options.FinishPos = new Vector2(0.9f, 0.9f);
+        Flash_Options.TextColor1 = Color.green;
+        Flash_Options.AnimTime = 2f;
+        Flash_Options.StartWidth = Flash_Welcome.FinishWidth;
+        Flash_Options.FinishWidth = 0.18f;
+        Flash_Options.Xtween1 = Flash_Options.Ytween1 = Tween.BounceUp;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -203,6 +229,9 @@ public class GC : MonoBehaviour
         }
         // Start Lobby Ambient
         SM.PlayLobbyMusic();
+        Flash_Welcome.myMessage1 += player.Name;
+        FM.CustomFlash(Flash_Welcome);
+        FM.CustomFlash(Flash_Options, Flash_Welcome.AnimTime + 0.2f);
     }
 
 

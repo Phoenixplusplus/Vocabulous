@@ -248,8 +248,14 @@ public class FreeWordController : MonoBehaviour
             tile.GetComponent<Con_Tile2>().killOverlayTile();
             tile.transform.localScale = instancedFoundTilesScale;
             tile.GetComponent<Con_Tile2>().ChangeTileColorAdditive(gameController.ColorBodyHighlight);
-
-            tile.AddComponent<Lerp>().Configure(tile.transform.position, (instancedTiles[99].transform.position + (instancedTiles[99].transform.right * (count * instancedFoundTilesScale.x))) + ((instancedTiles[99].transform.forward / 1.4f) * (foundWords.Count - 1)), 1f, false);
+            if (foundWords.Count % 2 == 0)
+            {
+                tile.AddComponent<Lerp>().Configure(tile.transform.position, (instancedTiles[99].transform.position + (instancedTiles[99].transform.right * (count * instancedFoundTilesScale.x))) + ((instancedTiles[99].transform.forward / 1.4f) * ((foundWords.Count/2) - 1)), 1f, false);
+            }
+            else
+            {
+                tile.AddComponent<Lerp>().Configure(tile.transform.position, (instancedTiles[90].transform.position - (instancedTiles[90].transform.right * ((foundIDs.Count + 3 - count) * instancedFoundTilesScale.x))) + ((instancedTiles[90].transform.forward / 1.4f) * (foundWords.Count/2)), 1f, false);
+            }
             tile.GetComponent<Lerp>().Go();
             count++;
             gameController.SM.PlayTileSFX((TileSFX)Random.Range(2, 6), .8f);
