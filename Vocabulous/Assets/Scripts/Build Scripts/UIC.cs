@@ -85,6 +85,8 @@ public class UIC : MonoBehaviour
 
     public void ToggleOptionsInOut()
     {
+        gameController.SaveStats();
+
         bool b = OptionsAnimation.GetBool("OptionsClicked");
         OptionsAnimation.SetBool("OptionsClicked", !b);
 

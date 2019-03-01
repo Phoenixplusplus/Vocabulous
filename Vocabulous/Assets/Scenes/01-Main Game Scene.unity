@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
+  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3429,6 +3429,7 @@ MonoBehaviour:
   cameraParent: {fileID: 784828490}
   currentAngle: {x: 0, y: 0, z: 0}
   targetAngle: {x: 0, y: 0, z: 0}
+  MaxUp: 25
   mouseSensitivty: 4
   lerpSpeed: 1
   inPlay: 0
@@ -4103,6 +4104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 643923816}
   - component: {fileID: 643923817}
+  - component: {fileID: 643923818}
   m_Layer: 5
   m_Name: SoundEffectsSlider
   m_TagString: Untagged
@@ -4192,6 +4194,20 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &643923818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643923815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2360f386329a894697269a937590946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicSlider: 0
+  SFXSlider: 1
 --- !u!1 &660700703
 GameObject:
   m_ObjectHideFlags: 0
@@ -6237,6 +6253,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1048380680}
   - component: {fileID: 1048380681}
+  - component: {fileID: 1048380682}
   m_Layer: 5
   m_Name: BackgroundMusicSlider
   m_TagString: Untagged
@@ -6326,6 +6343,20 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1048380682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048380679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2360f386329a894697269a937590946, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicSlider: 1
+  SFXSlider: 0
 --- !u!1 &1053687399
 GameObject:
   m_ObjectHideFlags: 0
@@ -11743,6 +11774,10 @@ PrefabInstance:
     - target: {fileID: 634198889, guid: ab596eaab02ec17479741ec64dcd6c61, type: 3}
       propertyPath: m_Name
       value: SolverController
+      objectReference: {fileID: 0}
+    - target: {fileID: 634198889, guid: ab596eaab02ec17479741ec64dcd6c61, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 634198890, guid: ab596eaab02ec17479741ec64dcd6c61, type: 3}
       propertyPath: m_LocalPosition.x

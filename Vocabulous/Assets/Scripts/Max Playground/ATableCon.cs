@@ -109,6 +109,7 @@ public class ATableCon : MonoBehaviour
 
     void AnimateMain()
     {
+        gc.SM.PlayTileSFX(TileSFX.ShuffleQuick);
         ChangeTableColor(HighLightTileColor);
         foreach (Con_Tile2 tile in tableTiles)
         {
@@ -122,6 +123,7 @@ public class ATableCon : MonoBehaviour
 
     void StopAnimateMain()
     {
+        gc.SM.PlayTileSFX(TileSFX.ShuffleQuick);
         ChangeTableColor(NormalColor);
         foreach (Con_Tile2 tile in tableTiles)
         {

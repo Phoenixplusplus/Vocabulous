@@ -97,10 +97,12 @@ public class SoundMan : MonoBehaviour
     void SetMusicVolume()
     {
         sources[0].volume = MusicVol;
+        gc.player.MusicVolume = MusicVol;
     }
 
     void SetSFXVolume()
     {
+        gc.player.SFXVolume = SFXVol;
         for (int i = 1; i < SFXChannels; i++)
         {
             sources[i].volume = SFXVol;

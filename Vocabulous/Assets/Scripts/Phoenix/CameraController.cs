@@ -10,6 +10,10 @@ public class CameraController : MonoBehaviour
     public Transform cameraParent;
     public Vector3 currentAngle;
     public Vector3 targetAngle;
+
+    public float MaxUp;
+    private float CurrUp;
+
     float mouseX;
     public float mouseSensitivty = 4f;
     public float lerpSpeed = 1f;
@@ -62,6 +66,8 @@ public class CameraController : MonoBehaviour
 
         transform.LookAt(cameraParent);
         targetAngle = new Vector3(0f, 20f, 0f);
+
+        CurrUp = 0;
     }
 
     void Update()
@@ -85,34 +91,54 @@ public class CameraController : MonoBehaviour
         {
             if (Input.GetMouseButton(1))
             {
+                float len = 0;
+                Vector3 move = Vector3.zero;
                 if (playWordDice)
                 {
-                    wordDiceCameraTransform.position += wordDiceCameraTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    wordDiceCameraTransform.position += wordDiceUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    move = wordDiceUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    len = Vector3.Magnitude(move);
+                    if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
+                    CurrUp += len;
+                    // Debug.Log("CurrUp " + CurrUp.ToString());
+                    //wordDiceCameraTransform.position -= wordDiceCameraTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    if (CurrUp >= 0 && CurrUp <= MaxUp) wordDiceCameraTransform.position -= move;
                 }
                 if (playWordSearch)
                 {
-                    wordSearchTransform.position += wordSearchTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    wordSearchTransform.position += wordSearchUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    move = wordSearchUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    len = Vector3.Magnitude(move);
+                    if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
+                    CurrUp += len;
+                    //wordSearchTransform.position -= wordSearchTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    if (CurrUp >= 0 && CurrUp <= MaxUp) wordSearchTransform.position -= move;
                 }
                 if (playAnagram)
                 {
-                    anagramTransform.position += anagramTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    anagramTransform.position += anagramUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    move = anagramUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    len = Vector3.Magnitude(move);
+                    if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
+                    CurrUp += len;
+                    //anagramTransform.position -= anagramTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    anagramTransform.position -= move;
                 }
                 if (playWordDrop)
                 {
-                    freeWordTransform.position += freeWordTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    freeWordTransform.position += freeWordUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    move = freeWordUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
+                    len = Vector3.Magnitude(move);
+                    if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
+                    CurrUp += len;
+                    //freeWordTransform.position -= freeWordTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    freeWordTransform.position -= move;
                 }
                 if (playSolver)
                 {
-                    solverTransform.position += solverTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
+                    //solverTransform.position += solverTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     solverTransform.position += solverUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
                 }
             }
             if (Input.GetMouseButtonUp(1))
             {
+                CurrUp = 0;
                 if (playWordDice) { wordDiceCameraTransform.position = wordDiceCameraTransformOrigin; }
                 if (playWordSearch) { wordSearchTransform.position = wordSearchCameraTransformOrigin; }
                 if (playAnagram) { anagramTransform.position = anagramCameraTransformOrigin; }
@@ -137,31 +163,37 @@ public class CameraController : MonoBehaviour
         // transitioning into game area
         if (playWordDice)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, wordDiceCameraTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, wordDiceCameraTransform.rotation, Time.deltaTime);
         }
         if (playWordSearch)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, wordSearchTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, wordSearchTransform.rotation, Time.deltaTime);
         }
         if (playAnagram)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, anagramTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, anagramTransform.rotation, Time.deltaTime);
         }
         if (playWordDrop)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, freeWordTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, freeWordTransform.rotation, Time.deltaTime);
         }
         if (playSolver)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, solverTransform.position, Time.deltaTime);
             transform.rotation = Quaternion.Lerp(transform.rotation, solverTransform.rotation, Time.deltaTime);
         }
         if (quitting)
         {
+            CurrUp = 0;
             transform.position = Vector3.Lerp(transform.position, notInPlayTransform.position, Time.deltaTime * 3f);
             transform.rotation = Quaternion.Lerp(transform.rotation, notInPlayTransform.rotation, Time.deltaTime * 3f);
             if (Vector3.Distance(transform.position, notInPlayTransform.position) < 0.05f)
@@ -179,6 +211,7 @@ public class CameraController : MonoBehaviour
             {
                 if (onWordDice)
                 {
+                    CurrUp = 0;
                     gameController.SetGameState(2);
                     clickedWordDice = false;
                 }
@@ -190,6 +223,7 @@ public class CameraController : MonoBehaviour
             {
                 if (onWordSearch)
                 {
+                    CurrUp = 0;
                     gameController.SetGameState(2);
                     clickedWordSearch = false;
                 }
@@ -201,6 +235,7 @@ public class CameraController : MonoBehaviour
             {
                 if (onAnagram)
                 {
+                    CurrUp = 0;
                     gameController.SetGameState(2);
                     clickedAnagram = false;
                 }
@@ -212,6 +247,7 @@ public class CameraController : MonoBehaviour
             {
                 if (onFreeWord)
                 {
+                    CurrUp = 0;
                     gameController.SetGameState(2);
                     clickedFreeWord = false;
                 }
@@ -223,6 +259,7 @@ public class CameraController : MonoBehaviour
             {
                 if (onSolver)
                 {
+                    CurrUp = 0;
                     gameController.SetGameState(2);
                     clickedSolver = false;
                 }
@@ -233,27 +270,32 @@ public class CameraController : MonoBehaviour
     // asset click functions / button click functions
     public void RotateToGameWordDice()
     {
+        CurrUp = 0;
         clickedWordDice = true;
         targetAngle = new Vector3(0, gameController.RotTranWordDice.y, 0);
 
     }
     public void RotateToGameWordSearch()
     {
+        CurrUp = 0;
         clickedWordSearch = true;
         targetAngle = new Vector3(0, gameController.RotWordSearch.y, 0);
     }
     public void RotateToGameAnagram()
     {
+        CurrUp = 0;
         clickedAnagram = true;
         targetAngle = new Vector3(0, gameController.RotTranAnagram.y, 0);
     }
     public void RotateToGameFreeWord()
     {
+        CurrUp = 0;
         clickedFreeWord = true;
         targetAngle = new Vector3(0, gameController.RotTranFreeWord.y, 0);
     }
     public void RotateToSolver()
     {
+        CurrUp = 0;
         clickedSolver = true;
         targetAngle = new Vector3(0, gameController.RotTranSolver.y, 0);
     }
@@ -271,6 +313,7 @@ public class CameraController : MonoBehaviour
     public void QuitClicked()
     {
         quitting = true;
+        CurrUp = 0;
 
         playWordDice = false;
         playWordSearch = false;

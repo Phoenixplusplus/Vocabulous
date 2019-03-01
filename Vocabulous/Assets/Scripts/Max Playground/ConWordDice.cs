@@ -204,6 +204,7 @@ public class ConWordDice : MonoBehaviour
 
         // TESTER for gc.player ... IT WORKS <<yah me>>
         LoadStats();
+        Debug.Log("AverageWords (start game): " + AverageWords.ToString());
         // DEBUG
         if (ShortGame)
         {
@@ -249,6 +250,7 @@ public class ConWordDice : MonoBehaviour
     public void KickOff() // to be called by GameController
     {
         gc.FM.KillStaticGUIs();
+        gc.SM.KillSFX();
         SetupGUI();
         StartGame();
     }
@@ -314,15 +316,11 @@ public class ConWordDice : MonoBehaviour
     void SpawnDice()
     {
         myDice.transform.localRotation = Quaternion.identity;
-        Debug.Log("SpawnDice - GridSize = " + GSize.ToString());
-        Debug.Log("grid.bins.Length = " + grid.bins.Count.ToString());
-        Debug.Log("dbox.slots.Length = " + dbox.slots.Length.ToString());
         int count = 0;
         for (int z = GSize; z > 0; z--)
         {
             for (int x = 0; x < GSize; x++)
             {
-                //GameObject dice = gc.assets.SpawnDice(grid.bins[count], new Vector3(x, 0, z) + transform.position);
                 GameObject dice = gc.assets.SpawnDice(grid.bins[count], dbox.slots[count] + transform.position);
                 dice.transform.parent = myDice.transform;
                 ConDice con = dice.GetComponent<ConDice>();
@@ -381,13 +379,15 @@ public class ConWordDice : MonoBehaviour
                             {
                                 // ANIMATE
                                 gc.FM.CustomFlash(FindSame, "Already found " + res);
+                                gc.SM.PlayWordSFX(WordSFX.SameWord);
                             }
                             else
                             {
                                 // ANIMATE
                                 string score = GetWordScore(res).ToString();
                                 gc.FM.CustomFlash(FindGood, "Found " + res, "+" + score + " Pt");
-                                gc.SM.PlaySFX(SFX.Cheer);
+                                // gc.SM.PlaySFX(SFX.Cheer);
+                                gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                                 midGameScore(res);
                                 FoundWords.Add(res);
                                 foundListDisplay.addWord(res, "qu");
@@ -397,6 +397,7 @@ public class ConWordDice : MonoBehaviour
                         {
                             // ANIMATE
                             gc.FM.CustomFlash(FindBad, "Don't know " + res);
+                            gc.SM.PlayWordSFX(WordSFX.SameWord);
                         }
                     }
                 }
@@ -408,13 +409,8 @@ public class ConWordDice : MonoBehaviour
             {
                 if (gc.NewHoverOver == 8882) // restart game
                 {
-                    //Debug.Log("Attempting restart");
                     ResetGame();
                     KickOff();
-                }
-                if (gc.NewHoverOver == 8883) // back to menu
-                {
-                    //Debug.Log("Want to Return to main table ... but not connected yet");
                 }
             }
         }
@@ -456,7 +452,7 @@ public class ConWordDice : MonoBehaviour
         HighScore = gc.player.WDHighscore;
         AverageScore = gc.player.WDAverageScore;
         MostWords = gc.player.WDMostWords;
-        AverageWords = gc.WordDice.AverageWords;
+        AverageWords = gc.player.WDAverageWords;
         Longest = gc.player.WDLongest;
     }
 
@@ -511,13 +507,13 @@ public class ConWordDice : MonoBehaviour
             // ANIMATE .. Average words found improved
             Debug.Log("Average Words Improved : "+ AverageWords.ToString()+" -> "+FoundWords.Count.ToString());
             gc.FM.CustomFlash(Reward, "Average Words Improved !", "Average Words Improved !", count * 2.5f);
-            gc.SM.PlaySFX(SFX.Cheer, count * 2.5f);
+            gc.SM.PlayMiscSFX(MiscSFX.SwishQuick, count * 2.5f);
             count++;
         }
         if (FoundWords.Count > MostWords)
         {
             gc.FM.CustomFlash(Reward, "Record Word Count !", "Record Word Count !", count * 2.5f);
-            gc.SM.PlaySFX(SFX.Applause, count * 2.5f);
+            gc.SM.PlayMiscSFX(MiscSFX.SwishQuick, count * 2.5f);
             count++;
             MostWords = FoundWords.Count;
         }
@@ -526,7 +522,7 @@ public class ConWordDice : MonoBehaviour
             // ANIMATE .. Average Score Improved
             //Debug.Log("Average Score Improved : "+ AverageScore.ToString()+" -> "+CurrScore.ToString());
             gc.FM.CustomFlash(Reward, "Average Score Improved !", "Average Score Improved !", count * 2.5f);
-            gc.SM.PlaySFX(SFX.Cheer, count * 2.5f);
+            gc.SM.PlayMiscSFX(MiscSFX.SwishQuick, count * 2.5f);
             count++;
         }
         if (CurrScore > HighScore)
@@ -540,6 +536,7 @@ public class ConWordDice : MonoBehaviour
         }
         gc.FM.CustomFlash(NewGame, count * 2.5f);
         AverageWords = ((AverageWords * GamesPlayed) + FoundWords.Count) / ((float)GamesPlayed + 1);
+        Debug.Log("AverageWords (post game): " + AverageWords.ToString());
         AverageScore = ((AverageScore * GamesPlayed) + CurrScore) / ((float)GamesPlayed + 1);
         GamesPlayed++;
         SaveStats();

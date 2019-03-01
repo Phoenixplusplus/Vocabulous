@@ -159,6 +159,7 @@ public class ConAnagram : MonoBehaviour
 
     void DisplayHand ()
     {
+        gc.SM.PlayTileSFX((TileSFX)Random.Range(12, 16));
         TileSpots = new List<Vector3>();
         int count = letters.Count;
         float angle = 360.0f / (float)count;
@@ -251,6 +252,7 @@ public class ConAnagram : MonoBehaviour
     public void KickOff()
     {
         SetUpGUI();
+        gc.SM.KillSFX();
         TableCon.GameStart();
         StartGame();
     }
@@ -259,6 +261,7 @@ public class ConAnagram : MonoBehaviour
     {
         gc.FM.KillStaticGUIs();
         gc.FM.KillAllFlashes();
+        gc.SM.KillSFX();
         AnswersList.Clear();
         ToGets.Clear();
         letters.Clear();
@@ -333,6 +336,7 @@ public class ConAnagram : MonoBehaviour
             else
             {
                 ToGets[pos[Random.Range(0, pos.Count)]].RevealHint();
+                gc.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 8));
                 Playerhints--;
                 UpdateGUI();
                 HintDelay = true;
@@ -389,6 +393,7 @@ public class ConAnagram : MonoBehaviour
                         //Debug.Log("You found: " + res);
                         playerAnswers.Add(res);
                         ToFind--;
+                        gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                         int key = Random.Range(0, rewardString.Length);
                         if (ToFind > 1)
                         {
@@ -404,6 +409,10 @@ public class ConAnagram : MonoBehaviour
                             if (t.myWord == res)
                             {
                                 t.Roll(0.1f);
+                                for (int i = 1; i < res.Length; i++)
+                                {
+                                    gc.SM.PlayTileSFX((TileSFX)Random.Range(2,6),i*0.1f);
+                                }
                             }
                         }
                         // check for game end
@@ -420,6 +429,7 @@ public class ConAnagram : MonoBehaviour
                             Debug.Log("GREAT new word");
                             gc.FM.CustomFlash(Extra, "New Word " + res);
                             gc.FM.CustomFlash(PlusExtra);
+                            gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                             playerAnswers.Add(res);
                             Playerextras++;
                             if (Playerextras % 5 == 0) // cash in 5 extras for a hint
@@ -435,6 +445,7 @@ public class ConAnagram : MonoBehaviour
                             // ANIMATE - You've already got that one
                             //Debug.Log("Already have that one");
                             gc.FM.CustomFlash(Warning, "Already got " + res);
+                            gc.SM.PlayWordSFX(WordSFX.SameWord);
                         }
                     }
                     else
@@ -442,6 +453,7 @@ public class ConAnagram : MonoBehaviour
                         // ANIMATE - sorry word not recognised
                         Debug.Log("Not a word");
                         gc.FM.CustomFlash(Warning, "Not a word");
+                        gc.SM.PlayWordSFX(WordSFX.SameWord);
                     }
                 }
             }
@@ -453,6 +465,7 @@ public class ConAnagram : MonoBehaviour
                 if (gc.NewHoverOver == 6662) // restart game
                 {
                     Debug.Log("Attempting restart");
+                    gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                     ResetGame();
                     KickOff();
                 }
@@ -492,6 +505,7 @@ public class ConAnagram : MonoBehaviour
     void EndGame()
     {
         gc.FM.CustomFlash(GameOver);
+        gc.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
         gc.player.AExtras = Playerextras;
         gc.player.AHints = Playerhints;
         gc.player.ALevel++;
@@ -539,6 +553,14 @@ public class ConAnagram : MonoBehaviour
         GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 
+    public void ResetStats()
+    {
+        gc.player.AnagramMinLength = 6;
+        gc.player.ALevel = 0;
+        gc.player.AExtras = 0;
+        gc.player.AHints = 10;
+        gc.SaveStats();
+    }
 
     // Legacy script, used to determine Anagram candidates
     void ExamineWords()
@@ -603,13 +625,6 @@ public class ConAnagram : MonoBehaviour
         Debug.Log("Words examinied : " + con.ToString() + " candidates in " + (Time.realtimeSinceStartup - start).ToString() + " secs");
     }
 
-    public void ResetStats()
-    {
-        gc.player.AnagramMinLength = 6;
-        gc.player.ALevel = 0;
-        gc.player.AExtras = 0;
-        gc.player.AHints = 10;
-        gc.SaveStats();
-    }
+
 
 }

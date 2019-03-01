@@ -87,12 +87,14 @@ public class ConTableWordDice : MonoBehaviour
         {
             highlighted = true;
             setToHighlight();
+            gc.SM.PlayTileSFX(TileSFX.ShuffleQuick);
             ScaleDiceUp();
         }
         if (highlighted && gc.NewHoverOver != 8881)
         {
             highlighted = false;
             setToNormal();
+            gc.SM.PlayTileSFX(TileSFX.ShuffleQuick);
             ScaleDiceDown();
         }
         // CHECKING - Restart GUI Tile

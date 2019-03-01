@@ -256,7 +256,7 @@ public class GC : MonoBehaviour
         if (GameState == 1)
         {
             // WordDice
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { cameraController.RotateToGameWordDice(); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { cameraController.RotateToGameWordDice();}
             // Solver
             if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { cameraController.RotateToSolver(); }
             // Anagram
@@ -270,15 +270,15 @@ public class GC : MonoBehaviour
         if (GameState == 2)
         {
             // WordDice
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881) { SetGameState(31); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 8881 && cameraController.playWordDice) { SetGameState(31); }
             // Solver
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771) { SetGameState(32); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 7771 && cameraController.playSolver) { SetGameState(32); }
             // Anagram
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661) { SetGameState(33); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 6661 && cameraController.playAnagram) { SetGameState(33); }
             // FreeWord
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551) { SetGameState(34); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 5551 && cameraController.playWordDrop) { SetGameState(34); }
             // WordSearch
-            if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441) { SetGameState(35); }
+            if (Input.GetMouseButtonDown(0) && NewHoverOver == 4441 && cameraController.playWordSearch) { SetGameState(35); }
         }
     }
 
@@ -385,7 +385,7 @@ public class GC : MonoBehaviour
         wordSearchController.gameObject.SetActive(true);
         anagramController.gameObject.SetActive(true);
         freeWordController.gameObject.SetActive(true);
-        solverController.gameObject.SetActive(true);
+        //solverController.gameObject.SetActive(true);
     }
 
     void OnThisGameQuit(int i)
@@ -444,24 +444,28 @@ public class GC : MonoBehaviour
     {
         anagramController.ResetStats();
         playerManager.ResetAnagrams();
+        player = playerManager.LoadPlayer();
     }
 
     public void ClearWordDiceStats()
     {
         WordDice.ResetStats();
         playerManager.ResetWordDice();
+        player = playerManager.LoadPlayer();
     }
 
     public void ClearWordSearchStats()
     {
         wordSearchController.ResetStats();
         playerManager.ResetWordSearch();
+        player = playerManager.LoadPlayer();
     }
 
     public void ClearFreeWordStats()
     {
         freeWordController.ResetStats();
         playerManager.ResetFreeWord();
+        player = playerManager.LoadPlayer();
     }
 
     #endregion
