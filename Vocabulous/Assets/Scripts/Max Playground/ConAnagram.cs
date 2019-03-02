@@ -426,8 +426,7 @@ public class ConAnagram : MonoBehaviour
                         if (!playerAnswers.Contains(res)) // and not already found
                         {
                             // ANIMATE GREAT WORD, new for us
-                            Debug.Log("GREAT new word");
-                            gc.FM.CustomFlash(Extra, "New Word " + res);
+                            gc.FM.CustomFlash(Extra, "New Word " + res.ToUpper());
                             gc.FM.CustomFlash(PlusExtra);
                             gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                             playerAnswers.Add(res);
@@ -444,7 +443,7 @@ public class ConAnagram : MonoBehaviour
                         {
                             // ANIMATE - You've already got that one
                             //Debug.Log("Already have that one");
-                            gc.FM.CustomFlash(Warning, "Already got " + res);
+                            gc.FM.CustomFlash(Warning, "Already got " + res.ToUpper());
                             gc.SM.PlayWordSFX(WordSFX.SameWord);
                         }
                     }
@@ -464,7 +463,6 @@ public class ConAnagram : MonoBehaviour
             {
                 if (gc.NewHoverOver == 6662) // restart game
                 {
-                    Debug.Log("Attempting restart");
                     gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                     ResetGame();
                     KickOff();

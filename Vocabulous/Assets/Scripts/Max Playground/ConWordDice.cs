@@ -378,14 +378,14 @@ public class ConWordDice : MonoBehaviour
                             if (FoundWords.Contains(res))
                             {
                                 // ANIMATE
-                                gc.FM.CustomFlash(FindSame, "Already found " + res);
+                                gc.FM.CustomFlash(FindSame, "Already found " + res.ToUpper());
                                 gc.SM.PlayWordSFX(WordSFX.SameWord);
                             }
                             else
                             {
                                 // ANIMATE
                                 string score = GetWordScore(res).ToString();
-                                gc.FM.CustomFlash(FindGood, "Found " + res, "+" + score + " Pt");
+                                gc.FM.CustomFlash(FindGood, "Found " + res.ToUpper(), "+" + score + " Pt");
                                 // gc.SM.PlaySFX(SFX.Cheer);
                                 gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                                 midGameScore(res);
@@ -396,7 +396,7 @@ public class ConWordDice : MonoBehaviour
                         else
                         {
                             // ANIMATE
-                            gc.FM.CustomFlash(FindBad, "Don't know " + res);
+                            gc.FM.CustomFlash(FindBad, "Don't know " + res.ToUpper());
                             gc.SM.PlayWordSFX(WordSFX.SameWord);
                         }
                     }
