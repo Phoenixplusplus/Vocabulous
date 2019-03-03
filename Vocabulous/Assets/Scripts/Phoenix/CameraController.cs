@@ -119,7 +119,7 @@ public class CameraController : MonoBehaviour
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
                     //anagramTransform.position -= anagramTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    anagramTransform.position -= move;
+                    if (CurrUp >= 0 && CurrUp <= MaxUp)  anagramTransform.position -= move;
                 }
                 if (playWordDrop)
                 {
@@ -128,7 +128,7 @@ public class CameraController : MonoBehaviour
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
                     //freeWordTransform.position -= freeWordTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
-                    freeWordTransform.position -= move;
+                    if (CurrUp >= 0 && CurrUp <= MaxUp)  freeWordTransform.position -= move;
                 }
                 if (playSolver)
                 {
