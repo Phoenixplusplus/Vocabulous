@@ -7,7 +7,7 @@ public class UIC : MonoBehaviour
 {
     GC gameController;
     public CameraController cameraController;
-    public Animator OptionsAnimation, WDOptionsAnimation, WSOptionsAnimation, AOptionsAnimation, FWOptionsAnimation;
+    public Animator OptionsAnimation, WDOptionsAnimation, WSOptionsAnimation, AOptionsAnimation, FWOptionsAnimation, AboutOptionsAnimation;
     public Button PlayThis, QuitThis;
     public Text[] wordDiceStats = new Text[6];
     public Text[] wordSearchStats = new Text[3];
@@ -102,6 +102,9 @@ public class UIC : MonoBehaviour
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", !b);
 
+        bool ABb = AboutOptionsAnimation.GetBool("In");
+        if (ABb) AboutOptionsAnimation.SetBool("In", !b);
+
         if (gameController.player.Name != "NewPlayer") { nameField.text = gameController.player.Name; }
     }
 
@@ -118,6 +121,9 @@ public class UIC : MonoBehaviour
 
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", false);
+
+        bool ABb = AboutOptionsAnimation.GetBool("In");
+        if (ABb) AboutOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleWSOptionsInOut()
@@ -133,6 +139,9 @@ public class UIC : MonoBehaviour
 
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", false);
+
+        bool ABb = AboutOptionsAnimation.GetBool("In");
+        if (ABb) AboutOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleAOptionsInOut()
@@ -148,6 +157,9 @@ public class UIC : MonoBehaviour
 
         bool WSb = WSOptionsAnimation.GetBool("In");
         if (WSb) WSOptionsAnimation.SetBool("In", false);
+
+        bool ABb = AboutOptionsAnimation.GetBool("In");
+        if (ABb) AboutOptionsAnimation.SetBool("In", false);
     }
 
     public void ToggleFWOptionsInOut()
@@ -163,5 +175,26 @@ public class UIC : MonoBehaviour
 
         bool Ab = AOptionsAnimation.GetBool("In");
         if (Ab) AOptionsAnimation.SetBool("In", false);
+
+        bool ABb = AboutOptionsAnimation.GetBool("In");
+        if (ABb) AboutOptionsAnimation.SetBool("In", false);
+    }
+
+    public void ToggleAboutUsInOut()
+    {
+        bool b = AboutOptionsAnimation.GetBool("In");
+        AboutOptionsAnimation.SetBool("In", !b);
+
+        bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
+
+        bool WSb = WSOptionsAnimation.GetBool("In");
+        if (WSb) WSOptionsAnimation.SetBool("In", false);
+
+        bool Ab = AOptionsAnimation.GetBool("In");
+        if (Ab) AOptionsAnimation.SetBool("In", false);
+
+        bool FWb = FWOptionsAnimation.GetBool("In");
+        if (FWb) FWOptionsAnimation.SetBool("In", false);
     }
 }
