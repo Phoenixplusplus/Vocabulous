@@ -17,7 +17,7 @@ public class BoardAnimator : MonoBehaviour
     void Start()
     {
         gameController = GC.Instance;
-        thisText = gameObject.GetComponent<Text>();
+        //thisText = gameObject.GetComponent<Text>();
     }
 
     public void WriteWord(string str, float totalTime) { StartCoroutine(WriteWordIE(str, totalTime)); }
@@ -67,7 +67,9 @@ public class BoardAnimator : MonoBehaviour
 
     IEnumerator ScrubWordIE(float totalTime)
     {
+
         int len = thisText.text.Length;
+        Debug.Log(len);
         for (int i = len; i > -1; i--)
         {
             thisText.text = thisText.text.Substring(0, i);
@@ -100,5 +102,10 @@ public class BoardAnimator : MonoBehaviour
             yield return null;
         }
         yield break;
+    }
+
+    public void Init()
+    {
+        thisText = gameObject.GetComponent<Text>();
     }
 }

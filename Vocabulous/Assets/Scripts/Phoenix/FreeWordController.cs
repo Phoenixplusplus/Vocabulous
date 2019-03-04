@@ -159,7 +159,7 @@ public class FreeWordController : MonoBehaviour
             if (!showingRestart)
             {
                 freeWordTable.RestartSetup();
-                ClearTiles();
+                //ClearTiles();
                 RunEndFlashesAndSaveStats();
                 gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                 showingRestart = true;
@@ -204,7 +204,7 @@ public class FreeWordController : MonoBehaviour
                         else
                         {
                             Debug.Log("You already found " + res + "!");
-                            gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
+                            gameController.FM.CustomFlash(f_foundSame, "Already found " + res.ToUpper());
                             gameController.SM.PlayWordSFX(WordSFX.SameWord);
                             grid.FinishPath();
                         }
@@ -407,18 +407,10 @@ public class FreeWordController : MonoBehaviour
     public void TidyUp()
     {
         foundWords.Clear();
-        foreach (Con_Tile2 tile in tileHolder.GetComponentsInChildren<Con_Tile2>())
-        {
-            Destroy(tile.gameObject);
-        }
-        foreach (GameObject tile in instancedFoundTiles)
-        {
-            Destroy(tile);
-        }
-        instancedFoundTiles.Clear();
-        freeWordTable.StartSetup();
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
+        ClearTiles();
+        freeWordTable.StartSetup();
     }
 
     // essentially same as TidyUp, though we do not change any prefabs

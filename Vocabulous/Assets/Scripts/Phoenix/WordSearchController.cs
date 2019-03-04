@@ -467,13 +467,15 @@ public class WordSearchController : MonoBehaviour
             if (!showingRestart)
             {
                 wordSearchTable.RestartSetup();
-                ClearCubesAndBoard();
+                //ClearCubesAndBoard();
                 RunEndFlashesAndSaveStats();
                 gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                 showingRestart = true;
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
         }
+
+        if (Input.GetKeyDown(KeyCode.I)) Restart();
     }
 
     /* input and trie search */
@@ -504,7 +506,7 @@ public class WordSearchController : MonoBehaviour
                         {
                             if (foundWords.Contains(res))
                             {
-                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res);
+                                gameController.FM.CustomFlash(f_foundSame, "Already found " + res.ToUpper());
                                 gameController.SM.PlayWordSFX(WordSFX.SameWord);
                             }
                         }
@@ -610,10 +612,13 @@ public class WordSearchController : MonoBehaviour
         foundWords.Clear();
         unfoundWords.Clear();
         gameController.FM.KillAllFlashes();
+        gameController.FM.KillStaticGUIs();
+        gameController.SM.KillSFX();
         foreach (ConDice dice in diceHolder.GetComponentsInChildren<ConDice>())
         {
             Destroy(dice.gameObject);
         }
+        ClearCubesAndBoard();
         wordSearchTable.StartSetup();
     }
 
@@ -633,7 +638,9 @@ public class WordSearchController : MonoBehaviour
     {
         for (int i = 0; i < unfoundWords.Count; i++)
         {
+            wordSearchTable.unfoundWordObjects[i].Init();
             wordSearchTable.unfoundWordObjects[i].WriteWord(unfoundWords[i], 2f);
+            wordSearchTable.foundWordObjects[i].Init();
             wordSearchTable.foundWordObjects[i].GetComponent<Text>().text = unfoundWords[i];
             wordSearchTable.foundWordObjects[i].ScrubWord(2f);
         }
