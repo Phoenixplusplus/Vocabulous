@@ -1,0 +1,502 @@
+fileFormatVersion: 2
+guid: 10144a6a2a3f7e646acf951489188cd6
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Art1
+    100002: art2
+    100004: art3
+    100006: art4
+    100008: artworks
+    100010: bannister_head1
+    100012: bannister_head2
+    100014: bannister_head3
+    100016: bannister_head4
+    100018: bannister_heads
+    100020: book1
+    100022: book2
+    100024: book3
+    100026: book4
+    100028: book5
+    100030: book6
+    100032: book7
+    100034: book8
+    100036: book9
+    100038: bookcases
+    100040: bookS1
+    100042: bookS10
+    100044: bookS11
+    100046: bookS12
+    100048: bookS13
+    100050: bookS14
+    100052: bookS15
+    100054: bookS16
+    100056: bookS2
+    100058: bookS3
+    100060: bookS4
+    100062: bookS5
+    100064: bookS6
+    100066: bookS7
+    100068: bookS8
+    100070: bookS9
+    100072: books_on_shelf
+    100074: chair1
+    100076: chair2
+    100078: chair3
+    100080: chair4
+    100082: chair5
+    100084: chair6
+    100086: decor_chairs
+    100088: decor_tables
+    100090: floor
+    100092: frame
+    100094: frame1
+    100096: glass
+    100098: glass1
+    100100: individual_books
+    100102: //RootNode
+    100104: pCylinder38
+    100106: pCylinder38 1
+    100108: pCylinder38 2
+    100110: pCylinder38 3
+    100112: pCylinder38 4
+    100114: pCylinder38 5
+    100116: pCylinder39
+    100118: pCylinder39 1
+    100120: pCylinder39 2
+    100122: pCylinder39 3
+    100124: pCylinder39 4
+    100126: pCylinder39 5
+    100128: plant_pot1
+    100130: plant_pot2
+    100132: plant_pot3
+    100134: plant_pot4
+    100136: plant_pot5
+    100138: plant_pot6
+    100140: plants
+    100142: pPlane85
+    100144: pPlane85 1
+    100146: pPlane85 2
+    100148: pPlane85 3
+    100150: pPlane85 4
+    100152: pPlane85 5
+    100154: staircase1
+    100156: staircase2
+    100158: table2
+    100160: table3
+    100162: table4
+    100164: table5
+    100166: table6
+    100168: table7
+    100170: walls1
+    100172: window1
+    100174: window2
+    100176: windows
+    400000: Art1
+    400002: art2
+    400004: art3
+    400006: art4
+    400008: artworks
+    400010: bannister_head1
+    400012: bannister_head2
+    400014: bannister_head3
+    400016: bannister_head4
+    400018: bannister_heads
+    400020: book1
+    400022: book2
+    400024: book3
+    400026: book4
+    400028: book5
+    400030: book6
+    400032: book7
+    400034: book8
+    400036: book9
+    400038: bookcases
+    400040: bookS1
+    400042: bookS10
+    400044: bookS11
+    400046: bookS12
+    400048: bookS13
+    400050: bookS14
+    400052: bookS15
+    400054: bookS16
+    400056: bookS2
+    400058: bookS3
+    400060: bookS4
+    400062: bookS5
+    400064: bookS6
+    400066: bookS7
+    400068: bookS8
+    400070: bookS9
+    400072: books_on_shelf
+    400074: chair1
+    400076: chair2
+    400078: chair3
+    400080: chair4
+    400082: chair5
+    400084: chair6
+    400086: decor_chairs
+    400088: decor_tables
+    400090: floor
+    400092: frame
+    400094: frame1
+    400096: glass
+    400098: glass1
+    400100: individual_books
+    400102: //RootNode
+    400104: pCylinder38
+    400106: pCylinder38 1
+    400108: pCylinder38 2
+    400110: pCylinder38 3
+    400112: pCylinder38 4
+    400114: pCylinder38 5
+    400116: pCylinder39
+    400118: pCylinder39 1
+    400120: pCylinder39 2
+    400122: pCylinder39 3
+    400124: pCylinder39 4
+    400126: pCylinder39 5
+    400128: plant_pot1
+    400130: plant_pot2
+    400132: plant_pot3
+    400134: plant_pot4
+    400136: plant_pot5
+    400138: plant_pot6
+    400140: plants
+    400142: pPlane85
+    400144: pPlane85 1
+    400146: pPlane85 2
+    400148: pPlane85 3
+    400150: pPlane85 4
+    400152: pPlane85 5
+    400154: staircase1
+    400156: staircase2
+    400158: table2
+    400160: table3
+    400162: table4
+    400164: table5
+    400166: table6
+    400168: table7
+    400170: walls1
+    400172: window1
+    400174: window2
+    400176: windows
+    2100000: floor_tiles
+    2100002: walls
+    2100004: wood_stairs_bannister_balcony
+    2100006: wood_table_and_shelf
+    2100008: books_case
+    2100010: book_outer2
+    2100012: inner_book
+    2100014: book_outer1
+    2100016: artwork4
+    2100018: artwork3
+    2100020: artwork2
+    2100022: artwork
+    2100024: window
+    2100026: plant_stem
+    2100028: plant_leaf
+    2100030: plant_pot
+    2100032: gold
+    2300000: Art1
+    2300002: art2
+    2300004: art3
+    2300006: art4
+    2300008: bannister_head1
+    2300010: bannister_head2
+    2300012: bannister_head3
+    2300014: bannister_head4
+    2300016: book1
+    2300018: book2
+    2300020: book3
+    2300022: book4
+    2300024: book5
+    2300026: book6
+    2300028: book7
+    2300030: book8
+    2300032: book9
+    2300034: bookcases
+    2300036: bookS1
+    2300038: bookS10
+    2300040: bookS11
+    2300042: bookS12
+    2300044: bookS13
+    2300046: bookS14
+    2300048: bookS15
+    2300050: bookS16
+    2300052: bookS2
+    2300054: bookS3
+    2300056: bookS4
+    2300058: bookS5
+    2300060: bookS6
+    2300062: bookS7
+    2300064: bookS8
+    2300066: bookS9
+    2300068: chair1
+    2300070: chair2
+    2300072: chair3
+    2300074: chair4
+    2300076: chair5
+    2300078: chair6
+    2300080: floor
+    2300082: frame
+    2300084: frame1
+    2300086: glass
+    2300088: glass1
+    2300090: pCylinder38
+    2300092: pCylinder38 1
+    2300094: pCylinder38 2
+    2300096: pCylinder38 3
+    2300098: pCylinder38 4
+    2300100: pCylinder38 5
+    2300102: pCylinder39
+    2300104: pCylinder39 1
+    2300106: pCylinder39 2
+    2300108: pCylinder39 3
+    2300110: pCylinder39 4
+    2300112: pCylinder39 5
+    2300114: pPlane85
+    2300116: pPlane85 1
+    2300118: pPlane85 2
+    2300120: pPlane85 3
+    2300122: pPlane85 4
+    2300124: pPlane85 5
+    2300126: staircase1
+    2300128: staircase2
+    2300130: table2
+    2300132: table3
+    2300134: table4
+    2300136: table5
+    2300138: table6
+    2300140: table7
+    2300142: walls1
+    3300000: Art1
+    3300002: art2
+    3300004: art3
+    3300006: art4
+    3300008: bannister_head1
+    3300010: bannister_head2
+    3300012: bannister_head3
+    3300014: bannister_head4
+    3300016: book1
+    3300018: book2
+    3300020: book3
+    3300022: book4
+    3300024: book5
+    3300026: book6
+    3300028: book7
+    3300030: book8
+    3300032: book9
+    3300034: bookcases
+    3300036: bookS1
+    3300038: bookS10
+    3300040: bookS11
+    3300042: bookS12
+    3300044: bookS13
+    3300046: bookS14
+    3300048: bookS15
+    3300050: bookS16
+    3300052: bookS2
+    3300054: bookS3
+    3300056: bookS4
+    3300058: bookS5
+    3300060: bookS6
+    3300062: bookS7
+    3300064: bookS8
+    3300066: bookS9
+    3300068: chair1
+    3300070: chair2
+    3300072: chair3
+    3300074: chair4
+    3300076: chair5
+    3300078: chair6
+    3300080: floor
+    3300082: frame
+    3300084: frame1
+    3300086: glass
+    3300088: glass1
+    3300090: pCylinder38
+    3300092: pCylinder38 1
+    3300094: pCylinder38 2
+    3300096: pCylinder38 3
+    3300098: pCylinder38 4
+    3300100: pCylinder38 5
+    3300102: pCylinder39
+    3300104: pCylinder39 1
+    3300106: pCylinder39 2
+    3300108: pCylinder39 3
+    3300110: pCylinder39 4
+    3300112: pCylinder39 5
+    3300114: pPlane85
+    3300116: pPlane85 1
+    3300118: pPlane85 2
+    3300120: pPlane85 3
+    3300122: pPlane85 4
+    3300124: pPlane85 5
+    3300126: staircase1
+    3300128: staircase2
+    3300130: table2
+    3300132: table3
+    3300134: table4
+    3300136: table5
+    3300138: table6
+    3300140: table7
+    3300142: walls1
+    4300000: floor
+    4300002: walls1
+    4300004: staircase1
+    4300006: staircase2
+    4300008: bookcases
+    4300010: bookS1
+    4300012: bookS2
+    4300014: bookS3
+    4300016: bookS4
+    4300018: bookS5
+    4300020: bookS6
+    4300022: bookS7
+    4300024: bookS8
+    4300026: bookS9
+    4300028: bookS10
+    4300030: bookS11
+    4300032: bookS12
+    4300034: bookS13
+    4300036: bookS14
+    4300038: bookS15
+    4300040: bookS16
+    4300042: book1
+    4300044: book2
+    4300046: book3
+    4300048: book4
+    4300050: book5
+    4300052: book6
+    4300054: book7
+    4300056: book8
+    4300058: book9
+    4300060: chair1
+    4300062: chair2
+    4300064: chair3
+    4300066: chair4
+    4300068: chair5
+    4300070: chair6
+    4300072: table2
+    4300074: table3
+    4300076: table4
+    4300078: table5
+    4300080: table6
+    4300082: table7
+    4300084: Art1
+    4300086: art2
+    4300088: art3
+    4300090: art4
+    4300092: frame
+    4300094: glass
+    4300096: frame1
+    4300098: glass1
+    4300100: pCylinder39
+    4300102: pPlane85
+    4300104: pCylinder38
+    4300106: pCylinder39
+    4300108: pPlane85
+    4300110: pCylinder38
+    4300112: pCylinder39
+    4300114: pPlane85
+    4300116: pCylinder38
+    4300118: pCylinder39
+    4300120: pPlane85
+    4300122: pCylinder38
+    4300124: pCylinder39
+    4300126: pPlane85
+    4300128: pCylinder38
+    4300130: pCylinder39
+    4300132: pPlane85
+    4300134: pCylinder38
+    4300136: bannister_head1
+    4300138: bannister_head2
+    4300140: bannister_head3
+    4300142: bannister_head4
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
