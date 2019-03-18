@@ -95,7 +95,32 @@ ModelImporter:
     4300024: balcony2
     4300026: polySurface1166
     4300028: cushion4
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: floor
+    second: {fileID: 2100000, guid: 20011fd1b9979ae4a9e24130d0bb601c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert6
+    second: {fileID: 2100000, guid: 9e002be29ea0ab043811217f36daba50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: light_body
+    second: {fileID: 2100000, guid: 7a516e0bc1e2a74498fe1abdf2c5a368, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: outside2
+    second: {fileID: 2100000, guid: 8239a3f129221894e9c0ec1ecbd682c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood
+    second: {fileID: 2100000, guid: 3999100ff6233144782c134de8a85b81, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

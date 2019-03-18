@@ -414,7 +414,47 @@ ModelImporter:
     4300138: bannister_head2
     4300140: bannister_head3
     4300142: bannister_head4
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: book_outer1
+    second: {fileID: 2100000, guid: 4381de31316f0304c89b8893ac597ab4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: book_outer2
+    second: {fileID: 2100000, guid: 757a380d1da17dc4d9a372733820e9e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plant_leaf
+    second: {fileID: 2100000, guid: 4213833f25015d8409c315c2e6f9f449, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plant_pot
+    second: {fileID: 2100000, guid: ec06821f96baca947bfa9b0a5fef49e0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: plant_stem
+    second: {fileID: 2100000, guid: 4213833f25015d8409c315c2e6f9f449, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: window
+    second: {fileID: 2100000, guid: 9e002be29ea0ab043811217f36daba50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_stairs_bannister_balcony
+    second: {fileID: 2100000, guid: 89c0578e9474e9d4d9e6d586a00da1c7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wood_table_and_shelf
+    second: {fileID: 2100000, guid: 89c0578e9474e9d4d9e6d586a00da1c7, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
