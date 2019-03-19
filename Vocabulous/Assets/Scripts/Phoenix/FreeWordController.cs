@@ -38,7 +38,7 @@ public class FreeWordController : MonoBehaviour
     public int score = 0;
 
     FlashProTemplate f_foundWord, f_foundSame, f_timeNotification, f_endNotification;
-    TextMeshProUGUI g_Score, g_highScore, g_longestWord, g_averageScore, g_averageWord;
+    TextMeshProUGUI g_Score, g_highScore, g_Words;
 
     public int FWHighScore, FWLongestWordCount, FWTimesCompleted, FWGameTime;
     public float FWAverageScore, FWAverageWord;
@@ -347,38 +347,29 @@ public class FreeWordController : MonoBehaviour
 
     void SetupGUI()
     {
-        GameObject obj_Score = gameController.FM.AddGUIItem("Score: 0", 0.25f, 0.95f, 0.12f, Color.white);
+        GameObject obj_Score = gameController.FM.AddGUIItem("Score: 0", 0.45f, 0.95f, 0.2f, Color.white);
         g_Score = obj_Score.GetComponent<TextMeshProUGUI>();
 
-        GameObject obj_highScore = gameController.FM.AddGUIItem("Highscore: 0", 0.75f, 0.95f, 0.12f, Color.white);
+        GameObject obj_highScore = gameController.FM.AddGUIItem("Highscore: 0  Average Score: 0", 0.75f, 0.95f, 0.3f, Color.yellow);
         g_highScore = obj_highScore.GetComponent<TextMeshProUGUI>();
 
-        GameObject obj_averageScore = gameController.FM.AddGUIItem("Avarage Score: 0", 0.50f, 0.95f, 0.12f, Color.white);
-        g_averageScore = obj_averageScore.GetComponent<TextMeshProUGUI>();
+        GameObject obj_averageScore = gameController.FM.AddGUIItem("WORDS:  Longest: 0 (this)  Average: 0 ", 0.65f, 0.86f, 0.5f, Color.yellow);
+        g_Words = obj_averageScore.GetComponent<TextMeshProUGUI>();
 
-        GameObject obj_longestWord = gameController.FM.AddGUIItem("Longest Word: 0", 0.25f, 0.87f, 0.12f, Color.white);
-        g_longestWord = obj_longestWord.GetComponent<TextMeshProUGUI>();
-
-        GameObject obj_averageWord = gameController.FM.AddGUIItem("Average Words: 0", 0.50f, 0.87f, 0.12f, Color.white);
-        g_averageWord = obj_averageWord.GetComponent<TextMeshProUGUI>();
     }
 
     void SetGUI()
     {
         g_Score.text = "Score: " + score;
-        g_highScore.text = "Highscore: " + FWHighScore;
-        g_averageScore.text = "Average Score: " + FWAverageScore;
-        g_longestWord.text = "Longest Word: " + FWLongestWord + ", " + FWLongestWordCount;
-        g_averageWord.text = "Average Words: " + FWAverageWord;
+        g_highScore.text = "High: " + FWHighScore+"   Average: " + FWAverageScore.ToString("#.00");
+        g_Words.text = "WORDS:  Longest: " + FWLongestWordCount + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
     }
 
     void SetGUIToRed()
     {
         g_Score.color = Color.red;
         g_highScore.color = Color.red;
-        g_averageScore.color = Color.red;
-        g_longestWord.color = Color.red;
-        g_averageWord.color = Color.red;
+        g_Words.color = Color.red;
     }
     #endregion
 

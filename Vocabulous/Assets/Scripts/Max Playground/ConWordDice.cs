@@ -262,7 +262,7 @@ public class ConWordDice : MonoBehaviour
         GUIScore = gScore.GetComponent<TextMeshProUGUI>();
         GameObject gHighMean = gc.FM.AddGUIItem("High: 0"+"  "+"Mean: 0", 0.75f, 0.95f, 0.30f, Color.yellow);
         GUIHighMeanScore = gHighMean.GetComponent<TextMeshProUGUI>();
-        GameObject gWords = gc.FM.AddGUIItem("WORDS: Longest: 0 Most: 0 Mean: 0", 0.65f, 0.85f, 0.5f, Color.yellow);
+        GameObject gWords = gc.FM.AddGUIItem("WORDS: Longest: 0 Most: 0 Mean: 0", 0.65f, 0.86f, 0.5f, Color.yellow);
         GUIWords = gWords.GetComponent<TextMeshProUGUI>();
     }
 

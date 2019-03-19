@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class WordSearchController : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class WordSearchController : MonoBehaviour
     [SerializeField] int worstTime;
     [SerializeField] int timesCompleted;
     [SerializeField] int timesQuit;
+    [SerializeField] string g_High;
+    [SerializeField] string g_mean;
     //
     public List<string> foundWords = new List<string>();
     public List<string> unfoundWords = new List<string>();
@@ -57,7 +60,7 @@ public class WordSearchController : MonoBehaviour
     public FlashProTemplate f_foundSame;
     public FlashProTemplate f_timeNotification;
     public FlashProTemplate f_endNotification;
-
+    public TextMeshProUGUI g_times;
 
     #region StartUp
     /* main initialise function, will call subsequent StartUp functions */
@@ -69,6 +72,7 @@ public class WordSearchController : MonoBehaviour
 
         // configure flash animations
         ConfigureFlashes();
+        ConfigureGUI();
 
         // set variables based on player preferences
         LoadPlayerPreferences();
@@ -359,6 +363,22 @@ public class WordSearchController : MonoBehaviour
         worstTime = gameController.player.WordSearchWorstTime;
         timesCompleted = gameController.player.WordSearchTimesCompleted;
         timesQuit = gameController.player.WordSearchTimesQuit;
+
+        // Max's GUI additions
+        g_High = TimeToString(bestTime);
+        g_mean = TimeToString(averageTime);
+        SetGUI();
+    }
+
+    string TimeToString(int time)
+    {
+        int sec = time % 60;
+        int min = (time - sec)/60;
+        string ret = "";
+        if (min < 10) ret += "0";
+        ret += min.ToString() + ":";
+        if (sec < 10) ret += "0";
+        return ret + sec.ToString();
     }
 
     // configure flashes
@@ -442,6 +462,18 @@ public class WordSearchController : MonoBehaviour
         f_endNotification.Xtween2 = Tween.QuinUp;
         f_endNotification.AnimTime = 4f;
         f_endNotification.MiddleTimeRatio = .6f;
+    }
+
+    void ConfigureGUI ()
+    {
+        GameObject obj_times = gameController.FM.AddGUIItem("TIMES: Best: 0  Average: 0", 0.81f, 0.95f, 0.24f, Color.white);
+        g_times = obj_times.GetComponent<TextMeshProUGUI>();
+        SetGUI();
+    }
+
+    void SetGUI ()
+    {
+        g_times.text = "TIMES: Best: "+g_High+"  Average: "+ g_mean;
     }
 
     #endregion
@@ -614,6 +646,7 @@ public class WordSearchController : MonoBehaviour
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
         gameController.SM.KillSFX();
+        gameController.FM.KillStaticGUIs();
         foreach (ConDice dice in diceHolder.GetComponentsInChildren<ConDice>())
         {
             Destroy(dice.gameObject);
@@ -668,7 +701,7 @@ public class WordSearchController : MonoBehaviour
         sevenLetterWordsCount = 0;
         eightLetterWordsCount = 0;
         gameTime = 599;
-        bestTime = 0;
+        bestTime = 599;
         averageTime = 0;
         worstTime = 0;
         timesCompleted = 0;
