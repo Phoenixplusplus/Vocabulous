@@ -435,10 +435,9 @@ public class FreeWordController : MonoBehaviour
         FWLongestWordCount = 0;
         FWTimesCompleted = 0;
         FWGameTime = 120;
-        FWAverageScore = 0;
-        FWAverageWord = 0;
+        FWAverageScore = 0f;
+        FWAverageWord = 0f;
         FWLongestWord = "N/A";
-        SaveStats();
     }
 
     void RunEndFlashesAndSaveStats()

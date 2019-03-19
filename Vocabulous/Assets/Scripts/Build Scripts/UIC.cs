@@ -14,13 +14,15 @@ public class UIC : MonoBehaviour
     public Text[] anagramStats = new Text[3];
     public Text[] freeWordStats = new Text[5];
     public InputField nameField;
+    public Image playButtonImage;
+    public Sprite wordDiceSprite, wordSearchSprite, anagramSprite, freeWordSprite;
 
     void Start()
     {
         gameController = GC.Instance;
 
         TogglePlayButton(false);
-        ToggleQuitButton(false);
+        QuitThis.gameObject.SetActive(true);
 
         // When editting, it's a pain not to have the GUI displayed ... so will "unfold" the GUI animation on start
         //OptionsAnimation.SetBool("OptionsClicked", true);
@@ -33,6 +35,11 @@ public class UIC : MonoBehaviour
         {
             if (cameraController.onWordDice || cameraController.onWordSearch || cameraController.onAnagram || cameraController.onFreeWord || cameraController.onSolver) TogglePlayButton(true);
             else TogglePlayButton(false);
+
+            if (cameraController.onWordDice) playButtonImage.sprite = wordDiceSprite;
+            if (cameraController.onWordSearch) playButtonImage.sprite = wordSearchSprite;
+            if (cameraController.onAnagram) playButtonImage.sprite = anagramSprite;
+            if (cameraController.onFreeWord) playButtonImage.sprite = freeWordSprite;
         }
     }
 
@@ -40,7 +47,10 @@ public class UIC : MonoBehaviour
     // in scene
     public void TogglePlayButton(bool state) { if (PlayThis.gameObject.activeInHierarchy == !state) PlayThis.gameObject.SetActive(state); }
     public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
-    public void QuitClicked() { ToggleQuitButton(false); }
+    public void QuitClicked()
+    {
+        if (gameController.GameState == 5) Application.Quit();
+    }
     public void PlayClicked() { TogglePlayButton(false); ToggleQuitButton(true); }
 
     // in menu

@@ -706,7 +706,6 @@ public class WordSearchController : MonoBehaviour
         worstTime = 0;
         timesCompleted = 0;
         timesQuit = 0;
-        SaveStats();
     }
 
     void RunEndFlashesAndSaveStats()

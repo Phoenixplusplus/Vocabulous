@@ -250,7 +250,7 @@ public class PlayerManager
         PlayerPrefs.SetInt("FWLongestWordCount", 0);
         PlayerPrefs.SetInt("FWTimesCompleted", 0);
         PlayerPrefs.SetInt("FWGameTime", 120);
-        PlayerPrefs.GetFloat("FWAverageScore", 0);
-        PlayerPrefs.GetFloat("FWAverageWord", 0);
+        PlayerPrefs.SetFloat("FWAverageScore", 0f);
+        PlayerPrefs.SetFloat("FWAverageWord", 0f);
     }
 }

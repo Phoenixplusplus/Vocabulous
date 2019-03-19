@@ -344,7 +344,7 @@ public class GC : MonoBehaviour
                     // 5 = transitioning from a game to 1 again
                     SM.PlayLobbyMusic();
                     cameraController.QuitClicked();
-                    UIController.QuitClicked();
+                    //UIController.QuitClicked();
                     ReEnableAllGames();
                     OnThisGameQuit(prevState);
                     break;
