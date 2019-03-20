@@ -110,7 +110,7 @@ public class GC : MonoBehaviour
     // 5 = transitioning from a game to 1 again
     // 9 = Quitting
 
-    private FlashProTemplate Flash_Welcome, Flash_Options;
+    private FlashProTemplate Flash_Welcome, Flash_Options, Flash_ShutOptions, Flash_Start;
 
      #endregion
 
@@ -187,6 +187,48 @@ public class GC : MonoBehaviour
         Flash_Options.StartWidth = Flash_Welcome.FinishWidth;
         Flash_Options.FinishWidth = 0.18f;
         Flash_Options.Xtween1 = Flash_Options.Ytween1 = Tween.BounceUp;
+
+        Flash_ShutOptions = new FlashProTemplate();
+        Flash_ShutOptions.SingleLerp = true;
+        Flash_ShutOptions.myMessage1 = "Shut Options To Play";
+        Flash_ShutOptions.StartPos = new Vector2(0.25f, 0.35f);
+        Flash_ShutOptions.FinishPos = new Vector2(0.25f, 0.85f);
+        Flash_ShutOptions.TextColor1 = Color.green;
+        Flash_ShutOptions.StartWidth = 0.3f;
+        Flash_ShutOptions.FinishWidth = 0.3f;
+        Flash_ShutOptions.AnimTime = 2.5f;
+
+        Flash_Start = new FlashProTemplate();
+        Flash_Start.SingleLerp = true;
+        Flash_Start.myMessage1 = "TBA";
+        Flash_Start.StartPos = new Vector2(0.5f, 0.3f);
+        Flash_Start.FinishPos = new Vector2(0.5f, 0.7f);
+        Flash_Start.TextColor1 = Color.green;
+        Flash_Start.StartWidth = 0.3f;
+        Flash_Start.FinishWidth = 0.5f;
+        Flash_Start.AnimTime = 1.5f;
+    }
+
+    public void Fire_Start_Flash ()
+    {
+        Flash_Start.TextColor1 = Color.green;
+        Flash_Start.StartWidth = 0.3f;
+        Flash_Start.FinishWidth = 0.5f;
+        FM.CustomFlash(Flash_Start,"Game Starting");
+        Flash_Start.TextColor1 = Color.red;
+        Flash_Start.StartWidth = 0.05f;
+        Flash_Start.FinishWidth = 0.15f;
+        FM.CustomFlash(Flash_Start, "3", 1f);
+        Flash_Start.TextColor1 = Color.yellow;
+        FM.CustomFlash(Flash_Start, "2", 2f);
+        Flash_Start.TextColor1 = Color.green;
+        FM.CustomFlash(Flash_Start, "1", 3f);
+    }
+
+    // Fire "Close Options to Play" flash
+    public void Options_Warning()
+    {
+        FM.CustomFlash(Flash_Options);
     }
 
     // Start is called before the first frame update
@@ -239,15 +281,15 @@ public class GC : MonoBehaviour
     void Update()
     {
         // testings
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            GameObject thing;
-            if (Random.value > 0.5) thing = assets.SpawnTile("questquest", cameraController.transform.position, Random.value > 0.5, Random.value > 0.5);
-            else thing = assets.SpawnDice("?", cameraController.transform.position);
-            Rigidbody rb = thing.AddComponent<Rigidbody>();
-            thing.transform.localRotation = Random.rotation;
-            rb.AddForce((cameraController.transform.forward + new Vector3(0, 0.35f, 0)) * 1000);
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    GameObject thing;
+        //    if (Random.value > 0.5) thing = assets.SpawnTile("questquest", cameraController.transform.position, Random.value > 0.5, Random.value > 0.5);
+        //    else thing = assets.SpawnDice("?", cameraController.transform.position);
+        //    Rigidbody rb = thing.AddComponent<Rigidbody>();
+        //    thing.transform.localRotation = Random.rotation;
+        //    rb.AddForce((cameraController.transform.forward + new Vector3(0, 0.35f, 0)) * 1000);
+        //}
 
         // sets HoverOver values to the returned value from any IisOverlayTile class (if none, then -1)
         CheckHoverOver();
@@ -255,6 +297,31 @@ public class GC : MonoBehaviour
     }
     #endregion
 
+    #region Toggle Options
+    public void ShutAllOptionsMenus ()
+    {
+        if (UIController.isAOpen) UIController.ToggleAOptionsInOut();
+        if (UIController.isAUOpen) UIController.ToggleAboutUsInOut();
+        if (UIController.isFWOpen) UIController.ToggleFWOptionsInOut();
+        if (UIController.isWDOpen) UIController.ToggleWDOptionsInOut();
+        if (UIController.isWSOpen) UIController.ToggleWSOptionsInOut();
+        if (UIController.isMainMenuOpen) UIController.ToggleOptionsInOut();
+    }
+
+    public void OpenOptionsMenu (string which)
+    {
+        if (!UIController.isMainMenuOpen) UIController.ToggleOptionsInOut();
+        switch (which)
+        {
+            case "A": if (!UIController.isAOpen) UIController.ToggleAOptionsInOut(); break;
+            case "FW": if (!UIController.isFWOpen) UIController.ToggleFWOptionsInOut(); break;
+            case "WD": if (!UIController.isWDOpen) UIController.ToggleWDOptionsInOut(); break;
+            case "WS": if (!UIController.isWSOpen) UIController.ToggleWSOptionsInOut(); break;
+        }
+    }
+
+
+    #endregion
 
     #region HoverOver and Clicks
     void CheckHoverOver()
@@ -353,6 +420,14 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 31 = Playing WordDice
+                    if(player.WDPlays == 0)
+                    {
+                        OpenOptionsMenu("WD");
+                    }
+                    if (UIController.isWDOpen)
+                    {
+                        FM.CustomFlash(Flash_ShutOptions);
+                    }
                     WordDice.KickOff();
                     DisableOtherGames(WordDice.gameObject);
                     SM.PlayRandomTrack();
@@ -371,6 +446,14 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 33 = Playing Anagram
+                    if (player.ALevel == 0)
+                    {
+                        OpenOptionsMenu("A");
+                    }
+                    if (UIController.isAOpen)
+                    {
+                        FM.CustomFlash(Flash_ShutOptions);
+                    }
                     anagramController.KickOff();
                     DisableOtherGames(anagramController.gameObject);
                     SM.PlayRandomTrack();
@@ -380,6 +463,14 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 34 = Playing FreeWord
+                    if (player.FWTimesCompleted == 0)
+                    {
+                        OpenOptionsMenu("FW");
+                    }
+                    if (UIController.isFWOpen)
+                    {
+                        FM.CustomFlash(Flash_ShutOptions);
+                    }
                     if (!freeWordController.isInitialised) freeWordController.Initialise();
                     else freeWordController.Restart();
                     DisableOtherGames(freeWordController.gameObject);
@@ -390,6 +481,14 @@ public class GC : MonoBehaviour
                 {
                     // called in 'CheckClicks()'
                     // 35 = Playing WordSearch
+                    if (player.WordSearchTimesCompleted == 0)
+                    {
+                        OpenOptionsMenu("WS");
+                    }
+                    if (UIController.isWSOpen)
+                    {
+                        FM.CustomFlash(Flash_ShutOptions);
+                    }
                     if (!wordSearchController.isInitialised) wordSearchController.Initialise();
                     else wordSearchController.Restart();
                     DisableOtherGames(wordSearchController.gameObject);

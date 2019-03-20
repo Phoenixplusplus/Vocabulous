@@ -233,11 +233,31 @@ public class ConWordDice : MonoBehaviour
         CurrScore = 0;
         gameState = 2;
         myMenu.GameRunning();
+        SetupGUI();
         GUI_Backdrop.SetActive(false);
+    }
+
+    void PreStart()
+    {
+        // TESTER for gc.player ... IT WORKS <<yah me>>
+        LoadStats();
+        myMenu.GameRunning();
+        GUI_Backdrop.SetActive(false);
+        SpawnDiceBasic();
+        gc.Fire_Start_Flash();
+        StartCoroutine("RealStart", 4.5f);
+    }
+
+    IEnumerator RealStart(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ResetGame();
+        StartGame();
     }
 
     public void TidyUp()
     {
+        StopAllCoroutines();
         ResetGame();
         gameState = 0;
         gc.FM.KillStaticGUIs();
@@ -255,9 +275,21 @@ public class ConWordDice : MonoBehaviour
     {
         gc.FM.KillStaticGUIs();
         gc.SM.KillSFX();
-        SetupGUI();
         GUI_Backdrop.SetActive(false);
-        StartGame();
+        if (gc.UIController.isWDOpen) StartCoroutine("PauseForOptionsMenu");
+        else { PreStart(); }
+        
+    }
+
+    IEnumerator PauseForOptionsMenu ()
+    {
+        bool waiting = true;
+        while (waiting)
+        {
+            if (!gc.UIController.isWDOpen) waiting = false;
+            yield return null;
+        }
+        PreStart();
     }
 
     // Because I'm a complete and utter masocist
@@ -334,6 +366,17 @@ public class ConWordDice : MonoBehaviour
                 count++;
             }
         }
+        myDice.transform.localRotation = transform.localRotation;
+    }
+
+    void SpawnDiceBasic()
+    {
+        myDice.transform.localRotation = Quaternion.identity;
+            for (int x = 0; x < 16; x++)
+            {
+                GameObject dice = gc.assets.SpawnDice("?", dbox.slots[x] + transform.position);
+                dice.transform.parent = myDice.transform;
+            }
         myDice.transform.localRotation = transform.localRotation;
     }
 
