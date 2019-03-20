@@ -149,8 +149,11 @@ public class FreeWordController : MonoBehaviour
     {
         if (gameController != null)
         {
-            CheckGCHoverValue();
-            InputAndSearch();
+            if (!timeUp)
+            {
+                CheckGCHoverValue();
+                InputAndSearch();
+            }
             SetGUI();
         }
 
@@ -199,6 +202,8 @@ public class FreeWordController : MonoBehaviour
                             gameController.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
                             score += GetScore(res.Length);
                             DisplayPointFlash(res.Length);
+                            if (res.Length >= FWLongestWordCount)
+                            { FWLongestWord = res; }
                             grid.FinishPath();
                         }
                         else
@@ -212,6 +217,8 @@ public class FreeWordController : MonoBehaviour
                     else
                     {
                         Debug.Log("Sorry, " + res + " is not on the list!");
+                        gameController.FM.CustomFlash(f_foundSame, "Don't know " + res.ToUpper());
+                        gameController.SM.PlayWordSFX(WordSFX.SameWord);
                         grid.FinishPath();
                     }
                 }
@@ -362,7 +369,7 @@ public class FreeWordController : MonoBehaviour
     {
         g_Score.text = "Score: " + score;
         g_highScore.text = "High: " + FWHighScore+"   Average: " + FWAverageScore.ToString("#.00");
-        g_Words.text = "WORDS:  Longest: " + FWLongestWordCount + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
+        g_Words.text = "WORDS:  Longest: " + FWLongestWord.Length.ToString() + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
     }
 
     void SetGUIToRed()
@@ -442,6 +449,8 @@ public class FreeWordController : MonoBehaviour
 
     void RunEndFlashesAndSaveStats()
     {
+        selecting = false;
+        grid.ClearPath();
         float flashDelay = 0;
         int longestWordLen = 0;
         string longestWordStr = "";
@@ -473,13 +482,14 @@ public class FreeWordController : MonoBehaviour
             {
                 longestWordLen = word.Length;
                 longestWordStr = word;
+
             }
         }
         if (longestWordLen > FWLongestWordCount)
         {
             //f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
             //f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
-            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .75f);
+            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", "Length " + longestWordLen.ToString(), flashDelay + .75f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
@@ -500,6 +510,7 @@ public class FreeWordController : MonoBehaviour
         FWAverageWord = ((FWAverageWord * FWTimesCompleted) + foundWords.Count) / (FWTimesCompleted + 1);
         FWAverageScore = ((FWAverageScore * FWTimesCompleted) + score) / (FWTimesCompleted + 1);
         FWTimesCompleted++;
+        FWLongestWordCount = FWLongestWord.Length;
         SaveStats();
         LoadPlayerPreferences();
         SetGUI();

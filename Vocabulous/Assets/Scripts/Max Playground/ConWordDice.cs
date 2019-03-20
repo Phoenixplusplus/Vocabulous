@@ -111,7 +111,7 @@ public class ConWordDice : MonoBehaviour
         // Un recognised word .. mid screen -> top left (and fade out) in Red
         FindBad = FindGood.Copy();
         FindBad.SingleLerp = true;
-        FindBad.FinishPos = new Vector2(0.2f, 0.95f);
+        FindBad.FinishPos = new Vector2(0.1f, 0.85f);
         FindBad.TextColor1 = Color.red;
         FindBad.FinishAlpha = 0.1f;
         FindBad.Xtween1 = Tween.LinearUp;
