@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UIC : MonoBehaviour
 {
     GC gameController;
+    public GameObject newLibrary, japaneseLibrary;
     public CameraController cameraController;
     public Animator OptionsAnimation, WDOptionsAnimation, WSOptionsAnimation, AOptionsAnimation, FWOptionsAnimation, AboutOptionsAnimation;
     public Button PlayThis, QuitThis;
@@ -52,6 +53,21 @@ public class UIC : MonoBehaviour
     // in scene
     public void TogglePlayButton(bool state) { if (PlayThis.gameObject.activeInHierarchy == !state) PlayThis.gameObject.SetActive(state); }
     public void ToggleQuitButton(bool state) { if (QuitThis.gameObject.activeInHierarchy == !state) QuitThis.gameObject.SetActive(state); }
+    public void ThemeButtonClicked()
+    {
+        if (newLibrary.activeInHierarchy)
+        {
+            newLibrary.SetActive(false);
+            japaneseLibrary.SetActive(true);
+            return;
+        }
+        if (japaneseLibrary.activeInHierarchy)
+        {
+            newLibrary.SetActive(true);
+            japaneseLibrary.SetActive(false);
+            return;
+        }
+    }
     public void QuitClicked()
     {
         if (gameController.GameState == 5) Application.Quit();
