@@ -98,7 +98,7 @@ public class ConWordDice : MonoBehaviour
         FindGood.FinishWidth = 0.1f;
         FindGood.myMessage1 = "You Found XXX";
         FindGood.myMessage2 = "+1 Pt";
-        FindGood.TextColor1 = Color.red;
+        FindGood.TextColor1 = Color.green;
         FindGood.TextColor2 = Color.green;
         FindGood.UseXLerpOnly = true;
         FindGood.Xtween1 = Tween.BounceUp;
@@ -124,7 +124,7 @@ public class ConWordDice : MonoBehaviour
         // fires for 3.5 seconds, stationary for the last 0.5 seconds
         Reward = FindSame.Copy();
         Reward.SingleLerp = false;
-        Reward.StartPos = new Vector2(0.21f, 0.26f);
+        Reward.StartPos = new Vector2(0.21f, 0.16f);
         Reward.FinishPos = Reward.MiddlePos = new Vector2(0.65f, 0.2f);
         Reward.TextColor1 = Color.green;
         Reward.StartWidth = 0.25f;
