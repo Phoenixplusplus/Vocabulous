@@ -16,6 +16,7 @@ public class UIC : MonoBehaviour
     public InputField nameField;
     public Image playButtonImage;
     public Sprite wordDiceSprite, wordSearchSprite, anagramSprite, freeWordSprite;
+    public bool isMainMenuOpen, isWDOpen, isAOpen, isWSOpen, isFWOpen, isAUOpen;
 
     void Start()
     {
@@ -33,8 +34,12 @@ public class UIC : MonoBehaviour
     {
         if (!cameraController.inPlay)
         {
-            if (cameraController.onWordDice || cameraController.onWordSearch || cameraController.onAnagram || cameraController.onFreeWord || cameraController.onSolver) TogglePlayButton(true);
-            else TogglePlayButton(false);
+            if (!isMainMenuOpen || !isWDOpen || !isAOpen || !isWSOpen || !isFWOpen || !isAUOpen)
+            {
+                if (cameraController.onWordDice || cameraController.onWordSearch || cameraController.onAnagram || cameraController.onFreeWord || cameraController.onSolver) TogglePlayButton(true);
+                else TogglePlayButton(false);
+            }
+            if (isMainMenuOpen || isWDOpen || isAOpen || isWSOpen || isFWOpen || isAUOpen) TogglePlayButton(false);
 
             if (cameraController.onWordDice) playButtonImage.sprite = wordDiceSprite;
             if (cameraController.onWordSearch) playButtonImage.sprite = wordSearchSprite;
@@ -115,6 +120,14 @@ public class UIC : MonoBehaviour
         bool ABb = AboutOptionsAnimation.GetBool("In");
         if (ABb) AboutOptionsAnimation.SetBool("In", !b);
 
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
+
         if (gameController.player.Name != "NewPlayer") { nameField.text = gameController.player.Name; }
     }
 
@@ -122,6 +135,7 @@ public class UIC : MonoBehaviour
     {
         bool b = WDOptionsAnimation.GetBool("WDOptionsClicked");
         WDOptionsAnimation.SetBool("WDOptionsClicked", !b);
+        if (b) isWDOpen = true;
 
         bool WSb = WSOptionsAnimation.GetBool("In");
         if (WSb) WSOptionsAnimation.SetBool("In", false);
@@ -134,12 +148,21 @@ public class UIC : MonoBehaviour
 
         bool ABb = AboutOptionsAnimation.GetBool("In");
         if (ABb) AboutOptionsAnimation.SetBool("In", false);
+
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
     }
 
     public void ToggleWSOptionsInOut()
     {
         bool b = WSOptionsAnimation.GetBool("In");
         WSOptionsAnimation.SetBool("In", !b);
+        if (b) isWSOpen = true;
 
         bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
         if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
@@ -152,12 +175,21 @@ public class UIC : MonoBehaviour
 
         bool ABb = AboutOptionsAnimation.GetBool("In");
         if (ABb) AboutOptionsAnimation.SetBool("In", false);
+
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
     }
 
     public void ToggleAOptionsInOut()
     {
         bool b = AOptionsAnimation.GetBool("In");
         AOptionsAnimation.SetBool("In", !b);
+        if (b) isAOpen = true;
 
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", false);
@@ -170,12 +202,21 @@ public class UIC : MonoBehaviour
 
         bool ABb = AboutOptionsAnimation.GetBool("In");
         if (ABb) AboutOptionsAnimation.SetBool("In", false);
+
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
     }
 
     public void ToggleFWOptionsInOut()
     {
         bool b = FWOptionsAnimation.GetBool("In");
         FWOptionsAnimation.SetBool("In", !b);
+        if (b) isFWOpen = true;
 
         bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
         if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
@@ -188,12 +229,21 @@ public class UIC : MonoBehaviour
 
         bool ABb = AboutOptionsAnimation.GetBool("In");
         if (ABb) AboutOptionsAnimation.SetBool("In", false);
+
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
     }
 
     public void ToggleAboutUsInOut()
     {
         bool b = AboutOptionsAnimation.GetBool("In");
         AboutOptionsAnimation.SetBool("In", !b);
+        if (b) isAUOpen = true;
 
         bool WDb = WDOptionsAnimation.GetBool("WDOptionsClicked");
         if (WDb) WDOptionsAnimation.SetBool("WDOptionsClicked", false);
@@ -206,5 +256,13 @@ public class UIC : MonoBehaviour
 
         bool FWb = FWOptionsAnimation.GetBool("In");
         if (FWb) FWOptionsAnimation.SetBool("In", false);
+
+        // global bools to reading which menu is open if any
+        isMainMenuOpen = OptionsAnimation.GetBool("OptionsClicked");
+        isWDOpen = WDOptionsAnimation.GetBool("WDOptionsClicked");
+        isWSOpen = WSOptionsAnimation.GetBool("In");
+        isAOpen = AOptionsAnimation.GetBool("In");
+        isFWOpen = FWOptionsAnimation.GetBool("In");
+        isAUOpen = AboutOptionsAnimation.GetBool("In");
     }
 }
