@@ -279,7 +279,7 @@ public class FreeWordController : MonoBehaviour
         f_foundWord.FinishAlpha = 0;
         f_foundWord.myMessage1 = "Found a word!";
         f_foundWord.myMessage2 = "Good/Great/Excellent!";
-        f_foundWord.TextColor1 = Color.cyan;
+        f_foundWord.TextColor1 = Color.yellow;
         f_foundWord.TextColor2 = Color.green;
         f_foundWord.Xtween1 = Tween.LinearUp;
         f_foundWord.Xtween2 = Tween.QuinUp;
@@ -289,12 +289,12 @@ public class FreeWordController : MonoBehaviour
         // same word flash
         f_foundSame = new FlashProTemplate();
         f_foundSame.SingleLerp = true;
-        f_foundSame.StartPos = new Vector2(0.15f, 0.8f);
-        f_foundSame.FinishPos = new Vector2(0.15f, 0.1f);
-        f_foundSame.StartWidth = 0.3f;
-        f_foundSame.FinishWidth = 0.1f;
+        f_foundSame.StartPos = new Vector2(0.15f, 0.3f);
+        f_foundSame.FinishPos = new Vector2(0.15f, 0.8f);
+        f_foundSame.StartWidth = 0.13f;
+        f_foundSame.FinishWidth = 0.3f;
         f_foundSame.StartAlpha = 1f;
-        f_foundSame.FinishAlpha = 0.2f;
+        f_foundSame.FinishAlpha = 0.9f;
         f_foundSame.myMessage1 = "Already found!";
         f_foundSame.myMessage2 = "Already found!";
         f_foundSame.TextColor1 = Color.red;
@@ -326,19 +326,19 @@ public class FreeWordController : MonoBehaviour
         // end notification
         f_endNotification = new FlashProTemplate();
         f_endNotification.SingleLerp = false;
-        f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
-        f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
-        f_endNotification.FinishPos = new Vector2(0.9f, 1.0f);
-        f_endNotification.StartWidth = 0.3f;
+        f_endNotification.StartPos = new Vector2(0.89f, 0.4f);
+        f_endNotification.MiddlePos = new Vector2(0.8f, 0.7f);
+        f_endNotification.FinishPos = new Vector2(0.8f, 0.9f);
+        f_endNotification.StartWidth = 0.2f;
         f_endNotification.MiddleWidth = 0.3f;
         f_endNotification.FinishWidth = 0.1f;
         f_endNotification.StartAlpha = 0.8f;
         f_endNotification.MiddleAlpha = 1f;
-        f_endNotification.FinishAlpha = 0;
+        f_endNotification.FinishAlpha = 1f;
         f_endNotification.myMessage1 = "Found a word!";
         f_endNotification.myMessage2 = "Good/Great/Excellent!";
         f_endNotification.TextColor1 = Color.yellow;
-        f_endNotification.TextColor2 = Color.red;
+        f_endNotification.TextColor2 = Color.green;
         f_endNotification.Xtween1 = Tween.LinearUp;
         f_endNotification.Xtween2 = Tween.QuinUp;
         f_endNotification.AnimTime = 3f;
@@ -448,22 +448,22 @@ public class FreeWordController : MonoBehaviour
 
         if (score > FWHighScore)
         {
-            f_endNotification.StartPos = new Vector2(0.1f, 0.3f);
-            f_endNotification.MiddlePos = new Vector2(0.5f, 0.3f);
-            gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay +.5f);
-            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay +.5f);
-            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay +.5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
+            //f_endNotification.StartPos = new Vector2(0.1f, 0.3f);
+            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.3f);
+            gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay +.75f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay +.75f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay +.75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             FWHighScore = score;
             flashDelay++;
         }
 
         if (score > FWAverageScore)
         {
-            f_endNotification.StartPos = new Vector2(0.1f, 0.4f);
-            f_endNotification.MiddlePos = new Vector2(0.5f, 0.4f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay +.5f);
-            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
-            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
+            //f_endNotification.StartPos = new Vector2(0.1f, 0.4f);
+           // f_endNotification.MiddlePos = new Vector2(0.5f, 0.4f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay +.75f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
         }
 
@@ -477,11 +477,11 @@ public class FreeWordController : MonoBehaviour
         }
         if (longestWordLen > FWLongestWordCount)
         {
-            f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
-            f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
-            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .5f);
-            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
-            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
+            //f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
+            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
+            gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", longestWordStr + ", " + longestWordLen.ToString(), flashDelay + .75f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
             FWLongestWordCount = longestWordLen;
             FWLongestWord = longestWordStr;
@@ -489,11 +489,11 @@ public class FreeWordController : MonoBehaviour
 
         if (foundWords.Count > FWAverageWord)
         {
-            f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
-            f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay + .5f);
-            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
-            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
+            //f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
+            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay + .75f);
+            gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
+            gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
             flashDelay++;
         }
 
@@ -501,6 +501,8 @@ public class FreeWordController : MonoBehaviour
         FWAverageScore = ((FWAverageScore * FWTimesCompleted) + score) / (FWTimesCompleted + 1);
         FWTimesCompleted++;
         SaveStats();
+        LoadPlayerPreferences();
+        SetGUI();
     }
     #endregion
 
@@ -542,7 +544,7 @@ public class FreeWordController : MonoBehaviour
                 }
             default:
                 {
-                    f_foundWord.TextColor2 = Color.yellow;
+                    f_foundWord.TextColor2 = Color.green;
                     gameController.FM.CustomFlash(f_foundWord, strLen + " letter word", GetScore(strLen).ToString() + "pts!");
                     break;
                 }
