@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ConWordDice : MonoBehaviour
@@ -62,6 +63,7 @@ public class ConWordDice : MonoBehaviour
     public FlashProTemplate FindSame;
     public FlashProTemplate Reward;
     public FlashProTemplate NewGame;
+    public GameObject GUI_Backdrop;
 
     private TextMeshProUGUI GUIScore;
     private TextMeshProUGUI GUIHighMeanScore;
@@ -231,6 +233,7 @@ public class ConWordDice : MonoBehaviour
         CurrScore = 0;
         gameState = 2;
         myMenu.GameRunning();
+        GUI_Backdrop.SetActive(false);
     }
 
     public void TidyUp()
@@ -240,6 +243,7 @@ public class ConWordDice : MonoBehaviour
         gc.FM.KillStaticGUIs();
         gc.SM.KillSFX();
         myMenu.OnSceneTable();
+        GUI_Backdrop.SetActive(false);
     }
 
 
@@ -252,6 +256,7 @@ public class ConWordDice : MonoBehaviour
         gc.FM.KillStaticGUIs();
         gc.SM.KillSFX();
         SetupGUI();
+        GUI_Backdrop.SetActive(false);
         StartGame();
     }
 
@@ -431,7 +436,8 @@ public class ConWordDice : MonoBehaviour
 
     void TimesUp()
     {
-        SetGUIToRed();
+        //SetGUIToRed();
+        GUI_Backdrop.SetActive(true);
         clock.SetTime(0f);
         gameState = 3;
         endGameScore();
