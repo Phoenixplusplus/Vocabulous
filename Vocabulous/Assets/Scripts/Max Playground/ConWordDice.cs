@@ -235,6 +235,7 @@ public class ConWordDice : MonoBehaviour
         myMenu.GameRunning();
         SetupGUI();
         GUI_Backdrop.SetActive(false);
+        if (gc.UIController.isMainMenuOpen) gc.UIController.ToggleOptionsInOut();
     }
 
     void PreStart()

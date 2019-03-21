@@ -36,6 +36,7 @@ public class FreeWordController : MonoBehaviour
     bool showingRestart;
     public bool timeUp;
     public int score = 0;
+    bool waiting;
 
     FlashProTemplate f_foundWord, f_foundSame, f_timeNotification, f_endNotification;
     TextMeshProUGUI g_Score, g_highScore, g_Words;
@@ -75,6 +76,10 @@ public class FreeWordController : MonoBehaviour
         PlaceTilesInGrid();
 
         isInitialised = true;
+
+        gameController.Fire_Start_Flash();
+        StartCoroutine(PauseForOptionsMenu());
+        StartCoroutine(RealStart(4.5f));
     }
 
     void LoadPlayerPreferences()
@@ -147,27 +152,34 @@ public class FreeWordController : MonoBehaviour
     // update
     void Update()
     {
-        if (gameController != null)
+        if (!waiting)
         {
-            if (!timeUp)
+            if (gameController != null)
             {
-                CheckGCHoverValue();
-                InputAndSearch();
+                if (!timeUp)
+                {
+                    CheckGCHoverValue();
+                    InputAndSearch();
+                }
+                SetGUI();
             }
-            SetGUI();
-        }
 
-        if (timeUp)
-        {
-            if (!showingRestart)
+            if (timeUp)
             {
-                freeWordTable.RestartSetup();
-                //ClearTiles();
-                RunEndFlashesAndSaveStats();
-                gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
-                showingRestart = true;
+                if (!showingRestart)
+                {
+                    freeWordTable.RestartSetup();
+                    //ClearTiles();
+                    RunEndFlashesAndSaveStats();
+                    gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
+                    showingRestart = true;
+                }
+                if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 5552) Restart();
             }
-            if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 5552) Restart();
+        }
+        else
+        {
+            freeWordTable.clock.GetComponent<Clock>().SetTime(FWGameTime);
         }
     }
 
@@ -372,7 +384,8 @@ public class FreeWordController : MonoBehaviour
     {
         g_Score.text = "Score: " + score;
         g_highScore.text = "High: " + FWHighScore+"   Average: " + FWAverageScore.ToString("#.00");
-        g_Words.text = "WORDS:  Longest: " + FWLongestWord.Length.ToString() + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
+        if (FWLongestWord != "N/A") g_Words.text = "WORDS:  Longest: " + FWLongestWord.Length.ToString() + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
+        else g_Words.text = "WORDS:  Longest: " + "0" + " (" + FWLongestWord + ")  Average: " + FWAverageWord.ToString("#.00");
     }
 
     void SetGUIToRed()
@@ -397,11 +410,14 @@ public class FreeWordController : MonoBehaviour
         gameController.SM.KillSFX();
         SetupGUI();
         foundWords.Clear();
-        freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
+        //freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
         tileHolder.transform.localRotation = Quaternion.identity;
         PlaceTilesInGrid();
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13,15));
         showingRestart = false;
+
+        gameController.Fire_Start_Flash();
+        StartCoroutine(RealStart(4.5f));
     }
 
     // clear previous words on the board, delete all dice, change tabledice to view when around table
@@ -564,6 +580,47 @@ public class FreeWordController : MonoBehaviour
                     break;
                 }
         }
+    }
+
+    IEnumerator PauseForOptionsMenu()
+    {
+        g_Score.alpha = 0;
+        g_highScore.alpha = 0;
+        g_Words.alpha = 0;
+        bool w = true;
+        while (w)
+        {
+            if (!gameController.UIController.isFWOpen)
+            {
+                g_Score.alpha = 1;
+                g_highScore.alpha = 1;
+                g_Words.alpha = 1;
+                waiting = false;
+                w = false;
+            }
+            yield return null;
+        }
+        yield break;
+    }
+
+    IEnumerator RealStart(float delay)
+    {
+        g_Score.alpha = 0;
+        g_highScore.alpha = 0;
+        g_Words.alpha = 0;
+        waiting = true;
+        yield return new WaitForSeconds(delay);
+        if (!gameController.UIController.isFWOpen)
+        {
+            freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
+            g_Score.alpha = 1;
+            g_highScore.alpha = 1;
+            g_Words.alpha = 1;
+            if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
+            waiting = false;
+        }
+        else waiting = true;
+        yield break;
     }
     #endregion
 }

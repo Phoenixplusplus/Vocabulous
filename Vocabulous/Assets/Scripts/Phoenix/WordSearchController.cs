@@ -55,6 +55,7 @@ public class WordSearchController : MonoBehaviour
     public bool timeUp;
     bool showingRestart;
     string clockString;
+    bool waiting;
 
     public FlashProTemplate f_foundWord;
     public FlashProTemplate f_foundSame;
@@ -79,7 +80,7 @@ public class WordSearchController : MonoBehaviour
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+        //wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
 
         /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
         if (maximumLengthWord > 17) maximumLengthWord = 17;
@@ -110,6 +111,10 @@ public class WordSearchController : MonoBehaviour
         RunInitialBoardAnimations();
 
         isInitialised = true;
+
+        gameController.Fire_Start_Flash();
+        StartCoroutine(PauseForOptionsMenu());
+        StartCoroutine(RealStart(4.5f));
     }
 
     /* recursive populate 'unfoundWords' list, called in the Initialise() */
@@ -484,28 +489,32 @@ public class WordSearchController : MonoBehaviour
     /* update */
     void Update()
     {
-        if (!timeUp) if (selecting) grid.GetCurrentPath();
-
-        if (gameController != null)
+        if (!waiting)
         {
-            CheckGCHoverValue();
-            if (!timeUp) InputAndSearch();
-        }
+            if (!timeUp) if (selecting) grid.GetCurrentPath();
 
-        if (foundWords.Count == 10) wordSearchTable.clock.GetComponent<Clock>().StopClock();
-
-        if (timeUp)
-        {
-            if (!showingRestart)
+            if (gameController != null)
             {
-                wordSearchTable.RestartSetup();
-                //ClearCubesAndBoard();
-                RunEndFlashesAndSaveStats();
-                gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
-                showingRestart = true;
+                CheckGCHoverValue();
+                if (!timeUp) InputAndSearch();
             }
-            if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
+
+            if (foundWords.Count == 10) wordSearchTable.clock.GetComponent<Clock>().StopClock();
+
+            if (timeUp)
+            {
+                if (!showingRestart)
+                {
+                    wordSearchTable.RestartSetup();
+                    //ClearCubesAndBoard();
+                    RunEndFlashesAndSaveStats();
+                    gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
+                    showingRestart = true;
+                }
+                if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
+            }
         }
+        else wordSearchTable.clock.GetComponent<Clock>().SetTime(0f);
     }
 
     /* input and trie search */
@@ -631,7 +640,7 @@ public class WordSearchController : MonoBehaviour
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
         gameController.SM.KillSFX();
-        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+        //wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
         diceHolder.transform.localRotation = Quaternion.identity;
         PlaceCubesInGrid();
         RunInitialBoardAnimations();
@@ -641,6 +650,8 @@ public class WordSearchController : MonoBehaviour
         LoadPlayerPreferences();
         ConfigureGUI();
 
+        gameController.Fire_Start_Flash();
+        StartCoroutine(RealStart(4.5f));
     }
 
     /* clear previous words on the board, delete all dice, change tabledice to view when around table */
@@ -743,6 +754,41 @@ public class WordSearchController : MonoBehaviour
         SaveStats();
         LoadPlayerPreferences();
         SetGUI();
+    }
+
+    IEnumerator PauseForOptionsMenu()
+    {
+        g_times.alpha = 0;
+        bool w = true;
+        while (w)
+        {
+            if (!gameController.UIController.isWSOpen)
+            {
+                wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+                g_times.alpha = 1;
+                if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
+                waiting = false;
+                w = false;
+            }
+            yield return null;
+        }
+        yield break;
+    }
+
+    IEnumerator RealStart(float delay)
+    {
+        g_times.alpha = 0;
+        waiting = true;
+        yield return new WaitForSeconds(delay);
+        if (!gameController.UIController.isWSOpen)
+        {
+            g_times.alpha = 1;
+            wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+            if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
+            waiting = false;
+        }
+        else waiting = true;
+        yield break;
     }
     #endregion
 }

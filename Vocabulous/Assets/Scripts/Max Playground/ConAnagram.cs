@@ -155,6 +155,7 @@ public class ConAnagram : MonoBehaviour
         DisplayToGets();
         GameState = 2;
         HintDelay = false;
+        if (gc.UIController.isMainMenuOpen) gc.UIController.ToggleOptionsInOut();
     }
 
 
