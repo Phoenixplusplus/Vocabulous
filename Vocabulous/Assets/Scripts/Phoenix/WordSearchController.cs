@@ -506,8 +506,6 @@ public class WordSearchController : MonoBehaviour
             }
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver == 4442) Restart();
         }
-
-        if (Input.GetKeyDown(KeyCode.I)) Restart();
     }
 
     /* input and trie search */
