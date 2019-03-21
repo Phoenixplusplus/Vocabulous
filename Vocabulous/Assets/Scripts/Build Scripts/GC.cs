@@ -191,12 +191,12 @@ public class GC : MonoBehaviour
         Flash_ShutOptions = new FlashProTemplate();
         Flash_ShutOptions.SingleLerp = true;
         Flash_ShutOptions.myMessage1 = "Shut Options To Play";
-        Flash_ShutOptions.StartPos = new Vector2(0.25f, 0.35f);
-        Flash_ShutOptions.FinishPos = new Vector2(0.25f, 0.85f);
+        Flash_ShutOptions.StartPos = new Vector2(0.17f, 0.35f);
+        Flash_ShutOptions.FinishPos = new Vector2(0.17f, 0.85f);
         Flash_ShutOptions.TextColor1 = Color.green;
         Flash_ShutOptions.StartWidth = 0.3f;
         Flash_ShutOptions.FinishWidth = 0.3f;
-        Flash_ShutOptions.AnimTime = 2.5f;
+        Flash_ShutOptions.AnimTime = 6f;
 
         Flash_Start = new FlashProTemplate();
         Flash_Start.SingleLerp = true;

@@ -157,6 +157,7 @@ public class ConAnagram : MonoBehaviour
         HintDelay = false;
     }
 
+
     void DisplayHand ()
     {
         gc.SM.PlayTileSFX((TileSFX)Random.Range(12, 16));
@@ -251,17 +252,35 @@ public class ConAnagram : MonoBehaviour
 
     public void KickOff()
     {
-        SetUpGUI();
+        
         gc.SM.KillSFX();
         TableCon.GameStart();
+        if (gc.UIController.isAOpen) StartCoroutine("PauseForOptionsMenu");
+        else
+        {
+            SetUpGUI();
+            StartGame();
+        }
+    }
+
+    IEnumerator PauseForOptionsMenu()
+    {
+        bool waiting = true;
+        while (waiting)
+        {
+            if (!gc.UIController.isAOpen) waiting = false;
+            yield return null;
+        }
+        SetUpGUI();
         StartGame();
     }
-    
+
     public void TidyUp()
     {
         gc.FM.KillStaticGUIs();
         gc.FM.KillAllFlashes();
         gc.SM.KillSFX();
+        StopAllCoroutines();
         AnswersList.Clear();
         ToGets.Clear();
         letters.Clear();
@@ -450,7 +469,7 @@ public class ConAnagram : MonoBehaviour
                     else
                     {
                         // ANIMATE - sorry word not recognised
-                        Debug.Log("Not a word");
+                        //Debug.Log("Not a word");
                         gc.FM.CustomFlash(Warning, "Not a word");
                         gc.SM.PlayWordSFX(WordSFX.SameWord);
                     }

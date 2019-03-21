@@ -203,7 +203,10 @@ public class FreeWordController : MonoBehaviour
                             score += GetScore(res.Length);
                             DisplayPointFlash(res.Length);
                             if (res.Length >= FWLongestWordCount)
-                            { FWLongestWord = res; }
+                            {
+                                FWLongestWord = res;
+                                FWLongestWordCount = res.Length;
+                            }
                             grid.FinishPath();
                         }
                         else
@@ -407,6 +410,7 @@ public class FreeWordController : MonoBehaviour
         foundWords.Clear();
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
+        StopAllCoroutines();
         ClearTiles();
         freeWordTable.StartSetup();
     }

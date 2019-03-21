@@ -239,7 +239,6 @@ public class ConWordDice : MonoBehaviour
 
     void PreStart()
     {
-        // TESTER for gc.player ... IT WORKS <<yah me>>
         LoadStats();
         myMenu.GameRunning();
         GUI_Backdrop.SetActive(false);
