@@ -10549,10 +10549,13 @@ MonoBehaviour:
   - {fileID: 1368835985}
   nameField: {fileID: 1851060263}
   playButtonImage: {fileID: 2062733032}
+  quitButtonImage: {fileID: 692099806}
   wordDiceSprite: {fileID: 21300000, guid: e0c4f4ef8babb124fb938c9aa45b59d8, type: 3}
   wordSearchSprite: {fileID: 21300000, guid: c57aae0bc7a0ab5419af32f9532429ef, type: 3}
   anagramSprite: {fileID: 21300000, guid: f52deaae1773890439014c688f9bdda4, type: 3}
   freeWordSprite: {fileID: 21300000, guid: 5b55b5bd4714bd342a963c9e4dd78fe4, type: 3}
+  exitVocabSprite: {fileID: 21300000, guid: c80e94eddd06bd94da08224b0ef2f2fe, type: 3}
+  quitSprite: {fileID: 21300000, guid: fa815d1f7b76cd947b3f1e78807c84bb, type: 3}
   isMainMenuOpen: 0
   isWDOpen: 0
   isAOpen: 0
