@@ -15,8 +15,8 @@ public class UIC : MonoBehaviour
     public Text[] anagramStats = new Text[3];
     public Text[] freeWordStats = new Text[5];
     public InputField nameField;
-    public Image playButtonImage;
-    public Sprite wordDiceSprite, wordSearchSprite, anagramSprite, freeWordSprite;
+    public Image playButtonImage, quitButtonImage;
+    public Sprite wordDiceSprite, wordSearchSprite, anagramSprite, freeWordSprite, exitVocabSprite, quitSprite;
     public bool isMainMenuOpen, isWDOpen, isAOpen, isWSOpen, isFWOpen, isAUOpen;
 
     void Start()
@@ -46,7 +46,9 @@ public class UIC : MonoBehaviour
             if (cameraController.onWordSearch) playButtonImage.sprite = wordSearchSprite;
             if (cameraController.onAnagram) playButtonImage.sprite = anagramSprite;
             if (cameraController.onFreeWord) playButtonImage.sprite = freeWordSprite;
+            quitButtonImage.sprite = exitVocabSprite;
         }
+        else quitButtonImage.sprite = quitSprite;
     }
 
     // UI Button functions

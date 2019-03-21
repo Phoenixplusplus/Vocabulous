@@ -99,8 +99,6 @@ public class CameraController : MonoBehaviour
                     len = Vector3.Magnitude(move);
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
-                    // Debug.Log("CurrUp " + CurrUp.ToString());
-                    //wordDiceCameraTransform.position -= wordDiceCameraTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     if (CurrUp >= 0 && CurrUp <= MaxUp) wordDiceCameraTransform.position -= move;
                 }
                 if (playWordSearch)
@@ -109,7 +107,6 @@ public class CameraController : MonoBehaviour
                     len = Vector3.Magnitude(move);
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
-                    //wordSearchTransform.position -= wordSearchTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     if (CurrUp >= 0 && CurrUp <= MaxUp) wordSearchTransform.position -= move;
                 }
                 if (playAnagram)
@@ -118,7 +115,6 @@ public class CameraController : MonoBehaviour
                     len = Vector3.Magnitude(move);
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
-                    //anagramTransform.position -= anagramTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     if (CurrUp >= 0 && CurrUp <= MaxUp)  anagramTransform.position -= move;
                 }
                 if (playWordDrop)
@@ -127,12 +123,10 @@ public class CameraController : MonoBehaviour
                     len = Vector3.Magnitude(move);
                     if (Input.GetAxis("Mouse Y") > 0) len *= -1f;
                     CurrUp += len;
-                    //freeWordTransform.position -= freeWordTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     if (CurrUp >= 0 && CurrUp <= MaxUp)  freeWordTransform.position -= move;
                 }
                 if (playSolver)
                 {
-                    //solverTransform.position += solverTransform.right * (Input.GetAxis("Mouse X") * mouseSensitivty);
                     solverTransform.position += solverUnrotatedForward * (Input.GetAxis("Mouse Y") * mouseSensitivty);
                 }
             }
