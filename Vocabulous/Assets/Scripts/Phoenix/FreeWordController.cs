@@ -57,7 +57,7 @@ public class FreeWordController : MonoBehaviour
 
         LoadPlayerPreferences();
         ConfigureFlashes();
-        SetupGUI();
+        // SetupGUI();
 
         freeWordTable.IngameSetup();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
@@ -73,13 +73,12 @@ public class FreeWordController : MonoBehaviour
         grid.init();
         grid.directional = true;
 
-        PlaceTilesInGrid();
+        //PlaceTilesInGrid();
 
         isInitialised = true;
 
-        gameController.Fire_Start_Flash();
         StartCoroutine(PauseForOptionsMenu());
-        StartCoroutine(RealStart(4.5f));
+
     }
 
     void LoadPlayerPreferences()
@@ -120,6 +119,9 @@ public class FreeWordController : MonoBehaviour
     // spawning function
     public void PlaceTilesInGrid()
     {
+        tileHolder.transform.localRotation = Quaternion.identity;
+        // Insurance
+        ClearTiles();
         // populate with random weighted chars
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
@@ -144,6 +146,25 @@ public class FreeWordController : MonoBehaviour
         }
         tileHolder.transform.localRotation = transform.localRotation;
     }
+
+    void SpawnEmptyTiles ()
+    {
+        tileHolder.transform.localRotation = Quaternion.identity;
+        ClearTiles();
+        int count = 0;
+        for (int z = gridYLength; z > 0; z--)
+        {
+            for (int x = 0; x < gridXLength; x++)
+            {
+                GameObject tile = gameController.assets.SpawnTile("questquest", new Vector3(tileHolder.transform.position.x + x, tileHolder.transform.position.y, tileHolder.transform.position.z + z), false, true);
+                tile.transform.parent = tileHolder.transform;
+                instancedTiles[count] = tile;
+                count++;
+            }
+        }
+        tileHolder.transform.localRotation = transform.localRotation;
+    }
+
     #endregion
 
 
@@ -166,7 +187,7 @@ public class FreeWordController : MonoBehaviour
 
             if (timeUp)
             {
-                if (!showingRestart)
+                if (!showingRestart) /// aka ... make sure the clock says something ... else the Restart menu pops up again ...
                 {
                     freeWordTable.RestartSetup();
                     //ClearTiles();
@@ -403,6 +424,10 @@ public class FreeWordController : MonoBehaviour
     {
         score = 0;
         freeWordTable.IngameSetup();
+        // insurance ....
+        freeWordTable.ToggleRestartObjects(false);
+        showingRestart = false;
+
         grid.init();
         ClearTiles();
         gameController.FM.KillAllFlashes();
@@ -410,11 +435,12 @@ public class FreeWordController : MonoBehaviour
         gameController.SM.KillSFX();
         SetupGUI();
         foundWords.Clear();
-        //freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
-        tileHolder.transform.localRotation = Quaternion.identity;
-        PlaceTilesInGrid();
+
+        // PlaceTilesInGrid(); 
+        SpawnEmptyTiles();
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13,15));
-        showingRestart = false;
+
+        freeWordTable.clock.GetComponent<Clock>().StartClock(5, 0); // required to stop "Restart" re-emerging
 
         gameController.Fire_Start_Flash();
         StartCoroutine(RealStart(4.5f));
@@ -584,6 +610,8 @@ public class FreeWordController : MonoBehaviour
 
     IEnumerator PauseForOptionsMenu()
     {
+        SpawnEmptyTiles();
+        SetupGUI();
         g_Score.alpha = 0;
         g_highScore.alpha = 0;
         g_Words.alpha = 0;
@@ -600,27 +628,30 @@ public class FreeWordController : MonoBehaviour
             }
             yield return null;
         }
-        yield break;
+        Restart(); // which in turn will call "RealStart" after 4.5 seconds
     }
 
     IEnumerator RealStart(float delay)
     {
-        g_Score.alpha = 0;
-        g_highScore.alpha = 0;
-        g_Words.alpha = 0;
-        waiting = true;
         yield return new WaitForSeconds(delay);
-        if (!gameController.UIController.isFWOpen)
-        {
-            freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
-            g_Score.alpha = 1;
-            g_highScore.alpha = 1;
-            g_Words.alpha = 1;
-            if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
-            waiting = false;
-        }
-        else waiting = true;
-        yield break;
+        //if (!gameController.UIController.isFWOpen)
+        //{
+
+        freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
+        PlaceTilesInGrid();
+        gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
+
+        // insurance
+        freeWordTable.IngameSetup();
+
+        //    g_Score.alpha = 1;
+        //    g_highScore.alpha = 1;
+        //    g_Words.alpha = 1;
+        //    if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
+        //    waiting = false;
+        //}
+        //else waiting = true;
+        //yield break;
     }
     #endregion
 }

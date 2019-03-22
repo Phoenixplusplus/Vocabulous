@@ -424,6 +424,10 @@ public class GC : MonoBehaviour
                     {
                         OpenOptionsMenu("WD");
                     }
+                    else
+                    {
+                        ShutAllOptionsMenus();
+                    }
                     if (UIController.isWDOpen)
                     {
                         FM.CustomFlash(Flash_ShutOptions);
@@ -450,6 +454,10 @@ public class GC : MonoBehaviour
                     {
                         OpenOptionsMenu("A");
                     }
+                    else
+                    {
+                        ShutAllOptionsMenus();
+                    }
                     if (UIController.isAOpen)
                     {
                         FM.CustomFlash(Flash_ShutOptions);
@@ -466,6 +474,10 @@ public class GC : MonoBehaviour
                     if (player.FWTimesCompleted == 0)
                     {
                         OpenOptionsMenu("FW");
+                    }
+                    else
+                    {
+                        ShutAllOptionsMenus();
                     }
                     if (UIController.isFWOpen)
                     {
@@ -484,6 +496,10 @@ public class GC : MonoBehaviour
                     if (player.WordSearchTimesCompleted == 0)
                     {
                         OpenOptionsMenu("WS");
+                    }
+                    else
+                    {
+                        ShutAllOptionsMenus();
                     }
                     if (UIController.isWSOpen)
                     {
