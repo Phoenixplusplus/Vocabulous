@@ -78,7 +78,6 @@ public class FreeWordController : MonoBehaviour
         isInitialised = true;
 
         StartCoroutine(PauseForOptionsMenu());
-
     }
 
     void LoadPlayerPreferences()
@@ -399,6 +398,9 @@ public class FreeWordController : MonoBehaviour
         GameObject obj_averageScore = gameController.FM.AddGUIItem("WORDS:  Longest: 0 (this)  Average: 0 ", 0.65f, 0.86f, 0.5f, Color.yellow);
         g_Words = obj_averageScore.GetComponent<TextMeshProUGUI>();
 
+        g_Score.alpha = 0;
+        g_highScore.alpha = 0;
+        g_Words.alpha = 0;
     }
 
     void SetGUI()
@@ -608,21 +610,19 @@ public class FreeWordController : MonoBehaviour
         }
     }
 
+    public void PlayPauseForOptionsMenu() { StartCoroutine(PauseForOptionsMenu()); }
     IEnumerator PauseForOptionsMenu()
     {
+        freeWordTable.IngameSetup();
+        grid.init();
         SpawnEmptyTiles();
         SetupGUI();
-        g_Score.alpha = 0;
-        g_highScore.alpha = 0;
-        g_Words.alpha = 0;
         bool w = true;
+        waiting = true;
         while (w)
         {
             if (!gameController.UIController.isFWOpen)
             {
-                g_Score.alpha = 1;
-                g_highScore.alpha = 1;
-                g_Words.alpha = 1;
                 waiting = false;
                 w = false;
             }
@@ -633,25 +633,16 @@ public class FreeWordController : MonoBehaviour
 
     IEnumerator RealStart(float delay)
     {
+        waiting = true;
         yield return new WaitForSeconds(delay);
-        //if (!gameController.UIController.isFWOpen)
-        //{
-
+        g_Score.alpha = 1;
+        g_highScore.alpha = 1;
+        g_Words.alpha = 1;
+        waiting = false;
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
         PlaceTilesInGrid();
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
-
-        // insurance
         freeWordTable.IngameSetup();
-
-        //    g_Score.alpha = 1;
-        //    g_highScore.alpha = 1;
-        //    g_Words.alpha = 1;
-        //    if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
-        //    waiting = false;
-        //}
-        //else waiting = true;
-        //yield break;
     }
     #endregion
 }

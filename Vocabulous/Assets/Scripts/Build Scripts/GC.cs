@@ -274,6 +274,7 @@ public class GC : MonoBehaviour
         Flash_Welcome.myMessage1 += player.Name;
         FM.CustomFlash(Flash_Welcome);
         FM.CustomFlash(Flash_Options, Flash_Welcome.AnimTime + 0.2f);
+        if (player.Name == "NewPlayer") StartCoroutine(OpenNewPlayerMenu(4.5f));
     }
 
 
@@ -317,6 +318,7 @@ public class GC : MonoBehaviour
             case "FW": if (!UIController.isFWOpen) UIController.ToggleFWOptionsInOut(); break;
             case "WD": if (!UIController.isWDOpen) UIController.ToggleWDOptionsInOut(); break;
             case "WS": if (!UIController.isWSOpen) UIController.ToggleWSOptionsInOut(); break;
+            case "Help": if (!UIController.isAUOpen) UIController.ToggleAboutUsInOut(); break;
         }
     }
 
@@ -484,7 +486,7 @@ public class GC : MonoBehaviour
                         FM.CustomFlash(Flash_ShutOptions);
                     }
                     if (!freeWordController.isInitialised) freeWordController.Initialise();
-                    else freeWordController.Restart();
+                    else freeWordController.PlayPauseForOptionsMenu();
                     DisableOtherGames(freeWordController.gameObject);
                     SM.PlayRandomTrack();
                     break;
@@ -506,7 +508,7 @@ public class GC : MonoBehaviour
                         FM.CustomFlash(Flash_ShutOptions);
                     }
                     if (!wordSearchController.isInitialised) wordSearchController.Initialise();
-                    else wordSearchController.Restart();
+                    else wordSearchController.PlayPauseForOptionsMenu();
                     DisableOtherGames(wordSearchController.gameObject);
                     SM.PlayRandomTrack();
                     break;
@@ -620,5 +622,12 @@ public class GC : MonoBehaviour
     public void ResetAnagramsStats() { ClearAnagramStats(); SaveStats(); }
     public void ResetWordSearchStats() { ClearWordSearchStats(); SaveStats(); }
     public void ResetFreeWordStats() { ClearFreeWordStats(); SaveStats(); }
+
+    IEnumerator OpenNewPlayerMenu(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        OpenOptionsMenu("Help");
+        yield break;
+    }
     #endregion
 }

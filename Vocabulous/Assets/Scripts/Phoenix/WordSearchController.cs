@@ -105,16 +105,16 @@ public class WordSearchController : MonoBehaviour
         grid.directional = true;
 
         /* place cubes in grid */
-        PlaceCubesInGrid();
+        //PlaceCubesInGrid();
 
         /* do initial board animations */
-        RunInitialBoardAnimations();
+        //RunInitialBoardAnimations();
 
         isInitialised = true;
 
-        gameController.Fire_Start_Flash();
+        //gameController.Fire_Start_Flash();
         StartCoroutine(PauseForOptionsMenu());
-        StartCoroutine(RealStart(4.5f));
+        //StartCoroutine(RealStart(4.5f));
     }
 
     /* recursive populate 'unfoundWords' list, called in the Initialise() */
@@ -350,6 +350,22 @@ public class WordSearchController : MonoBehaviour
         diceHolder.transform.localRotation = transform.localRotation;
     }
 
+    public void PlaceEmptyCubes()
+    {
+        int count = 0;
+        for (int z = gridYLength; z > 0; z--)
+        {
+            for (int x = 0; x < gridXLength; x++)
+            {
+                GameObject dice = gameController.assets.SpawnDice("?", new Vector3(diceHolder.transform.position.x + x, diceHolder.transform.position.y, diceHolder.transform.position.z + z));
+                dice.transform.parent = diceHolder.transform;
+                instancedDice[count] = dice;
+                count++;
+            }
+        }
+        diceHolder.transform.localRotation = transform.localRotation;
+    }
+
     // set variables to what's in the player preferences
     void LoadPlayerPreferences()
     {
@@ -473,6 +489,7 @@ public class WordSearchController : MonoBehaviour
     {
         GameObject obj_times = gameController.FM.AddGUIItem("TIMES: Best: 0  Average: 0", 0.81f, 0.95f, 0.24f, Color.white);
         g_times = obj_times.GetComponent<TextMeshProUGUI>();
+        g_times.alpha = 0;
         SetGUI();
     }
 
@@ -636,16 +653,21 @@ public class WordSearchController : MonoBehaviour
     {
         wordSearchTable.IngameSetup();
         grid.init();
-        ClearCubesAndBoard();
+        //ClearCubesAndBoard();
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
         gameController.SM.KillSFX();
         //wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+        //diceHolder.transform.localRotation = Quaternion.identity;
+        //PlaceCubesInGrid();
+        //RunInitialBoardAnimations();
+
         diceHolder.transform.localRotation = Quaternion.identity;
-        PlaceCubesInGrid();
-        RunInitialBoardAnimations();
+        ClearCubesAndBoard();
+        PlaceEmptyCubes();
+
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
-        showingRestart = false;
+        //showingRestart = false;
 
         LoadPlayerPreferences();
         ConfigureGUI();
@@ -756,39 +778,42 @@ public class WordSearchController : MonoBehaviour
         SetGUI();
     }
 
+    public void PlayPauseForOptionsMenu() { StartCoroutine(PauseForOptionsMenu()); }
     IEnumerator PauseForOptionsMenu()
     {
-        g_times.alpha = 0;
+        wordSearchTable.IngameSetup();
+        grid.init();
+        diceHolder.transform.localRotation = Quaternion.identity;
+        PlaceEmptyCubes();
+        ConfigureGUI();
+        waiting = true;
         bool w = true;
         while (w)
         {
             if (!gameController.UIController.isWSOpen)
             {
-                wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
-                g_times.alpha = 1;
-                if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
                 waiting = false;
                 w = false;
             }
             yield return null;
         }
-        yield break;
+        Restart(); // which in turn will call "RealStart" after 4.5 seconds
     }
 
     IEnumerator RealStart(float delay)
     {
-        g_times.alpha = 0;
         waiting = true;
         yield return new WaitForSeconds(delay);
-        if (!gameController.UIController.isWSOpen)
-        {
-            g_times.alpha = 1;
-            wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
-            if (gameController.UIController.isMainMenuOpen) gameController.UIController.ToggleOptionsInOut();
-            waiting = false;
-        }
-        else waiting = true;
-        yield break;
+        g_times.alpha = 1;
+        waiting = false;
+        wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
+        showingRestart = false;
+        ClearCubesAndBoard();
+        diceHolder.transform.localRotation = Quaternion.identity;
+        PlaceCubesInGrid();
+        RunInitialBoardAnimations();
+        gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
+        wordSearchTable.IngameSetup();
     }
     #endregion
 }
