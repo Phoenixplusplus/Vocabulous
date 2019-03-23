@@ -90,8 +90,8 @@ public class UIC : MonoBehaviour
     public void PopulateWordSearchStats()
     {
         wordSearchStats[0].text = "Times Played: " + gameController.player.WordSearchTimesCompleted;
-        wordSearchStats[1].text = "Best Time: " + gameController.player.WordSearchBestTime;
-        wordSearchStats[2].text = "Average Time: " + gameController.player.WordSearchAverageTime;
+        wordSearchStats[1].text = "Best Time: " + ConvertTimeToString(gameController.player.WordSearchBestTime);
+        wordSearchStats[2].text = "Average Time: " + ConvertTimeToString(gameController.player.WordSearchAverageTime);
     }
 
     public void PopulateAnagramsStats()
@@ -108,6 +108,13 @@ public class UIC : MonoBehaviour
         freeWordStats[2].text = "Average Score: " + gameController.player.FWAverageScore.ToString("0.0");
         freeWordStats[3].text = "Longest Word: " + gameController.player.FWLongestWord + ", " + gameController.player.FWLongestWordCount;
         freeWordStats[4].text = "Average Words: " + gameController.player.FWAverageWord.ToString("0.0");
+    }
+
+    public string ConvertTimeToString(float time)
+    {
+        float minutes = Mathf.Floor(time / 60);
+        int seconds = Mathf.RoundToInt(time % 60);
+        return minutes + ":" + seconds.ToString("0");
     }
 
     public void UpdateName()
