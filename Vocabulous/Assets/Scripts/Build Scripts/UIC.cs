@@ -72,7 +72,7 @@ public class UIC : MonoBehaviour
     }
     public void QuitClicked()
     {
-        if (gameController.GameState == 5) Application.Quit();
+        if (gameController.GameState == 1) Application.Quit();
     }
     public void PlayClicked() { TogglePlayButton(false); ToggleQuitButton(true); }
 

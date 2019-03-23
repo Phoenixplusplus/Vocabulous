@@ -71,12 +71,11 @@ public class WordSearchController : MonoBehaviour
         gameController = GC.Instance;
         trie = gameController.phoenixTrie;
 
-        // configure flash animations
-        ConfigureFlashes();
-        ConfigureGUI();
-
         // set variables based on player preferences
         LoadPlayerPreferences();
+
+        ConfigureFlashes();
+        ConfigureGUI();
 
         /* hide/unhide table prefabs */
         wordSearchTable.IngameSetup();
@@ -385,10 +384,6 @@ public class WordSearchController : MonoBehaviour
         timesCompleted = gameController.player.WordSearchTimesCompleted;
         timesQuit = gameController.player.WordSearchTimesQuit;
 
-        // Max's GUI additions
-        g_High = TimeToString(bestTime);
-        g_mean = TimeToString(averageTime);
-        SetGUI();
     }
 
     string TimeToString(int time)
@@ -495,6 +490,11 @@ public class WordSearchController : MonoBehaviour
 
     void SetGUI ()
     {
+        // Max's GUI additions
+        g_High = TimeToString(bestTime);
+        g_mean = TimeToString(averageTime);
+        if (averageTime == 0) g_mean = "TBA";
+
         g_times.text = "TIMES: Best: "+g_High+"  Average: "+ g_mean;
     }
 
@@ -741,7 +741,7 @@ public class WordSearchController : MonoBehaviour
         gameTime = 599;
         bestTime = 599;
         averageTime = 0;
-        worstTime = 0;
+        worstTime = 599;
         timesCompleted = 0;
         timesQuit = 0;
     }
@@ -750,7 +750,7 @@ public class WordSearchController : MonoBehaviour
     {
         float flashDelay = 0;
         float endtime = wordSearchTable.clock.GetComponent<Clock>().time;
-        string timeStr = wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(endtime);
+        string timeStr = TimeToString((int)endtime);
 
         if ((int)endtime < bestTime)
         {
@@ -761,13 +761,13 @@ public class WordSearchController : MonoBehaviour
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
         }
 
-        averageTime = ((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1);
+        averageTime = (int)(((averageTime * timesCompleted) + (int)endtime) / (timesCompleted + 1));
         if (endtime < averageTime || (int)endtime == averageTime)
         {
             flashDelay++;
             // f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
             // f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
-            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", wordSearchTable.clock.GetComponent<Clock>().ConvertTimeToString(averageTime), flashDelay + .5f);
+            gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", TimeToString(averageTime), flashDelay + .5f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
         }

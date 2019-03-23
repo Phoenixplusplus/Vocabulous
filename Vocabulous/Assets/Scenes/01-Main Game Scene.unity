@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
+  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -8983,11 +8983,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 468538077}
     m_Modifications:
-    - target: {fileID: 8170849466671032422, guid: db351675032262f4396c49fff953057c,
-        type: 3}
-      propertyPath: m_Name
-      value: Clock
-      objectReference: {fileID: 0}
     - target: {fileID: 6206811268379573063, guid: db351675032262f4396c49fff953057c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9042,6 +9037,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8170849466671032422, guid: db351675032262f4396c49fff953057c,
+        type: 3}
+      propertyPath: m_Name
+      value: Clock
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db351675032262f4396c49fff953057c, type: 3}
@@ -13894,13 +13894,18 @@ PrefabInstance:
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: UseDefaultPlayer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
         type: 3}
       propertyPath: SM
       value: 
       objectReference: {fileID: 1151723402}
+    - target: {fileID: 6776935128822241970, guid: 39081cda580a8ac408c729871e3547c7,
+        type: 3}
+      propertyPath: PosTranFreeWord.y
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 39081cda580a8ac408c729871e3547c7, type: 3}
 --- !u!1001 &5775424619593281385

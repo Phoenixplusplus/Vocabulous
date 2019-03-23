@@ -238,7 +238,7 @@ public class PlayerManager
         PlayerPrefs.SetInt("WordSearchEightLetterWordsCount", 0);
         PlayerPrefs.SetInt("WordSearchBestTime", 599);
         PlayerPrefs.SetInt("WordSearchAverageTime", 0);
-        PlayerPrefs.SetInt("WordSearchWorstTime", 0);
+        PlayerPrefs.SetInt("WordSearchWorstTime", 599);
         PlayerPrefs.SetInt("WordSearchTimesCompleted", 0);
         PlayerPrefs.SetInt("WordSearchTimesQuit", 0);
     }
