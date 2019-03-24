@@ -567,6 +567,7 @@ public class ConAnagram : MonoBehaviour
     void UpdateGUI()
     {
         GUILevel.text = "Level: " + (gc.player.ALevel + 1).ToString();
+        if (Testing) GUILevel.text = "Level: " + (TestLevel + 1).ToString();
         GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 

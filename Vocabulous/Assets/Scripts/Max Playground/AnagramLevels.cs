@@ -1420,6 +1420,8 @@ static string[] Anagrams = new string[] {
             return ret;
         }
         string str = Anagrams[level];
+        int len = str.Length;
+        int count = 1;
         string word = "";
         foreach (char c in str)
         {
@@ -1428,10 +1430,16 @@ static string[] Anagrams = new string[] {
                 ret.Add(word);
                 word = "";
             }
+            else if (count == len)
+            {
+                word += c;
+                ret.Add(word);
+            }
             else
             {
                 word += c;
             }
+            count++;
         }
         return ret;
     }
