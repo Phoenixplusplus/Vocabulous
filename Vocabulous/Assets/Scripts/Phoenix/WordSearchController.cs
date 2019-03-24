@@ -438,6 +438,7 @@ public class WordSearchController : MonoBehaviour
         eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
         gameTime = gameController.player.WordSearchGameLength;
         bestTime = gameController.player.WordSearchBestTime;
+        if (bestTime == 0) bestTime = 599; // insurance for a buggy 0 value
         averageTime = gameController.player.WordSearchAverageTime;
         worstTime = gameController.player.WordSearchWorstTime;
         timesCompleted = gameController.player.WordSearchTimesCompleted;
@@ -811,7 +812,7 @@ public class WordSearchController : MonoBehaviour
         float endtime = wordSearchTable.clock.GetComponent<Clock>().time;
         string timeStr = TimeToString((int)endtime);
 
-        if ((int)endtime < bestTime)
+        if ((int)endtime < bestTime || bestTime == 0) // insurance over rogue 0 values
         {
             bestTime = (int)endtime;
             flashDelay++;
