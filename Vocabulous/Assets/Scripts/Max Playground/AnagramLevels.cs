@@ -1378,6 +1378,39 @@ static string[] Anagrams = new string[] {
 
     public int levels = Anagrams.Length;
 
+    public string GetWord(int Length)
+    {
+        List<string> miniret = new List<string>();
+        if (Length < 4) Length = 4;
+        else if (Length > 10) Length = 10;
+
+        switch (Length)
+        {
+            case 4:
+                miniret = GetAnagramLevel(Random.Range(0, 51));
+                break;
+            case 5:
+                miniret = GetAnagramLevel(Random.Range(0, 165) + 51);
+                break;
+            case 6:
+                miniret = GetAnagramLevel(Random.Range(0, 277) + 216);
+                break;
+            case 7:
+                miniret = GetAnagramLevel(Random.Range(0, 307) + 493);
+                break;
+            case 8:
+                miniret = GetAnagramLevel(Random.Range(0, 243) + 800);
+                break;
+            case 9:
+                miniret = GetAnagramLevel(Random.Range(0, 181) + 1043);
+                break;
+            case 10:
+                miniret = GetAnagramLevel(Random.Range(0, 145) + 1224);
+                break;
+        }
+        return miniret[0];
+    }
+
     public List<string> GetAnagramLevel(int level)
     {
         List<string> ret = new List<string>();

@@ -56,6 +56,7 @@ public class WordSearchController : MonoBehaviour
     bool showingRestart;
     string clockString;
     bool waiting;
+    private AnagramLevels AL;
 
     public FlashProTemplate f_foundWord;
     public FlashProTemplate f_foundSame;
@@ -70,6 +71,7 @@ public class WordSearchController : MonoBehaviour
         // gamecontroller and initialising variables
         gameController = GC.Instance;
         trie = gameController.phoenixTrie;
+        AL = GetComponent<AnagramLevels>();
 
         // set variables based on player preferences
         LoadPlayerPreferences();
@@ -300,6 +302,21 @@ public class WordSearchController : MonoBehaviour
         return successfulRoutes;
     }
 
+
+    private void AddWord (int Len)
+    {
+        bool looking = true;
+        while (looking)
+        {
+            string me = AL.GetWord(Len);
+            if (!unfoundWords.Contains(me))
+            {
+                unfoundWords.Add(me);
+                looking = false;
+            }
+        }
+    }
+
     /* triggers recursive function, places words into the grid where it can, then spawns the actual cube meshes according to strings/random weighted letters */
     public void PlaceCubesInGrid()
     {
@@ -311,12 +328,54 @@ public class WordSearchController : MonoBehaviour
             grid.PopulateBin(i, defaultString);
         }
 
+        // HISTORIC CODE _ RETAINED FOR POSSIBLE REVERT
         /* populate with initial words to be placed 'unfoundWords' List */
-        for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
-        for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
-        for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
-        for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
-        for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
+        //for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
+        //for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
+        //for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
+        //for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
+        //for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
+
+        for (int i = 0; i < fourLetterWordsCount; i++)
+        {
+            if (Random.Range(0f,1f) >= 0.3f) AddWord(4);
+            else
+            {
+                PopulateInitialWords(4, 1, false);
+            }
+        }
+        for (int i = 0; i < fiveLetterWordsCount; i++)
+        {
+            if (Random.Range(0f, 1f) >= 0.3f) AddWord(5);
+            else
+            {
+                PopulateInitialWords(5, 1, false);
+            }
+        }
+        for (int i = 0; i < sixLetterWordsCount; i++)
+        {
+            if (Random.Range(0f, 1f) >= 0.3f) AddWord(6);
+            else
+            {
+                PopulateInitialWords(6, 1, false);
+            }
+        }
+        for (int i = 0; i < sevenLetterWordsCount; i++)
+        {
+            if (Random.Range(0f, 1f) >= 0.3f) AddWord(7);
+            else
+            {
+                PopulateInitialWords(7, 1, false);
+            }
+        }
+        for (int i = 0; i < eightLetterWordsCount; i++)
+        {
+            if (Random.Range(0f, 1f) >= 0.3f) AddWord(8);
+            else
+            {
+                PopulateInitialWords(8, 1, false);
+            }
+        }
 
         /* start placing words in the grid and check their legality (possible recursion for each word) */
         foreach (string word in unfoundWords)

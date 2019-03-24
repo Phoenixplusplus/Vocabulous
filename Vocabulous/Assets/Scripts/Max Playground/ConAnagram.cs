@@ -215,7 +215,6 @@ public class ConAnagram : MonoBehaviour
                 count = 0;
             }
             rowoffset[row] = (((float)AnswersListWidth - (float)count)/2f);
-            Debug.Log("Row offset " + rowoffset[row].ToString());
             count += len + 1;
         }
         row = 0;
@@ -643,6 +642,5 @@ public class ConAnagram : MonoBehaviour
         Debug.Log("Words examinied : " + con.ToString() + " candidates in " + (Time.realtimeSinceStartup - start).ToString() + " secs");
     }
 
-
-
+ 
 }
