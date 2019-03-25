@@ -112,9 +112,24 @@ public class UIC : MonoBehaviour
 
     public string ConvertTimeToString(float time)
     {
-        float minutes = Mathf.Floor(time / 60);
-        int seconds = Mathf.RoundToInt(time % 60);
-        return minutes + ":" + seconds.ToString("0");
+        int sec = (int)time % 60;
+        int min = ((int)time - sec) / 60;
+        string ret = "";
+        if (min < 10) ret += "0";
+        ret += min.ToString() + ":";
+        if (sec < 10) ret += "0";
+        return ret + sec.ToString();
+    }
+
+    public string ConvertTimeToString(int time)
+    {
+        int sec = time % 60;
+        int min = (time - sec) / 60;
+        string ret = "";
+        if (min < 10) ret += "0";
+        ret += min.ToString() + ":";
+        if (sec < 10) ret += "0";
+        return ret + sec.ToString();
     }
 
     public void UpdateName()
