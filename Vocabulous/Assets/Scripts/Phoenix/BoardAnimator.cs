@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿//////////////////////////////////////////
+// Kingston University: Module CI6530   //
+// Games Creation Processes             //
+// Coursework 2: PC/MAC Game            //
+// Team Chumbawumba                     //
+// Vocabulous                           //
+//////////////////////////////////////////
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,9 +25,10 @@ public class BoardAnimator : MonoBehaviour
     void Start()
     {
         gameController = GC.Instance;
-        //thisText = gameObject.GetComponent<Text>();
     }
 
+    // functions to be called by WordSearchController,
+    // subsiquent functions will their respective co-routines and clean up after themselves
     public void WriteWord(string str, float totalTime) { StartCoroutine(WriteWordIE(str, totalTime)); }
     public void ScrubWord(float totalTime) { StartCoroutine(ScrubWordIE(totalTime)); }
     public void UseScrubber(float initialLerpTime) { StartCoroutine(UseScrubberIE(initialLerpTime)); }
@@ -27,6 +36,7 @@ public class BoardAnimator : MonoBehaviour
     public string GetWord() { return thisText.text; }
     public void SetWord(string str) { thisText.text = str; }
 
+    // populate a line on the board with a word, 1 letter at a time
     IEnumerator WriteWordIE(string str, float totalTime)
     {
         thisText.text = "";
@@ -38,6 +48,7 @@ public class BoardAnimator : MonoBehaviour
         yield break;
     }
 
+    // moves the chalk object position to the board and where the word needs to be written
     IEnumerator UseChalkIE(float initialLerpTime)
     {
         chalkOriginPos = chalk.transform.position;
@@ -65,6 +76,7 @@ public class BoardAnimator : MonoBehaviour
         yield break;
     }
 
+    // removes the word on the board, letter by letter
     IEnumerator ScrubWordIE(float totalTime)
     {
 
@@ -78,6 +90,7 @@ public class BoardAnimator : MonoBehaviour
         yield break;
     }
 
+    // moves the scrubber object position to the board and where the word needs to be rubbed out
     IEnumerator UseScrubberIE(float initialLerpTime)
     {
         scrubOriginPos = scrubber.transform.position;
@@ -104,6 +117,9 @@ public class BoardAnimator : MonoBehaviour
         yield break;
     }
 
+    // important for the WordSearchController to call this at the right time,
+    // there was a bug in the build involving which start functions are called before the other,
+    // this mitigates that problem
     public void Init()
     {
         thisText = gameObject.GetComponent<Text>();

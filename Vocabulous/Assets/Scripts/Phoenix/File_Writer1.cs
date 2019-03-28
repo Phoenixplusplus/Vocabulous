@@ -1,4 +1,13 @@
-﻿using System.Collections;
+﻿//////////////////////////////////////////
+// Kingston University: Module CI6530   //
+// Games Creation Processes             //
+// Coursework 2: PC/MAC Game            //
+// Team Chumbawumba                     //
+// Vocabulous                           //
+//////////////////////////////////////////
+//LEGACY //
+
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;

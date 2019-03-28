@@ -1,11 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿//////////////////////////////////////////
+// Kingston University: Module CI6530   //
+// Games Creation Processes             //
+// Coursework 2: PC/MAC Game            //
+// Team Chumbawumba                     //
+// Vocabulous                           //
+//////////////////////////////////////////
 
 // All Music and SFX are purchased and Free-to-use licence
 // https://www.promusicpack.com/license.html
 // http://www.soundeffectpack.com/license.html
 // Sources (Open Commons) from https://www.freemusicpublicdomain.com/royalty-free-classical-music/
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 // Placeholders only
 public enum Music { Bells,Chill,Country,Mantra,Morning,Suspense,Techno,WindOfChange,ClassPiano,ClassGuitar,ModPiano,ModGuitar }
