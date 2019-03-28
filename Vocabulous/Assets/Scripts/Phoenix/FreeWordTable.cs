@@ -25,6 +25,7 @@ public class FreeWordTable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // freeWord IDs begin with 555
         gameController = GC.Instance;
         startOverlay.setID(5551);
         restartOverlay.setID(5552);
@@ -51,7 +52,7 @@ public class FreeWordTable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // checking hover over
+        // checking hover over values from GC to run functionality
         if (gameController.HoverChange && gameController.NewHoverOver == 5551 && !onStartHoverOver)
         {
             onStartHoverOver = true;
@@ -81,6 +82,8 @@ public class FreeWordTable : MonoBehaviour
         }
     }
 
+    // functions to control visibility of the prefab in parts,
+    // the object this class is attached to has different sets of objects childed to it, eg. restartobjects, restartobjects, etc.
     public void ToggleStartObjects(bool state) { if (startObjects.activeInHierarchy == !state) startObjects.SetActive(state); }
     public void ToggleRestartObjects(bool state) { if (restartObjects.activeInHierarchy == !state) restartObjects.SetActive(state); }
     public void ToggleClock(bool state) { if (clock.activeInHierarchy == !state) clock.SetActive(state); }
@@ -145,6 +148,7 @@ public class FreeWordTable : MonoBehaviour
         }
     }
 
+    // co-routines on animating the prefab
     IEnumerator ShiftTilesToReadyPosition(float finishTime)
     {
         float t = 0;

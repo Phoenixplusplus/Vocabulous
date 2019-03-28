@@ -20,14 +20,18 @@ public class FreeWordController : MonoBehaviour
     GC gameController;
     GameGrid grid;
     public GameObject tileHolder;
+
     GameObject[] instancedTiles = new GameObject[100];
     List<GameObject> instancedFoundTiles = new List<GameObject>();
     Vector3 instancedFoundTilesScale = new Vector3(.6f, .6f, .6f);
+
     public FreeWordTable freeWordTable;
     public TrieTest trie;
+
     int minimumLengthWord = 2;
     int gridXLength = 10;
     int gridYLength = 10;
+
     public List<string> foundWords = new List<string>();
     public Dictionary<string, uint> weights = new Dictionary<string, uint>
     {
@@ -37,6 +41,7 @@ public class FreeWordController : MonoBehaviour
         { "s", 22310 }, { "t", 10543 }, { "u", 8067 }, { "v", 3423 }, { "w", 4005 },{ "x", 237 },
         { "y", 729 }, { "z", 855 }
     };
+
     uint totalWeight = 0;
     [SerializeField]
     bool selecting = false;
@@ -54,7 +59,9 @@ public class FreeWordController : MonoBehaviour
     public string FWLongestWord;
 
     #region StartUp
+
     // main initialise function, will call subsequent StartUp functions
+    // called by the GC on the correct state if not already initialised
     public void Initialise()
     {
         score = 0;
@@ -65,7 +72,6 @@ public class FreeWordController : MonoBehaviour
 
         LoadPlayerPreferences();
         ConfigureFlashes();
-        // SetupGUI();
 
         freeWordTable.IngameSetup();
         freeWordTable.clock.GetComponent<Clock>().StartClock(FWGameTime, 0);
@@ -80,8 +86,6 @@ public class FreeWordController : MonoBehaviour
         grid = new GameGrid() { dx = gridXLength, dy = gridYLength };
         grid.init();
         grid.directional = true;
-
-        //PlaceTilesInGrid();
 
         isInitialised = true;
 
@@ -127,8 +131,10 @@ public class FreeWordController : MonoBehaviour
     public void PlaceTilesInGrid()
     {
         tileHolder.transform.localRotation = Quaternion.identity;
+
         // Insurance
         ClearTiles();
+
         // populate with random weighted chars
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
@@ -154,6 +160,7 @@ public class FreeWordController : MonoBehaviour
         tileHolder.transform.localRotation = transform.localRotation;
     }
 
+    // used for spawning the initial '?' tiles with no smart behaviour attached
     void SpawnEmptyTiles ()
     {
         tileHolder.transform.localRotation = Quaternion.identity;
@@ -175,8 +182,8 @@ public class FreeWordController : MonoBehaviour
     #endregion
 
 
-
     #region Update Loop and Functions
+
     // update
     void Update()
     {
@@ -194,10 +201,9 @@ public class FreeWordController : MonoBehaviour
 
             if (timeUp)
             {
-                if (!showingRestart) /// aka ... make sure the clock says something ... else the Restart menu pops up again ...
+                if (!showingRestart)
                 {
                     freeWordTable.RestartSetup();
-                    //ClearTiles();
                     RunEndFlashesAndSaveStats();
                     gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                     showingRestart = true;
@@ -211,10 +217,10 @@ public class FreeWordController : MonoBehaviour
         }
     }
 
-    // input and trie search
+    // mouse input and trie searching
     void InputAndSearch()
     {
-        /* hit a tile, mouse down */
+        // hit a tile, mouse down
         if (!selecting)
         {
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver != -1)
@@ -223,7 +229,7 @@ public class FreeWordController : MonoBehaviour
                 grid.AddToPath(gameController.NewHoverOver);
             }
         }
-        /* search string, mouse up */
+        // search string, mouse up
         else
         {
             if (Input.GetMouseButtonUp(0))
@@ -283,10 +289,13 @@ public class FreeWordController : MonoBehaviour
             if (grid.legals.Contains(gameController.NewHoverOver) || grid.GetPathSecondFromEnd() == gameController.NewHoverOver) grid.AddToPath(gameController.NewHoverOver);
         }
     }
+
     #endregion
 
 
     #region Juice / GUI
+
+    // when player has successfully found a word, spawn and move tiles into position on opposite sides of the player area
     void SpawnFoundWordTiles()
     {
         List<int> foundIDs = grid.GetCurrentPathIDs();
@@ -425,16 +434,17 @@ public class FreeWordController : MonoBehaviour
         g_highScore.color = Color.red;
         g_Words.color = Color.red;
     }
+
     #endregion
 
 
     #region Restart and TidyUp
+
     // restarting fresh / initialising functions
     public void Restart()
     {
         score = 0;
         freeWordTable.IngameSetup();
-        // insurance ....
         freeWordTable.ToggleRestartObjects(false);
         showingRestart = false;
 
@@ -446,7 +456,6 @@ public class FreeWordController : MonoBehaviour
         SetupGUI();
         foundWords.Clear();
 
-        // PlaceTilesInGrid(); 
         SpawnEmptyTiles();
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13,15));
 
@@ -513,8 +522,6 @@ public class FreeWordController : MonoBehaviour
 
         if (score > FWHighScore)
         {
-            //f_endNotification.StartPos = new Vector2(0.1f, 0.3f);
-            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.3f);
             gameController.FM.CustomFlash(f_endNotification, "New High Score!", score.ToString(), flashDelay +.75f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay +.75f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay +.75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
@@ -524,8 +531,6 @@ public class FreeWordController : MonoBehaviour
 
         if (score > FWAverageScore)
         {
-            //f_endNotification.StartPos = new Vector2(0.1f, 0.4f);
-           // f_endNotification.MiddlePos = new Vector2(0.5f, 0.4f);
             gameController.FM.CustomFlash(f_endNotification, "New Best Average Score!", score.ToString(), flashDelay +.75f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
@@ -541,10 +546,9 @@ public class FreeWordController : MonoBehaviour
 
             }
         }
+
         if (longestWordLen > FWLongestWordCount)
         {
-            //f_endNotification.StartPos = new Vector2(0.1f, 0.5f);
-            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.5f);
             gameController.FM.CustomFlash(f_endNotification, "New Longest Word!", "Length " + longestWordLen.ToString(), flashDelay + .75f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
@@ -555,8 +559,6 @@ public class FreeWordController : MonoBehaviour
 
         if (foundWords.Count > FWAverageWord)
         {
-            //f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
-            //f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
             gameController.FM.CustomFlash(f_endNotification, "New Best Average Words!", foundWords.Count.ToString(), flashDelay + .75f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .75f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .75f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
@@ -571,9 +573,12 @@ public class FreeWordController : MonoBehaviour
         LoadPlayerPreferences();
         SetGUI();
     }
+
     #endregion
 
+
     #region Misc
+
     int GetScore(int strLen)
     {
         switch(strLen)
@@ -618,6 +623,11 @@ public class FreeWordController : MonoBehaviour
         }
     }
 
+    #endregion
+
+
+    #region Co-routines
+
     public void PlayPauseForOptionsMenu() { StartCoroutine(PauseForOptionsMenu()); }
     IEnumerator PauseForOptionsMenu()
     {
@@ -652,5 +662,6 @@ public class FreeWordController : MonoBehaviour
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
         freeWordTable.IngameSetup();
     }
+
     #endregion
 }

@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
                 onWordDice, onWordSearch, onAnagram, onFreeWord, onSolver,
                 clickedWordDice, clickedWordSearch, clickedAnagram, clickedFreeWord, clickedSolver,
                 quitting;
+
     public Transform notInPlayTransform, wordDiceCameraTransform, wordSearchTransform, anagramTransform, freeWordTransform, solverTransform;
     Vector3 wordDiceCameraTransformOrigin, wordSearchCameraTransformOrigin, anagramCameraTransformOrigin, freeWordCameraTransformOrigin, solverCameraTransformOrigin,
             wordDiceUnrotatedForward, wordSearchUnrotatedForward, anagramUnrotatedForward, freeWordUnrotatedForward, solverUnrotatedForward;
@@ -46,7 +47,7 @@ public class CameraController : MonoBehaviour
         solverCameraTransformOrigin = solverTransform.position;
 
         // set true forward direction for panning
-        // unrotate angle of original transform, grab its forward and assign, then rotate back (long winded but half decent way)
+        // unrotate angle of original transform, grab its forward and assign, then rotate back (long winded, but works)
         Vector3 wdt = wordDiceCameraTransform.transform.eulerAngles;
         wordDiceCameraTransform.transform.eulerAngles = new Vector3(0, wordDiceCameraTransform.eulerAngles.y, wordDiceCameraTransform.eulerAngles.z);
         wordDiceUnrotatedForward = wordDiceCameraTransform.forward;
@@ -206,7 +207,8 @@ public class CameraController : MonoBehaviour
             }
         }
 
-        // clicked on 3d asset of a game, rotate to it, then transition in
+        // clicked on 3d prefab of a game, rotate to it, then transition in
+        // called by GC with subsequent state change and start up functions
         if (clickedWordDice)
         {
             if (targetAngle == new Vector3(0, gameController.RotTranWordDice.y, 0))

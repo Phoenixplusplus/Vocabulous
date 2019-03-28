@@ -13,7 +13,7 @@ using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
-    public WordSearchController wordSearchController; // Does not need to be used
+    public WordSearchController wordSearchController;
     public FreeWordController freeWordController;
     public Text clockText;
     public bool clockOn, countDown, countUp;
@@ -39,7 +39,7 @@ public class Clock : MonoBehaviour
         }
     }
 
-    // NEW METHOD .. call this from Wherever to update the displayed time from any controller type thing
+    // main method .. call this from any class in update, to get the displayed time, then do behaviour
     public void SetTime(float secs)
     {
         time = secs;

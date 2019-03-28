@@ -73,7 +73,9 @@ public class WordSearchController : MonoBehaviour
     public TextMeshProUGUI g_times;
 
     #region StartUp
-    /* main initialise function, will call subsequent StartUp functions */
+
+    // main initialise function, will call subsequent StartUp functions
+    // called by the GC on the correct state if not already initialised
     public void Initialise()
     {
         // gamecontroller and initialising variables
@@ -86,12 +88,11 @@ public class WordSearchController : MonoBehaviour
 
         ConfigureFlashes();
         ConfigureGUI();
-
-        /* hide/unhide table prefabs */
+    
+        // hide/unhide table prefabs 
         wordSearchTable.IngameSetup();
-        //wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
 
-        /* check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word */
+        // check maximumWordLength against maximum word in dictionary and bounds of grid so everything fits/is a legal word
         if (maximumLengthWord > 17) maximumLengthWord = 17;
         if (gridXLength < maximumLengthWord)
         {
@@ -102,57 +103,49 @@ public class WordSearchController : MonoBehaviour
             }
         }
 
-        /* sum weights.Value for 'totalWeight' from start as this wont change */
+        // sum weights.Value for 'totalWeight' from start as this wont change
         foreach (KeyValuePair<string, uint> weight in weights)
         {
             totalWeight = totalWeight + weight.Value;
         }
 
-        /* setup grid and tiles */
+        // setup grid and tiles
         grid = new GameGrid() { dx = gridXLength, dy = gridYLength };
         grid.init();
         grid.directional = true;
 
-        /* place cubes in grid */
-        //PlaceCubesInGrid();
-
-        /* do initial board animations */
-        //RunInitialBoardAnimations();
-
         isInitialised = true;
 
-        //gameController.Fire_Start_Flash();
         StartCoroutine(PauseForOptionsMenu());
-        //StartCoroutine(RealStart(4.5f));
     }
 
-    /* recursive populate 'unfoundWords' list, called in the Initialise() */
+    // recursive populate 'unfoundWords' list, called in the Initialise()
     void PopulateInitialWords(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
-        Debug.Log("Populating initial words..");
-        /* create a random string to the lenth 'len' we want */
+        // create a random string to the lenth 'len' we want
         string s = "";
         for (int i = 0; i < len; i++)
         {
             if (Random.value < 0.7) s = s + GetRandomLetter(totalWeight, true);
             else s = s + GetRandomLetter(0, false);
         }
-        /* search trie with string 's' and store result with..
-         * s = string, anagram = true, exactCompare = false, storeWords = true, lengthOfStoredWords = len, debug = false */
+
+        // search trie with string 's' and store result with..
+        // s = string, anagram = true, exactCompare = false, storeWords = true, lengthOfStoredWords = len, debug = false
         bool success = trie.SearchString(s, true, false, true, len, false);
 
         if (trie.lastStoredWords.Count < len) success = false;
 
         if (success)
         {
-            /* grab the amount 'numberOfWordsCount' we need at random if it's not already in the List 'unfoundWords' */
+            // grab the amount 'numberOfWordsCount' we need at random if it's not already in the List 'unfoundWords'
             if (basedOnSameAnagram)
             {
                 for (int i = 0; i < numberOfWordsCount; i++)
                 {
                     int randIndex = Random.Range(0, trie.lastStoredWords.Count - 1);
                     if (!unfoundWords.Contains(trie.lastStoredWords[randIndex])) unfoundWords.Add(trie.lastStoredWords[randIndex]);
-                    /* if the random number made the controller add the same word twice or more, go mental */
+                    // if the random number made the controller add the same word twice or more, go mental
                     else
                     {
                         for (int a = 0; a < numberOfWordsCount - i; a++)
@@ -162,21 +155,20 @@ public class WordSearchController : MonoBehaviour
                     }
                 }
             }
-            /* do the same but pick at random for 1 word, not the same anagram for all words */
+            // do the same but pick at random for 1 word, not the same anagram for all words
             else
             {
                 PopulateUnfoundWordsList(len, numberOfWordsCount, basedOnSameAnagram);
             }
         }
-        /* recursion */
+        // recursion
         else
         {
-            Debug.Log("Failed to populate words, repopulating");
             PopulateInitialWords(len, numberOfWordsCount, false);
         }
     }
 
-    /* populate unfound words with random word from anagram, and check to see if not already in list, if so recurse */
+    // populate unfound words with random word from anagram, and check to see if not already in list, if so recurse
     void PopulateUnfoundWordsList(int len, int numberOfWordsCount, bool basedOnSameAnagram)
     {
         int randIndex = Random.Range(0, trie.lastStoredWords.Count);
@@ -187,7 +179,7 @@ public class WordSearchController : MonoBehaviour
         else unfoundWords.Add(trie.lastStoredWords[randIndex]);
     }
 
-    /* based on accumulated weight > random number, return string 'Key' in Dictionary 'weights' */
+    // based on accumulated weight > random number, return string 'Key' in Dictionary 'weights'
     string GetRandomLetter(uint tw, bool isWeighted)
     {
         if (isWeighted)
@@ -211,31 +203,26 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
-    /* place words in 'unfoundWords' into the grid at random start position while checking if it would be legal */
+    // place words in 'unfoundWords' into the grid at random start position while checking if it would be legal
     void InsertWordToGrid(string word)
     {
-        Debug.Log("-- Function Start with: " + word + " --");
-
         List<int[]> precalculatedRoutes = new List<int[]>();
         precalculatedRoutes = PrecalculateRoutes(word, gridXLength, gridYLength);
         int rand = Random.Range(0, precalculatedRoutes.Count);
 
         // it's possible that there may not be any legal moves left for this word, restart from scratch to be safe
-        if (precalculatedRoutes.Count == 0) { Debug.Log("There were no legal paths for " + word + " restarting.."); Restart(); }
+        if (precalculatedRoutes.Count == 0) Restart();
 
-        Debug.Log(word + " has " + precalculatedRoutes.Count + " legal routes");
-
-        /* all checks done: choosing a random path, populate each part of the string for each path in the grid we took */
+        // all checks done: choosing a random path, populate each part of the string for each path in the grid we took
         for (int i = 0; i < precalculatedRoutes[rand].Length; i++)
         {
             grid.PopulateBin(precalculatedRoutes[rand][i], word[i].ToString());
         }
-        Debug.Log("Placed word: " + word);
         debugPlacedWords++;
     }
 
-    /* with a word, this function will check all legal possible paths to place the word inside the grid 
-     * as this is called word by word, it will also check by char, if it can put it's string over another string */
+    // with a word, this function will check all legal possible paths to place the word inside the grid 
+    // as this is called word by word, it will also check by char, if it can put it's string over another string
     List<int[]> PrecalculateRoutes(string word, int gridX, int gridY)
     {
         List<int[]> successfulRoutes = new List<int[]>();
@@ -310,7 +297,7 @@ public class WordSearchController : MonoBehaviour
         return successfulRoutes;
     }
 
-
+    // add a word from the anagram levels dictionary (hand picked common words)
     private void AddWord (int Len)
     {
         bool looking = true;
@@ -325,24 +312,24 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
-    /* triggers recursive function, places words into the grid where it can, then spawns the actual cube meshes according to strings/random weighted letters */
+    // triggers recursive function, places words into the grid where it can, then spawns the actual cube meshes according to strings/random weighted letters
     public void PlaceCubesInGrid()
     {
         debugPlacedWords = 0;
 
-        /* populate with dummy data so the grid can check 'legals' for placing words in */
+        // populate with dummy data so the grid can check 'legals' for placing words in
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
             grid.PopulateBin(i, defaultString);
         }
 
         // HISTORIC CODE _ RETAINED FOR POSSIBLE REVERT
-        /* populate with initial words to be placed 'unfoundWords' List */
-        //for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
-        //for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
-        //for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
-        //for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
-        //for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
+        // populate with initial words to be placed 'unfoundWords' List
+        // for (int i = 0; i < fourLetterWordsCount; i++) { PopulateInitialWords(4, fourLetterWordsCount, false); }
+        // for (int i = 0; i < fiveLetterWordsCount; i++) { PopulateInitialWords(5, fiveLetterWordsCount, false); }
+        // for (int i = 0; i < sixLetterWordsCount; i++) { PopulateInitialWords(6, sixLetterWordsCount, false); }
+        // for (int i = 0; i < sevenLetterWordsCount; i++) { PopulateInitialWords(7, sevenLetterWordsCount, false); }
+        // for (int i = 0; i < eightLetterWordsCount; i++) { PopulateInitialWords(8, eightLetterWordsCount, false); }
 
         for (int i = 0; i < fourLetterWordsCount; i++)
         {
@@ -385,20 +372,19 @@ public class WordSearchController : MonoBehaviour
             }
         }
 
-        /* start placing words in the grid and check their legality (possible recursion for each word) */
+        // start placing words in the grid and check their legality (possible recursion for each word)
         foreach (string word in unfoundWords)
         {
             InsertWordToGrid(word);
         }
-        Debug.Log("Finished populating words, successfully placed " + debugPlacedWords + " words out of " + unfoundWords.Count + " on the unfoundWords list");
 
-        /* bosh in some random weighted letters where there are only 'defaultLetters' left */
+        // bosh in some random weighted letters where there are only 'defaultLetters' left
         for (int i = 0; i < gridXLength * gridYLength; i++)
         {
             if (grid.bins[i] == defaultString) grid.PopulateBin(i, GetRandomLetter(totalWeight, true));
         }
 
-        /* now pop the cubes in */
+        // now pop the cubes in
         int count = 0;
         for (int z = gridYLength; z > 0; z--)
         {
@@ -416,6 +402,7 @@ public class WordSearchController : MonoBehaviour
         diceHolder.transform.localRotation = transform.localRotation;
     }
 
+    // used for spawning the initial '?' cubes with no smart behaviour attached
     public void PlaceEmptyCubes()
     {
         int count = 0;
@@ -446,7 +433,7 @@ public class WordSearchController : MonoBehaviour
         eightLetterWordsCount = gameController.player.WordSearchEightLetterWordsCount;
         gameTime = gameController.player.WordSearchGameLength;
         bestTime = gameController.player.WordSearchBestTime;
-        if (bestTime == 0) bestTime = 599; // insurance for a buggy 0 value
+        if (bestTime == 0) bestTime = 599;
         averageTime = gameController.player.WordSearchAverageTime;
         worstTime = gameController.player.WordSearchWorstTime;
         timesCompleted = gameController.player.WordSearchTimesCompleted;
@@ -558,7 +545,6 @@ public class WordSearchController : MonoBehaviour
 
     void SetGUI ()
     {
-        // Max's GUI additions
         g_High = TimeToString(bestTime);
         g_mean = TimeToString(averageTime);
         if (averageTime == 0) g_mean = "TBA";
@@ -569,9 +555,9 @@ public class WordSearchController : MonoBehaviour
     #endregion
 
 
-
     #region Update Loop and Functions
-    /* update */
+
+    // update
     void Update()
     {
         if (!waiting)
@@ -591,7 +577,6 @@ public class WordSearchController : MonoBehaviour
                 if (!showingRestart)
                 {
                     wordSearchTable.RestartSetup();
-                    //ClearCubesAndBoard();
                     RunEndFlashesAndSaveStats();
                     gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
                     showingRestart = true;
@@ -602,10 +587,10 @@ public class WordSearchController : MonoBehaviour
         else wordSearchTable.clock.GetComponent<Clock>().SetTime(0f);
     }
 
-    /* input and trie search */
+    // input and trie search
     void InputAndSearch()
     {
-        /* hit a tile, mouse down */
+        // hit a tile, mouse down
         if (!selecting)
         {
             if (Input.GetMouseButtonDown(0) && gameController.NewHoverOver != -1)
@@ -614,7 +599,7 @@ public class WordSearchController : MonoBehaviour
                 grid.AddToPath(gameController.NewHoverOver);
             }
         }
-        /* search string, mouse up */
+        // search string, mouse up
         else
         {
             if (Input.GetMouseButtonUp(0))
@@ -698,7 +683,7 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
-    /* middle man between GC and this class' grid */
+    // middle man between GC and this class' grid
     void CheckGCHoverValue()
     {
         if (gameController.NewHoverOver != gameController.OldHoverOver && selecting)
@@ -711,31 +696,26 @@ public class WordSearchController : MonoBehaviour
             if (grid.legals.Contains(gameController.NewHoverOver) || grid.GetPathSecondFromEnd() == gameController.NewHoverOver) grid.AddToPath(gameController.NewHoverOver);
         }
     }
+
     #endregion
 
 
-
     #region Restart / TidyUp / SaveStats
-    /* restarting fresh / initialising functions*/
+
+    // restarting fresh / initialising functions
     public void Restart()
     {
         wordSearchTable.IngameSetup();
         grid.init();
-        //ClearCubesAndBoard();
         gameController.FM.KillAllFlashes();
         gameController.FM.KillStaticGUIs();
         gameController.SM.KillSFX();
-        //wordSearchTable.clock.GetComponent<Clock>().StartClock(0, gameTime);
-        //diceHolder.transform.localRotation = Quaternion.identity;
-        //PlaceCubesInGrid();
-        //RunInitialBoardAnimations();
 
         diceHolder.transform.localRotation = Quaternion.identity;
         ClearCubesAndBoard();
         PlaceEmptyCubes();
 
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
-        //showingRestart = false;
 
         LoadPlayerPreferences();
         ConfigureGUI();
@@ -744,7 +724,7 @@ public class WordSearchController : MonoBehaviour
         StartCoroutine(RealStart(4.5f));
     }
 
-    /* clear previous words on the board, delete all dice, change tabledice to view when around table */
+    // clear previous words on the board, delete all dice, change tabledice to view when around table
     public void TidyUp()
     {
         foundWords.Clear();
@@ -761,7 +741,7 @@ public class WordSearchController : MonoBehaviour
         wordSearchTable.StartSetup();
     }
 
-    /* essentially same as TidyUp, though we do not change any prefabs */
+    // essentially same as TidyUp, though we do not change any prefabs
     public void ClearCubesAndBoard()
     {
         foundWords.Clear();
@@ -772,7 +752,7 @@ public class WordSearchController : MonoBehaviour
         }
     }
 
-    /* populate chalk board with words (animation) */
+    // populate chalk board with words (animation)
     public void RunInitialBoardAnimations()
     {
         for (int i = 0; i < unfoundWords.Count; i++)
@@ -820,7 +800,7 @@ public class WordSearchController : MonoBehaviour
         float endtime = wordSearchTable.clock.GetComponent<Clock>().time;
         string timeStr = TimeToString((int)endtime);
 
-        if ((int)endtime < bestTime || bestTime == 0) // insurance over rogue 0 values
+        if ((int)endtime < bestTime || bestTime == 0)
         {
             bestTime = (int)endtime;
             flashDelay++;
@@ -833,8 +813,6 @@ public class WordSearchController : MonoBehaviour
         if (endtime < averageTime || (int)endtime == averageTime)
         {
             flashDelay++;
-            // f_endNotification.StartPos = new Vector2(0.1f, 0.6f);
-            // f_endNotification.MiddlePos = new Vector2(0.5f, 0.6f);
             gameController.FM.CustomFlash(f_endNotification, "New Best Average Time!", TimeToString(averageTime), flashDelay + .5f);
             gameController.SM.PlayMiscSFX(MiscSFX.SwishQuick, flashDelay + .5f);
             gameController.SM.PlayMiscSFX((MiscSFX)Random.Range(3, 9), (flashDelay + .5f) + (f_endNotification.AnimTime * f_endNotification.MiddleTimeRatio));
@@ -883,5 +861,6 @@ public class WordSearchController : MonoBehaviour
         gameController.SM.PlayTileSFX((TileSFX)Random.Range(13, 15));
         wordSearchTable.IngameSetup();
     }
+
     #endregion
 }

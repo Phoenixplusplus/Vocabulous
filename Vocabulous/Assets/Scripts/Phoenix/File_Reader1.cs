@@ -5,7 +5,10 @@
 // Team Chumbawumba                     //
 // Vocabulous                           //
 //////////////////////////////////////////
-// LEGACY // 
+
+
+// -- This script is lagacy and not part of the build, however, to avoid Git conflicts, leave this alone -- //
+
 
 using System.Collections;
 using System.Collections.Generic;

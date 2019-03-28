@@ -27,6 +27,7 @@ public class WordSearchTable : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // wordSearch IDs begin with 444
         gameController = GC.Instance;
         startOverlay.setID(4441);
         restartOverlay.setID(4442);
@@ -38,9 +39,6 @@ public class WordSearchTable : MonoBehaviour
 
         for (int i = 0; i < tableDice.Length; i++)
         {
-            // MAX EDIT trying to convert positions from Global to Local
-            // diceStartPos[i] = tableDice[i].gameObject.transform.position + new Vector3(0, 0.5f, 0);
-            // diceStartPos[i] = tableDice[i].gameObject.transform.localPosition + new Vector3(0, 0.5f, 0);
             diceStartPos[i] = tableDice[i].gameObject.transform.localPosition;
             diceStartRot[i] = tableDice[i].gameObject.transform.rotation;
             tableDice[i].killOverlayTile();
@@ -67,7 +65,7 @@ public class WordSearchTable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // checking hover over
+        // checking hover over values from GC to run functionality
         if (gameController.HoverChange && gameController.NewHoverOver == 4441 && !onStartHoverOver)
         {
             onStartHoverOver = true;
@@ -97,6 +95,8 @@ public class WordSearchTable : MonoBehaviour
         }
     }
 
+    // functions to control visibility of the prefab in parts,
+    // the object this class is attached to has different sets of objects childed to it, eg. restartobjects, restartobjects, etc.
     public void ToggleStartObjects(bool state) { if (startObjects.activeInHierarchy == !state) startObjects.SetActive(state); }
     public void ToggleRestartObjects(bool state) { if (restartObjects.activeInHierarchy == !state) restartObjects.SetActive(state); }
     public void ToggleBoards(bool state) { if (boards.activeInHierarchy == !state) boards.SetActive(state); }
@@ -171,6 +171,7 @@ public class WordSearchTable : MonoBehaviour
         }
     }
 
+    // co-routines on animating the prefab
     IEnumerator ShiftDiceToReadyPosition(float finishTime)
     {
         float t = 0;
@@ -178,7 +179,6 @@ public class WordSearchTable : MonoBehaviour
         {
             foreach (ConDice dice in tableDice)
             {
-                //dice.transform.position = Vector3.Lerp(dice.transform.position, dice.transform.parent.transform.position, t / finishTime);
                 dice.transform.localPosition = Vector3.Lerp(dice.transform.localPosition, Vector3.zero, t / finishTime);
                 dice.transform.rotation = Quaternion.Lerp(dice.transform.rotation, dice.transform.parent.transform.rotation, t / finishTime);
             }
@@ -196,8 +196,6 @@ public class WordSearchTable : MonoBehaviour
         {
             for (int i = 0; i < tableDice.Length; i++)
             {
-                // Max Edit
-                // tableDice[i].transform.position = Vector3.Lerp(tableDice[i].transform.position, diceStartPos[i], t / finishTime);
                 tableDice[i].transform.localPosition = Vector3.Lerp(tableDice[i].transform.localPosition, diceStartPos[i], t / finishTime);
                 tableDice[i].transform.rotation = Quaternion.Lerp(tableDice[i].transform.rotation, diceStartRot[i], t / finishTime);
             }

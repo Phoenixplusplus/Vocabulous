@@ -19,7 +19,6 @@ public class Text_Transfer1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //reader.open("/Dictionaries/XLGameDictUK.txt");
         reader.open("/StreamingAssets/Game_Dictionary.txt");
         
         _running = true;
@@ -39,6 +38,7 @@ public class Text_Transfer1 : MonoBehaviour
         }
         else
         {
+            // adds each word read from the external file the specified trie's List
             Trie.allWordsList.Add(word);
         }
     }

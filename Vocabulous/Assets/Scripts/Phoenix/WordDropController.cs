@@ -6,6 +6,11 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
+
+// -- This script is lagacy and not part of the build, however, to avoid Git conflicts, leave this alone -- //
+// -- This game was discontinued based on feedback from the alpha demo and third party observation -- //
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
