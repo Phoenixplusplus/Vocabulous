@@ -11,8 +11,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
+// controls the Anagram Game
 public class ConAnagram : MonoBehaviour
 {
+    #region Member declaration
     private GC gc;
     public bool Testing;
     public int TestLevel;
@@ -49,10 +52,10 @@ public class ConAnagram : MonoBehaviour
     [SerializeField]
     private int GameState = 0; // 0 = on Big Table, 1 = starting, 2 = playing, 3 = ended, awaiting restart
     private int ToFind = 0;
-
+    // On-The-Fly GUI elements
     private TextMeshProUGUI GUILevel;
     private TextMeshProUGUI GUIHints;
-
+    // Flashes
     private FlashProTemplate Warning;
     private FlashProTemplate NoHint;
     private FlashProTemplate Reward;
@@ -62,7 +65,9 @@ public class ConAnagram : MonoBehaviour
     private FlashProTemplate GameOver;
 
     private string[] rewardString = new string[] { "Super", "Brill", "Great", "Magic", "Bravo", "Sweet" };
+    #endregion
 
+    #region Unity API
     // Start is called before the first frame update
     void Start()
     {
@@ -133,6 +138,73 @@ public class ConAnagram : MonoBehaviour
         GameOver.MiddleTimeRatio = 0.5f;
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if (Selecting)
+        {
+            CurrWord = "";
+            foreach (int i in selected)
+            {
+                CurrWord += letters[i];
+            }
+        }
+
+        CheckMouseClicks();
+        CheckHoverOver();
+        SetLineRenderer();
+        if (animTimer != 0)
+        {
+            animTimer -= Time.deltaTime;
+            if (animTimer <= 0)
+            {
+                animTimer = 0;
+                animating = false;
+            }
+        }
+    }
+    #endregion
+
+    #region Public Methods
+
+    // Called by GC when transitioning from Main tale to "in-game"
+    public void KickOff()
+    {
+
+        gc.SM.KillSFX();
+        TableCon.GameStart();
+        if (gc.UIController.isAOpen) StartCoroutine("PauseForOptionsMenu");
+        else
+        {
+            SetUpGUI();
+            StartGame();
+        }
+    }
+
+    // Called by GC when player transitions from in-game back to Main Table
+    public void TidyUp()
+    {
+        gc.FM.KillStaticGUIs();
+        gc.FM.KillAllFlashes();
+        gc.SM.KillSFX();
+        StopAllCoroutines();
+        AnswersList.Clear();
+        ToGets.Clear();
+        letters.Clear();
+        selected.Clear();
+        playerAnswers.Clear();
+        Selecting = false;
+        killDisplays();
+        TableCon.Table();
+        GameState = 0;
+    }
+
+    #endregion
+
+    #region Private Methods
+    //-----------------------------
+    // Game Start, reset and finish
+    //-----------------------------
     void StartGame ()
     {
         AnswersList.Clear();
@@ -166,6 +238,53 @@ public class ConAnagram : MonoBehaviour
         if (gc.UIController.isMainMenuOpen) gc.UIController.ToggleOptionsInOut();
     }
 
+    IEnumerator PauseForOptionsMenu()
+    {
+        bool waiting = true;
+        while (waiting)
+        {
+            if (!gc.UIController.isAOpen) waiting = false;
+            yield return null;
+        }
+        SetUpGUI();
+        StartGame();
+    }
+
+    void EndGame()
+    {
+        gc.FM.CustomFlash(GameOver);
+        gc.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
+        gc.player.AExtras = Playerextras;
+        gc.player.AHints = Playerhints;
+        gc.player.ALevel++;
+        gc.SaveStats();
+        if (Testing) TestLevel++;
+        GameState = 3;
+        TableCon.EndGame();
+    }
+
+    void ResetGame()
+    {
+        gc.FM.KillStaticGUIs();
+        gc.FM.KillAllFlashes();
+        killDisplays();
+        AnswersList = new List<string>();
+        ToGets = new List<ConAnagramWord>();
+        letters = new List<string>();
+        selected = new List<int>();
+        playerAnswers = new List<string>();
+    }
+
+    //------------
+    // game set up
+    //------------
+    void SetUpGUI()
+    {
+        GameObject gLevel = gc.FM.AddGUIItem("Level: " + gc.player.ALevel, 0.45f, 0.93f, 0.2f, Color.white);
+        GUILevel = gLevel.GetComponent<TextMeshProUGUI>();
+        GameObject ghints = gc.FM.AddGUIItem("Extras: 0  Hints:  0", 0.75f, 0.93f, 0.3f, Color.yellow);
+        GUIHints = ghints.GetComponent<TextMeshProUGUI>();
+    }
 
     void DisplayHand ()
     {
@@ -258,74 +377,9 @@ public class ConAnagram : MonoBehaviour
         return list;
     }
 
-    public void KickOff()
-    {
-        
-        gc.SM.KillSFX();
-        TableCon.GameStart();
-        if (gc.UIController.isAOpen) StartCoroutine("PauseForOptionsMenu");
-        else
-        {
-            SetUpGUI();
-            StartGame();
-        }
-    }
-
-    IEnumerator PauseForOptionsMenu()
-    {
-        bool waiting = true;
-        while (waiting)
-        {
-            if (!gc.UIController.isAOpen) waiting = false;
-            yield return null;
-        }
-        SetUpGUI();
-        StartGame();
-    }
-
-    public void TidyUp()
-    {
-        gc.FM.KillStaticGUIs();
-        gc.FM.KillAllFlashes();
-        gc.SM.KillSFX();
-        StopAllCoroutines();
-        AnswersList.Clear();
-        ToGets.Clear();
-        letters.Clear();
-        selected.Clear();
-        playerAnswers.Clear();
-        Selecting = false;
-        killDisplays();
-        TableCon.Table();
-        GameState = 0;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Selecting)
-        {
-            CurrWord = "";
-            foreach (int i in selected)
-            {
-                CurrWord += letters[i];
-            }
-        }
-
-        CheckMouseClicks();
-        CheckHoverOver();
-        SetLineRenderer();
-        if (animTimer !=0)
-        {
-            animTimer -= Time.deltaTime;
-            if (animTimer <=0)
-            {
-                animTimer = 0;
-                animating = false;
-            }
-        }
-    }
-
+    //-------------------------------
+    // in game "Whilst playing" tools
+    //-------------------------------
     void SetLineRenderer()
     {
         if (!Selecting) LR.enabled = false;
@@ -378,6 +432,16 @@ public class ConAnagram : MonoBehaviour
         HintDelay = false;
     }
 
+    void UpdateGUI()
+    {
+        GUILevel.text = "Level: " + (gc.player.ALevel + 1).ToString();
+        if (Testing) GUILevel.text = "Level: " + (TestLevel + 1).ToString();
+        GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
+    }
+
+    //-----------------------
+    // Game / Player Controls
+    //-----------------------
     void CheckMouseClicks()
     {
         if (GameState == 2 && !animating) // game running
@@ -415,9 +479,6 @@ public class ConAnagram : MonoBehaviour
                     selected.Clear();
                     if (AnswersList.Contains(res) && !playerAnswers.Contains(res)) // found standard answer
                     {
-                        // ANIMATE - Gratz found one !!
-                        // ANIMATE reveal answer
-                        //Debug.Log("You found: " + res);
                         playerAnswers.Add(res);
                         ToFind--;
                         gc.SM.PlayWordSFX((WordSFX)Random.Range(0, 6));
@@ -527,31 +588,9 @@ public class ConAnagram : MonoBehaviour
         }
     }
 
-    void EndGame()
-    {
-        gc.FM.CustomFlash(GameOver);
-        gc.SM.PlayMiscSFX((MiscSFX)Random.Range(0, 3));
-        gc.player.AExtras = Playerextras;
-        gc.player.AHints = Playerhints;
-        gc.player.ALevel++;
-        gc.SaveStats();
-        if (Testing) TestLevel++;
-        GameState = 3;
-        TableCon.EndGame();
-    }
-
-    void ResetGame()
-    {
-        gc.FM.KillStaticGUIs();
-        gc.FM.KillAllFlashes();
-        killDisplays();
-        AnswersList = new List<string>();
-        ToGets = new List<ConAnagramWord>();
-        letters = new List<string>();
-        selected = new List<int>();
-        playerAnswers = new List<string>();
-    }
-
+    //-------------
+    // Tidy Up Code
+    //-------------
     void killDisplays ()
     {
         foreach (Transform child in AnswersDisplay.transform)
@@ -562,21 +601,6 @@ public class ConAnagram : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    void SetUpGUI()
-    {
-        GameObject gLevel = gc.FM.AddGUIItem("Level: "+ gc.player.ALevel, 0.45f, 0.93f, 0.2f, Color.white);
-        GUILevel = gLevel.GetComponent<TextMeshProUGUI>();
-        GameObject ghints = gc.FM.AddGUIItem("Extras: 0  Hints:  0", 0.75f, 0.93f, 0.3f, Color.yellow);
-        GUIHints = ghints.GetComponent<TextMeshProUGUI>();
-    }
-
-    void UpdateGUI()
-    {
-        GUILevel.text = "Level: " + (gc.player.ALevel + 1).ToString();
-        if (Testing) GUILevel.text = "Level: " + (TestLevel + 1).ToString();
-        GUIHints.text = "Extras: " + Playerextras.ToString() + "  Hints: " + Playerhints.ToString();
     }
 
     public void ResetStats()
@@ -650,6 +674,6 @@ public class ConAnagram : MonoBehaviour
         fw.close();
         Debug.Log("Words examinied : " + con.ToString() + " candidates in " + (Time.realtimeSinceStartup - start).ToString() + " secs");
     }
+#endregion
 
- 
 }

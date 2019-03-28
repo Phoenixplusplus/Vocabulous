@@ -7,11 +7,11 @@
 //////////////////////////////////////////
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Con_Tile2 : MonoBehaviour
 {
+    #region Member Declaration
     public Tile_Controlller TC_front;
     public Tile_Controlller TC_back;
     public int ID_front = -1;
@@ -23,7 +23,7 @@ public class Con_Tile2 : MonoBehaviour
     public GameObject Internal; // holds the guts of the tile, rotate this to change orientation
     public Collider collider;
     private Material Text_Material;
-    public Material Body_Material;
+    private Material Body_Material;
     public GameGrid myGrid; // should we need it sometime
     private GC gc;
     public bool vertical = true;
@@ -37,7 +37,9 @@ public class Con_Tile2 : MonoBehaviour
     private Vector3 HF = new Vector3(90, 0, 0);
     private Vector3 HB = new Vector3(-90, -180, 0);
     public bool isFreeWord;
+    #endregion
 
+    #region Unity API
     void Awake()
     {
         Text_Material = Text_Body.GetComponent<Renderer>().material;
@@ -45,29 +47,9 @@ public class Con_Tile2 : MonoBehaviour
         gc = GC.Instance;
     }
 
-
-
-
-    // Start is called before the first frame update
-    //void Start()
-    //{
-
-    //    // TESTING
-    //    // Roll(1f);
-    //    //SetID(54, 77);
-    //}
-
     // Update is called once per frame
     void Update()
     {
-        // TESTING
-        //if (oldforw != forward || oldVert != vertical)
-        //{
-        //    FlipTo(vertical, forward);
-        //    oldforw = forward;
-        //    oldVert = vertical;
-        //}
-
         if (myGrid != null && isFreeWord)
         {
             if (myGrid.legals.Contains(TC_front.ID))
@@ -98,6 +80,10 @@ public class Con_Tile2 : MonoBehaviour
         StopAllCoroutines();
     }
 
+    #endregion
+
+    #region Public Methods
+    // flip the tile to/from horizontal/vertical and forward/back facing
     public void FlipTo(bool Vertical, bool Forward)
     {
         Vector3 dir = new Vector3();
@@ -116,9 +102,10 @@ public class Con_Tile2 : MonoBehaviour
         forward = Forward;
     }
 
+    // rolls the tile (at specified speed) from front to back (or vice versa)
     public void Roll(float speed)
     {
-        if (animating)
+        if (animating) // sanity check to prevent multiple calls
         {
             Debug.Log("Tile already Animating");
             return;
@@ -146,6 +133,7 @@ public class Con_Tile2 : MonoBehaviour
         animating = false;
     }
 
+    // Color change methods
     public void ChangeTileColorAdditive(Color myColor)
     {
         Body_Material.color = (Body_Material.color + gc.ColorBodyHighlight) / 2f;
@@ -161,6 +149,7 @@ public class Con_Tile2 : MonoBehaviour
         Text_Material.color = color;
     }
 
+    // set ID methods (so that's what is reported to the GC)
     public void SetID(int frontID, int backID)
     {
         TC_front.setID(frontID);
@@ -173,10 +162,12 @@ public class Con_Tile2 : MonoBehaviour
         TC_back.SetBothID(backID);
     }
 
+    // KILL method to be called if a controller wants "dumb" tile that does not report to the GC
     public void killOverlayTile()
     {
         Destroy(TC_front);
         Destroy(TC_back);
         Destroy(GetComponent("OverlayTile"));
     }
+    #endregion
 }

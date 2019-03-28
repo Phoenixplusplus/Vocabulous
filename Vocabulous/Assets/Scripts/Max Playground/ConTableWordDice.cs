@@ -6,10 +6,9 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Table controller for WordDice
 public class ConTableWordDice : MonoBehaviour
 {
     // Controller for the Tabletop representation of WordDice
@@ -19,6 +18,7 @@ public class ConTableWordDice : MonoBehaviour
     // Presents "Restart" after game over
     // Presents "Back to table" after game over
 
+    #region members
     public GameObject Worddice;
     public GameObject StartDice;
     public GameObject TimeUp;
@@ -48,13 +48,12 @@ public class ConTableWordDice : MonoBehaviour
     private ConDice[] timeup;
     private ConDice[] restart;
 
-    void Awake()
-    {
-        
-    }
+    #endregion
 
 
-    // Start is called before the first frame update
+
+    #region Unity API
+
     void Start()
     {
         gc = GC.Instance;
@@ -124,6 +123,13 @@ public class ConTableWordDice : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Public Methods
+
+    //---------------------
+    // Called by Game Controller as game states change
+    //-------------------------
     public void OnSceneTable()
     {
         TimeUp.SetActive(false);
@@ -163,14 +169,17 @@ public class ConTableWordDice : MonoBehaviour
         Clock.SetActive(false);
         //Back.SetActive(true);
     }
+    #endregion
 
-
+    #region Private Methods
+    //-------------------------
+    // Color and Scale changers
+    //-------------------------
     private void setToNormal()
     {
         foreach (ConDice die in title)
         {
             die.ChangeDiceColor(TitleNormalColor);
-            die.shaking = false; // needs work
         }
         foreach (ConDice die in start)
         {
@@ -188,7 +197,6 @@ public class ConTableWordDice : MonoBehaviour
         foreach (ConDice die in title)
         {
             die.ChangeDiceColor(TitleSelectedColor);
-            die.shaking = true; // needs work
         }
         foreach (ConDice die in start)
         {
@@ -223,5 +231,6 @@ public class ConTableWordDice : MonoBehaviour
         }
     }
 
+    #endregion
 
 }

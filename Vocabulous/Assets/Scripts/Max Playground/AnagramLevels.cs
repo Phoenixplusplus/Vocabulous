@@ -13,6 +13,82 @@ public class AnagramLevels : MonoBehaviour
 {
     // Words selected from http://www.newgeneralservicelist.org listing
 
+    // Number of Anagram Levels, for reference by sub-game controllers
+    public int levels = Anagrams.Length;
+
+    // Returns a word of the required length from the Anagram Levels
+    // Used by WordSearch to ensure most words are "common"
+    // MAGIC NUMBER ALERT.  Changes to the Anagram Levels array will require these switch values to be re-visited
+    public string GetWord(int Length)
+    {
+        List<string> miniret = new List<string>();
+        if (Length < 4) Length = 4;
+        else if (Length > 10) Length = 10;
+
+        switch (Length)
+        {
+            case 4:
+                miniret = GetAnagramLevel(Random.Range(0, 51));
+                break;
+            case 5:
+                miniret = GetAnagramLevel(Random.Range(0, 165) + 51);
+                break;
+            case 6:
+                miniret = GetAnagramLevel(Random.Range(0, 277) + 216);
+                break;
+            case 7:
+                miniret = GetAnagramLevel(Random.Range(0, 307) + 493);
+                break;
+            case 8:
+                miniret = GetAnagramLevel(Random.Range(0, 243) + 800);
+                break;
+            case 9:
+                miniret = GetAnagramLevel(Random.Range(0, 181) + 1043);
+                break;
+            case 10:
+                miniret = GetAnagramLevel(Random.Range(0, 145) + 1224);
+                break;
+        }
+        return miniret[0];
+    }
+
+    // Returns A list of anagram level strings (for the desired level)
+    public List<string> GetAnagramLevel(int level)
+    {
+        List<string> ret = new List<string>();
+        if (level < 0 || level > levels - 1)
+        {
+            Debug.Log("Anagram Levels: level asked for (" + level.ToString() + ") does not exist, Empty List returned");
+            return ret;
+        }
+        string str = Anagrams[level];
+        int len = str.Length;
+        int count = 1;
+        string word = "";
+        foreach (char c in str)
+        {
+            if (c == ' ')
+            {
+                ret.Add(word);
+                word = "";
+            }
+            else if (count == len)
+            {
+                word += c;
+                ret.Add(word);
+            }
+            else
+            {
+                word += c;
+            }
+            count++;
+        }
+        return ret;
+    }
+
+
+    // static string array.  Double appearance of the first entry is an annoying artefact of the creating process
+    // First entry of the returned list is ignored by the Anagram Controller
 static string[] Anagrams = new string[] {
 "many many man may any",
 "part part trap art rat tap",
@@ -1384,72 +1460,6 @@ static string[] Anagrams = new string[] {
 "faithfully faithfully faith fault fully fail fall fill full flat ally tail tall till half hall hill lift fat fit fly all ill hat hit lay",
 "attachment attachment attach teach match that than then team tent chat cent hate heat mate meat mean each name act the tea cat can hat man eat net"};
 
-    public int levels = Anagrams.Length;
 
-    public string GetWord(int Length)
-    {
-        List<string> miniret = new List<string>();
-        if (Length < 4) Length = 4;
-        else if (Length > 10) Length = 10;
-
-        switch (Length)
-        {
-            case 4:
-                miniret = GetAnagramLevel(Random.Range(0, 51));
-                break;
-            case 5:
-                miniret = GetAnagramLevel(Random.Range(0, 165) + 51);
-                break;
-            case 6:
-                miniret = GetAnagramLevel(Random.Range(0, 277) + 216);
-                break;
-            case 7:
-                miniret = GetAnagramLevel(Random.Range(0, 307) + 493);
-                break;
-            case 8:
-                miniret = GetAnagramLevel(Random.Range(0, 243) + 800);
-                break;
-            case 9:
-                miniret = GetAnagramLevel(Random.Range(0, 181) + 1043);
-                break;
-            case 10:
-                miniret = GetAnagramLevel(Random.Range(0, 145) + 1224);
-                break;
-        }
-        return miniret[0];
-    }
-
-    public List<string> GetAnagramLevel(int level)
-    {
-        List<string> ret = new List<string>();
-        if (level < 0 || level > levels -1)
-        {
-            Debug.Log("Anagram Levels: level asked for ("+level.ToString()+") does not exist, Empty List returned");
-            return ret;
-        }
-        string str = Anagrams[level];
-        int len = str.Length;
-        int count = 1;
-        string word = "";
-        foreach (char c in str)
-        {
-            if (c == ' ')
-            {
-                ret.Add(word);
-                word = "";
-            }
-            else if (count == len)
-            {
-                word += c;
-                ret.Add(word);
-            }
-            else
-            {
-                word += c;
-            }
-            count++;
-        }
-        return ret;
-    }
 
 }

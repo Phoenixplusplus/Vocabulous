@@ -10,15 +10,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Sub manager for Anagrams.
+// Added to an assemblage of letters making up a "word"
+
 public class ConAnagramWord : MonoBehaviour
 {
-
+    #region Members
     public string myWord;
     [SerializeField]
     private List<Con_Tile2> myTiles;
     [SerializeField]
     private bool animating = false;
+    #endregion
 
+    #region Unity API
     void Awake()
     {
         myTiles = new List<Con_Tile2>();
@@ -27,14 +32,10 @@ public class ConAnagramWord : MonoBehaviour
             myTiles.Add(child.GetComponent<Con_Tile2>());
         }
     }
+    #endregion
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
+    #region Public Methods
+    // call to start "roll" animation (from Backward facing to Forward)
     public void Roll (float gap)
     {
         if (animating)
@@ -55,6 +56,7 @@ public class ConAnagramWord : MonoBehaviour
         }
     }
 
+    // call to roll one of the letters (at random)
     public void RevealHint ()
     {
         List<int> pos = new List<int>();
@@ -72,6 +74,7 @@ public class ConAnagramWord : MonoBehaviour
         }
     }
 
+    // check as to whether a hint is possible
     public bool IsHintable ()
     {
         int pos = 0;
@@ -81,11 +84,5 @@ public class ConAnagramWord : MonoBehaviour
         }
         return pos > 1;
     }
-
-
-    // Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
+    #endregion
 }

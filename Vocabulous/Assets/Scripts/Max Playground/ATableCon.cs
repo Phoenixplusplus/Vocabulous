@@ -6,18 +6,19 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+// Contols the table furniture of the Anagram Game, linked to the Anagram Controller
 public class ATableCon : MonoBehaviour
 {
-    private GC gc;
-    public GameObject Main;
-    public GameObject InGame;
-    public GameObject Restart;
-    public GameObject Shuffle;
-    public GameObject TableTiles;
+    #region member declaration
+    private GC gc;                      
+    public GameObject Main;             
+    public GameObject InGame;               
+    public GameObject Restart;              
+    public GameObject Shuffle;              
+    public GameObject TableTiles;           
     private Con_Tile2[] nextTiles;
     private Con_Tile2[] hintTiles;
     private Con_Tile2[] shuffleTiles;
@@ -26,7 +27,10 @@ public class ATableCon : MonoBehaviour
     public Color NormalColor;
     public Color BaseTileColor;
     public Color HighLightTileColor;
+    #endregion
 
+    #region Public Methods (for game controller)
+    // call when out of game and on the Main Table
     public void Table()
     {
         Main.SetActive(true);
@@ -35,27 +39,26 @@ public class ATableCon : MonoBehaviour
         Shuffle.SetActive(false);
         Restart.SetActive(false);
     }
-
+    // call when transitioning into the game
     public void GameStart()
     {
-        Debug.Log("Calling Game Start in Table Controller");
-        //if (Main.active) ResetMainTable();
         Main.SetActive(false);
         InGame.SetActive(true);
         Shuffle.SetActive(true);
         Restart.SetActive(false);
     }
 
+    // call when game is Over
     public void EndGame()
     {
-        //if (Main.active) ResetMainTable();
         Main.SetActive(false);
         InGame.SetActive(false);
         Shuffle.SetActive(false);
         Restart.SetActive(true);
     }
+    #endregion
 
-
+    #region Unity API
     // Start is called before the first frame update
     void Start()
     {
@@ -74,7 +77,7 @@ public class ATableCon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gc.HoverChange)
+        if (gc.HoverChange) // if GC Hover has changed, we may need to do something
         {
             if (gc.NewHoverOver == 6661 && Main.active) // MainTable Display
             {
@@ -114,7 +117,10 @@ public class ATableCon : MonoBehaviour
 
         }
     }
+    #endregion
 
+    #region TableTop animations
+    // transition tiles on the Main Table to/from "Naga" and "Mars" to "Anagrams"
     void AnimateMain()
     {
         gc.SM.PlayTileSFX(TileSFX.ShuffleQuick);
@@ -142,7 +148,9 @@ public class ATableCon : MonoBehaviour
             t.LerpBackwards();
         }
     }
+    #endregion
 
+    #region Private Methods
     void ResetMainTable()
     {
         ChangeTableColor(NormalColor);
@@ -187,6 +195,6 @@ public class ATableCon : MonoBehaviour
             tile.ChangeTileColor(color);
         }
     }
-
+    #endregion
 
 }

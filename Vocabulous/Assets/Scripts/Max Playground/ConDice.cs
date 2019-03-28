@@ -6,13 +6,12 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Controller for dice objects
 public class ConDice : MonoBehaviour
 {
+    #region Members
     private GC gc;
     public string letter = "g";
     public int ID = -1; //default to a -1 UNLESS you want it reported
@@ -24,20 +23,17 @@ public class ConDice : MonoBehaviour
     public GameObject Faceside2;
     public GameObject DiceBody;
     private Material DiceMaterial;
-    // currently bugged
-    public bool shaking;
-    private float shakeVar = 50.0f;
-    private float shakeRange = 3.0f;
+    #endregion
 
 
-    void Awake ()
+    #region Unity API
+    void Awake () // aka ... get and stash references
     {
         gc = GC.Instance;
         top = FaceTop.GetComponent<Renderer>().material;
         DiceMaterial = DiceBody.GetComponent<Renderer>().material;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (tc != null)
@@ -45,7 +41,7 @@ public class ConDice : MonoBehaviour
             tc.setID(ID);
             tc.SetVisible(false);
         }
-        // reset shadow stuff
+        // reset shadow stuff .. shortcut for Graphics optimisation
         Renderer MR;
         MR = FaceTop.GetComponent<Renderer>();
         MR.receiveShadows = false;
@@ -62,17 +58,9 @@ public class ConDice : MonoBehaviour
 
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // are we shaking?
-        if (shaking)
-        {
-            //transform.Rotate(Vector3.up * Mathf.Sin(shakeVar * Time.deltaTime) * shakeRange);
-            // needs work 8-)
-
-        }
-
+        // check GameGrid (if specified) and change colour as required if (a) is a legal next move of (b) is currently on the "path"
         if (myGrid != null)
         {
             if (myGrid.legals.Contains(ID))
@@ -97,7 +85,9 @@ public class ConDice : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Public Manipulation methods
     public void ChangeDiceColor (Color myColor)
     {
         DiceMaterial.color = myColor;
@@ -116,10 +106,11 @@ public class ConDice : MonoBehaviour
         DiceBody.transform.localScale = DiceBody.transform.localScale * factor;
     }
 
+    // Call to create a "dumb" dice which does not need to report to the GC
     public void killOverlayTile()
     {
         Destroy(tc.gameObject);
     }
-
+    #endregion
 
 }
