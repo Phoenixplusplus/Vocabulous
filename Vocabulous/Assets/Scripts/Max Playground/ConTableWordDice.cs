@@ -11,12 +11,11 @@ using UnityEngine;
 // Table controller for WordDice
 public class ConTableWordDice : MonoBehaviour
 {
-    // Controller for the Tabletop representation of WordDice
+    // Controller for the Tabletop representation (aka furniture) of WordDice
     // responds to hoverover
-    // On table ... shakes and colour changes to highlight it can be clicked to "start"
+    // On table ... scale and colour changes to highlight it can be clicked to "start"
     // Disappears "in-game"
     // Presents "Restart" after game over
-    // Presents "Back to table" after game over
 
     #region members
     public GameObject Worddice;

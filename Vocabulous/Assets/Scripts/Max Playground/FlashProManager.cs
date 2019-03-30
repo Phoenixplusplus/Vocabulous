@@ -11,17 +11,26 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+// Manager for creating Flashes (and static GUI items)
+// Attached to the GC
+
 public class FlashProManager : MonoBehaviour
 {
+    #region Member Declaration
     public GameObject prefabFlash;
     public GameObject freeGUI;
     private List<GameObject> myGUIitems;
+    #endregion
 
+    #region Unity API
     void Start()
     {
+        // stash reference for efficiency
         myGUIitems = new List<GameObject>();
     }
+    #endregion
 
+    #region Public Add/Delete Statis GUI methods
     public GameObject AddGUIItem (string text, float x, float y, float width, Color color)
     {
         GameObject GUI = Instantiate(freeGUI, Vector3.zero, Quaternion.identity);
@@ -42,7 +51,10 @@ public class FlashProManager : MonoBehaviour
         }
         myGUIitems.Clear();
     }
+    #endregion
 
+    #region Public Add/Delete Flashes (multiple Overloads)
+    // Use this for tidy up during scene changes
     public void KillAllFlashes ()
     {
         StopAllCoroutines(); // kills the ones requested on delay
@@ -105,4 +117,5 @@ public class FlashProManager : MonoBehaviour
         FT.myMessage2 = message2;
         StartCoroutine(DelayFire(FT, delay));
     }
+    #endregion
 }

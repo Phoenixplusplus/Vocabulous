@@ -6,14 +6,15 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 
+
+// Flash Panel manager script .. attached to prefab .... moves flash, changing color, scale, alpha and messages as required.
+// Destroys Flash (and self) upon completion
 public class FlashPro : MonoBehaviour
 {
+    #region Member Declaration
     public RectTransform myRect;
     public TextMeshProUGUI myText;
     public FlashProTemplate FT;
@@ -37,7 +38,10 @@ public class FlashPro : MonoBehaviour
     private Color CurrCol;
     private Tween currXTween;
     private Tween currYTween;
+    #endregion
 
+    #region Public Methods for Instantiation (inc Overloads)
+    // Basic instance, uses existing Templates Message
     public void ConfigureAndGoGo(FlashProTemplate myTemplate)
     {
         FT = myTemplate;
@@ -45,6 +49,7 @@ public class FlashPro : MonoBehaviour
         SetMeUp();
     }
 
+    // As above, but with customised Message 1
     public void ConfigureAndGoGo(FlashProTemplate myTemplate, string message1)
     {
         FT = myTemplate;
@@ -52,6 +57,8 @@ public class FlashPro : MonoBehaviour
         firstLerp = true;
         SetMeUp();
     }
+
+    // As above, but with customised Message 1 & 2
     public void ConfigureAndGoGo(FlashProTemplate myTemplate, string message1, string message2)
     {
         FT = myTemplate;
@@ -60,7 +67,30 @@ public class FlashPro : MonoBehaviour
         firstLerp = true;
         SetMeUp();
     }
+    #endregion
 
+    #region Unity API
+    // Update is called once per frame
+    void Update()
+    {
+        setTo(_time, currXTween, currYTween);
+        _time += Time.deltaTime * TimeMod;
+        if (_time >= 1)
+        {
+            if (firstLerp && !FT.SingleLerp)
+            {
+                firstLerp = false;
+                SetMeUp();
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+    }
+    #endregion
+
+    #region Private methods .. Setups
     void SetMeUp()
     {
         if (firstLerp)
@@ -156,27 +186,6 @@ public class FlashPro : MonoBehaviour
 
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        setTo(_time, currXTween, currYTween);
-        _time += Time.deltaTime * TimeMod;
-        if (_time >= 1)
-        {
-            if (firstLerp && !FT.SingleLerp)
-            {
-                firstLerp = false;
-                SetMeUp();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
-
     void InitialSet()
     {
         myRect.SetPositionAndRotation(new Vector3(X1, Y1, 0), Quaternion.identity);
@@ -214,7 +223,9 @@ public class FlashPro : MonoBehaviour
             myText.color = nCol;
         }
     }
+    #endregion
 
+    #region Tweening Methods/Logic (also Private)
     private float DoTween(Tween tween, float t)
     {
         // LinearUp, LinearDown, ParametricUp, ParametricDown, QuadUp, QuadDown, QuinUp, QuinDown, SineUp, SineDown,BounceUp, BounceDown, SinePop
@@ -356,5 +367,5 @@ public class FlashPro : MonoBehaviour
         else if (t > 1.0f) return 1.0f;
         else return t;
     }
-
+    #endregion
 }

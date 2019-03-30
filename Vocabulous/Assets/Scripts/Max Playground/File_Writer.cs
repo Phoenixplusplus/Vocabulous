@@ -6,8 +6,7 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
+// Legacy script, was used a LOT for pharsing and editing of dictionaries
 using System.IO;
 using UnityEngine;
 

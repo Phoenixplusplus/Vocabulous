@@ -6,6 +6,8 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
+// Interface Class (clue is in the name)
+// used by anything the GC hoverOver (aka, mouseover) needs to feed off.
 internal interface IisOverlayTile
 {
     int getID();

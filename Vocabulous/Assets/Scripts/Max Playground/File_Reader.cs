@@ -6,11 +6,10 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+// File Reader script, used toopen, close and read LINES of the dictionary to load into the Trie's
 public class File_Reader : MonoBehaviour
 {
     private bool _fileOpen = false;
@@ -66,7 +65,7 @@ public class File_Reader : MonoBehaviour
         return ret;
     }
 
-    // BUGGED TO FUCK AND BACK - do not use
+    // BUGGED TO HELL AND BACK - do not use
     public string nextWord()
     {
         string next = "";

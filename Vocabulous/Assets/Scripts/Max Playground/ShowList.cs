@@ -6,10 +6,14 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Helper script (used by WordDice for final "could have had" display)
+// instantates words made up of dice and displays them
+// populate by feeding a List<string> into "print()" (n.b. List is justified-middle)
+// destroy with "clear()"
 public class ShowList : MonoBehaviour
 {
     private GC gc;

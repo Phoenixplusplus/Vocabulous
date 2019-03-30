@@ -7,9 +7,12 @@
 //////////////////////////////////////////
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+// Utility function
+// One shot "move me" script
+// give it to a game Object ... will move it from Start to Finish (over prescribed time) then destroy itself
 public class Lerp : MonoBehaviour
 {
     private bool local = true;

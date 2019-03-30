@@ -107,6 +107,7 @@ public class ConDice : MonoBehaviour
     }
 
     // Call to create a "dumb" dice which does not need to report to the GC
+    // Also ... DO THIS TO OPTIMISE if you can
     public void killOverlayTile()
     {
         Destroy(tc.gameObject);

@@ -6,10 +6,12 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
+// KEY COMPONENT
+// Used by Overlaytiles (i.e. 3D GUI proxies, tiles and dice) to report back ID
+// VITAL ... do not mess this (or you will break lots of things you did not know existed)
 public class Object_Report : MonoBehaviour, IisOverlayTile
 {
     public Color myColor;

@@ -6,11 +6,14 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
-
+// ESSENTIAL
+// Mind numbingly mundane but essential script
+// Defines PlayerStats Structure, loaded from device to GC (and everything accesses it from there)
+// Also methods for Loading, Saving, creating a default player, and reseting Stats (either single game or all)
+// WARNING:  if adding/deleteing something ... finish the job and do it everywhere !!
 public struct PlayerStats
 {
     public int NewPlayer;          // flag RE if there is a new Player ... if 0 (or null) no Player, create a default and set to 1

@@ -6,11 +6,11 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using UnityEngine;
 
+// Max's Trie .... used by WordDice & Solver
+// 
 public class MaxTrie : MonoBehaviour
 {
     private string DictPath = "/StreamingAssets/Game_Dictionary.txt";
@@ -62,7 +62,8 @@ public class MaxTrie : MonoBehaviour
     };
 
 
-
+    // Node Structure ... key compnent of the Linked List
+    // N.B. bool Profane is not currently implemented
     public class Node
     {
         public char Letter { get; set; }

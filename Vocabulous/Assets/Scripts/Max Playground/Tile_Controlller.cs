@@ -6,10 +6,10 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Tile Controller
+// sets ID, letter, and changes colour of the latter if it appears on any connected GameGrid path or legals
 public class Tile_Controlller : MonoBehaviour
 {
     public Object_Report InnerQuad;

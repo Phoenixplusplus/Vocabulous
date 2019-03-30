@@ -7,9 +7,11 @@
 //////////////////////////////////////////
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+// Helper Class
+// Attatch to object and move it to/from specified positions in 3D space.
+// avoids animation coroutine clashes by refusing to fire if already animating
 public class TileLerper : MonoBehaviour
 {
     public Vector3 StartPosition;

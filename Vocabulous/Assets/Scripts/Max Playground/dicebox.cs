@@ -6,9 +6,10 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+// Added to the dicebox object ..
+// .. provides access to "slots" which are the positions to place Dice (so they look OK, and are orientated as the GameGrid would expect)
 
 public class dicebox : MonoBehaviour
 {

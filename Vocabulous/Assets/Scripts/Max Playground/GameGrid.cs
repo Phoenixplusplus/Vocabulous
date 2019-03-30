@@ -6,14 +6,13 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class GameGrid  {
     // GAMEGRID CLASS
-    // Created and initialised by an "game"
+    // Created and initialised by a "game"
     // is populated with the game "letters" (held in Dictionary bins by number and String Value)
     // Grids numbered from 0 - whatever, starting top left to right and down, e.g.
     // -----------------
@@ -206,7 +205,7 @@ public class GameGrid  {
     {
         // Called by any "game" to add a cell to the path
 
-        // of "out-of bounds" ... not getting in
+        // if "out-of bounds" ... not getting in
         if (a < 0 || a > dx * dy) 
         {
             Debug.Log("GameGrid:AddToPath() - illegal for: " + a);

@@ -6,24 +6,36 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Table furniture sub-controller used by WordDice
+// Seperate class, as it's handy and might want to be used elsewhere (I'm good like that, thanks me laterz)
+// Fits words into a set of rows of Inspector determined width
+// will fill words into "gaps" to save space
 public class Found_List_Display : MonoBehaviour
 {
+    #region Member Declaration
     List<int> lines;
     private GC gc;
     public int columns;
     public float scale;
     public Vector3 Offset;
     public string Title;
+    #endregion
 
+    #region Unity API
     void Awake()
     {
         gc = GC.Instance;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (gc == null) gc = GC.Instance;
+        lines = new List<int>();
+    }
 
     public void init()
     {
@@ -34,7 +46,10 @@ public class Found_List_Display : MonoBehaviour
         Found.transform.parent = transform;
         transform.localRotation = transform.parent.localRotation;
     }
-    
+    #endregion
+
+    // Public method -  send it a word string ... (n.b. QStatus "Qu" will use that dice)
+    // establishes where to put it ... and instantates it
     public void addWord(string word, string QStatus)
     {
         word = word.ToLower();
@@ -71,28 +86,6 @@ public class Found_List_Display : MonoBehaviour
         transform.localRotation = Quaternion.identity;
         myWord.transform.parent = transform;
         transform.localRotation = transform.parent.localRotation;
-
-        //GameObject newWord = gc.assets.MakeWordFromDiceQU(res, new Vector3(4.5f, 0, 5.6f - (FoundWords.Count * 0.6f)) + transform.position, 0.5f);
-        //FoundList.transform.localRotation = Quaternion.identity;
-        //newWord.transform.parent = FoundList.transform;
-        //FoundList.transform.localRotation = transform.localRotation; // phoenix edi
-
-
     }
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (gc == null) gc = GC.Instance;
-        lines = new List<int>();
-    }
-
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

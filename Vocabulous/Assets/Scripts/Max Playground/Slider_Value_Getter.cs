@@ -6,11 +6,11 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
+// Unity really has to make this a feature
+// converts GUI slider values and modifies the GC variables associated with them.
 public class Slider_Value_Getter : MonoBehaviour
 {
     public bool MusicSlider;

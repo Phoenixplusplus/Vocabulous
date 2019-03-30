@@ -6,10 +6,10 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Move to legacy ??
 public class GridFiller : MonoBehaviour
 {
     public List<int> GetWSPaths(int wordLength, int GridX, int GridY)
@@ -38,18 +38,4 @@ public class GridFiller : MonoBehaviour
         return ret;
     }
 
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

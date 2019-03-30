@@ -23,7 +23,7 @@ public class Con_Tile2 : MonoBehaviour
     public GameObject Internal; // holds the guts of the tile, rotate this to change orientation
     public Collider collider;
     private Material Text_Material;
-    private Material Body_Material;
+    public Material Body_Material;
     public GameGrid myGrid; // should we need it sometime
     private GC gc;
     public bool vertical = true;

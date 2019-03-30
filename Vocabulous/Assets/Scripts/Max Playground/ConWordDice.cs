@@ -14,6 +14,7 @@ using TMPro;
 
 public class ConWordDice : MonoBehaviour
 {
+    // Controller for in-game WordDice
     #region VARIABLE DECLARATION
     private GC gc;
     private GameGrid grid;
@@ -279,7 +280,7 @@ public class ConWordDice : MonoBehaviour
 
     #region GAME (RE)SET METHODS
 
-    public void KickOff() // to be called by GameController
+    public void KickOff() // called by GameController
     {
         gc.FM.KillStaticGUIs();
         gc.SM.KillSFX();

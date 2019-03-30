@@ -10,8 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Inspector Test script for Flash development/testing
+// Hit "Test_Me" to fire flash with Inspector settings
 public class FlashPro_Tester : MonoBehaviour
 {
+
     public FlashProManager FM;
 
     public bool TEST_ME = false;

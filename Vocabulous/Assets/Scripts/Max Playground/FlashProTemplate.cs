@@ -6,13 +6,13 @@
 // Vocabulous                           //
 //////////////////////////////////////////
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
+// Template class for Custom "Flashes"
+// A basic data holder, but with default constructor and a copy method (for speed)
 public class FlashProTemplate
 {
+    #region Member declaration
     public bool SingleLerp;
     public bool UseXLerpOnly;
 
@@ -41,7 +41,9 @@ public class FlashProTemplate
 
     public float AnimTime;
     public float MiddleTimeRatio;
+    #endregion
 
+    #region Public constructor & copy methods
     public FlashProTemplate() // default constructor
     {
         SingleLerp = true;
@@ -100,6 +102,6 @@ public class FlashProTemplate
             Ret.MiddleTimeRatio = MiddleTimeRatio;
         return Ret;
     }
-
+    #endregion
 
 }
