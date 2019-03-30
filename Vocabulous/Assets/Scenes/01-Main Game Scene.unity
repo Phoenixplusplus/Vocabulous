@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.30059117, g: 0.25243032, b: 0.19457969, a: 1}
+  m_IndirectSpecularColor: {r: 0.3007229, g: 0.25209886, b: 0.19473562, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -10729,10 +10729,10 @@ MonoBehaviour:
   nameField: {fileID: 1851060263}
   playButtonImage: {fileID: 2062733032}
   quitButtonImage: {fileID: 692099806}
-  wordDiceSprite: {fileID: 21300000, guid: e0c4f4ef8babb124fb938c9aa45b59d8, type: 3}
-  wordSearchSprite: {fileID: 21300000, guid: c57aae0bc7a0ab5419af32f9532429ef, type: 3}
-  anagramSprite: {fileID: 21300000, guid: f52deaae1773890439014c688f9bdda4, type: 3}
-  freeWordSprite: {fileID: 21300000, guid: 5b55b5bd4714bd342a963c9e4dd78fe4, type: 3}
+  wordDiceSprite: {fileID: 21300000, guid: 99646995dbe7aba4d966eac5a120efac, type: 3}
+  wordSearchSprite: {fileID: 21300000, guid: 4aeb370e39a02e14ca7171fc2b5eb61a, type: 3}
+  anagramSprite: {fileID: 21300000, guid: 310a778859a806a44a8632e9d0c7f2ac, type: 3}
+  freeWordSprite: {fileID: 21300000, guid: 2db1a5ff1fc8b7d458576f710894e2de, type: 3}
   exitVocabSprite: {fileID: 21300000, guid: c80e94eddd06bd94da08224b0ef2f2fe, type: 3}
   quitSprite: {fileID: 21300000, guid: fa815d1f7b76cd947b3f1e78807c84bb, type: 3}
   isMainMenuOpen: 0
