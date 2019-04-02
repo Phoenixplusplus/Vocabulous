@@ -54,6 +54,7 @@ public class SoundMan : MonoBehaviour
         gc = GC.Instance;
         sources = GetComponents<AudioSource>();
         SFXChannels = sources.Length - 1;
+        Debug.Log("Sound Manager has " + SFXChannels.ToString() + " channels");
         SetAllVolumes();
     }
 
@@ -93,8 +94,15 @@ public class SoundMan : MonoBehaviour
 
     void SetAllVolumes()
     {
-        MusicVol = gc.player.MusicVolume;
-        SFXVol = gc.player.SFXVolume;
+        if (gc != null) {
+            MusicVol = gc.player.MusicVolume;
+            SFXVol = gc.player.SFXVolume;
+        }
+        else
+        {
+            MusicVol = 1f;
+            SFXVol = 1f;
+        }
         foreach (AudioSource AS in sources)
         {
             AS.volume = SFXVol;
